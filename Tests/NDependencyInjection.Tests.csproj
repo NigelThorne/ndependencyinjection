@@ -1,0 +1,102 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{160F8E1E-BC53-4CB5-BC43-A8B0BC30C903}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NDependencyInjection.Tests</RootNamespace>
+    <AssemblyName>NDependencyInjection.Tests</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LinFu.Delegates, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\LinFu.Delegates.dll</HintPath>
+    </Reference>
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.2936.24750, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="LinFu.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\LinFu.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="NMock2, Version=1.0.2313.18049, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NMock2.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConstructorResolvingServiceProviderTests.cs" />
+    <Compile Include="ExampleClasses\ClassA.cs" />
+    <Compile Include="ExampleClasses\ClassB.cs" />
+    <Compile Include="ExampleClasses\ClassC.cs" />
+    <Compile Include="ExampleClasses\IMyTestClassA.cs" />
+    <Compile Include="ExampleClasses\MyTestClassA.cs" />
+    <Compile Include="ExampleClasses\NeedsA.cs" />
+    <Compile Include="ExampleClasses\NeedsB.cs" />
+    <Compile Include="ExampleClasses\SP.cs" />
+    <Compile Include="ExampleClasses\IA.cs" />
+    <Compile Include="ExampleClasses\IB.cs" />
+    <Compile Include="ExampleClasses\IC.cs" />
+    <Compile Include="FixedInstanceServiceProviderTests.cs" />
+    <Compile Include="InjectionScopeTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConduitTests.cs" />
+    <Compile Include="RhinoMockingTestFixture.cs" />
+    <Compile Include="ServiceRepositoryTests.cs" />
+    <Compile Include="SingletonServiceProviderDecoratorTests.cs" />
+    <Compile Include="TypeMappingServiceProviderTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NMockExtensions\NMockExtensions.csproj">
+      <Project>{97711593-9431-4DD5-A711-47E37A1026F6}</Project>
+      <Name>NMockExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TestUtilities\TestUtilities.csproj">
+      <Project>{87F45740-E8C7-40E1-9693-A39F7C339946}</Project>
+      <Name>TestUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NDependencyInjection.csproj">
+      <Project>{34206C97-167A-4A15-8FEF-C331001326B8}</Project>
+      <Name>NDependencyInjection</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
