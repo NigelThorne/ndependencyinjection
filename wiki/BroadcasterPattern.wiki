@@ -1,9 +1,9 @@
 #summary The Broadcaster Design Pattern extends the ObserverPattern to remove the duplication involved in multiple classes handling more than once Observer.
-#labels Designpattern
+#labels DesignPattern
 
 = Introduction =
 
-When more than one class wants to be an Observer of another class then your need to handle a list of observers. When you have more than once class with multiple observers, you have symantic duplication. This pattern solves that.
+When more than one class wants to be an Observer of another class then your need to handle a list of observers. When you have more than one class with multiple observers, you have symantic duplication. This pattern solves that.
 
 
 = Details =
