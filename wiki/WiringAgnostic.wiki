@@ -1,0 +1,5 @@
+#summary Classes should not care how they are wired.
+
+= Introduction =
+
+There should be a separation of concerns between what your classes do and how they are used. How they are used is a wiring decision.
