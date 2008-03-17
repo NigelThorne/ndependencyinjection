@@ -48,7 +48,7 @@ namespace NDependencyInjection.Tests.ExampleClasses
             get { return b; }
         }
     }
-    
+
     public class TwoConstructorsAttributes : IC
     {
         private readonly IA a;
@@ -75,7 +75,7 @@ namespace NDependencyInjection.Tests.ExampleClasses
             get { return b; }
         }
     }
-    
+
     public class TwoConstructorsTwoAttributes : IC
     {
         private readonly IA a;

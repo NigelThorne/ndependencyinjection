@@ -7,19 +7,19 @@ namespace NDependencyInjection.Tests
     [TestFixture]
     public class FixedInstanceServiceProviderTests : MockingTestFixture
     {
-        private FixedInstanceServiceProvider<object> fixedInstanceServiceProvider;
+        private FixedInstanceServiceProvider fixedInstanceServiceProvider;
         private object instance;
 
         protected override void SetUp()
         {
             instance = new object();
-            fixedInstanceServiceProvider = new FixedInstanceServiceProvider<object>(instance);
+            fixedInstanceServiceProvider = new FixedInstanceServiceProvider(instance);
         }
 
         [Test]
         public void GetService_ReturnsTheInstaceThatWasPassedIn()
         {
-            Assert.AreSame(instance, fixedInstanceServiceProvider.GetService());
+            Assert.AreSame(instance, fixedInstanceServiceProvider.GetService(typeof (object), typeof (object)));
         }
     }
 }

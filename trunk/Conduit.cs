@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using LinFu.DynamicProxy;
 using NDependencyInjection.interfaces;
@@ -5,23 +6,23 @@ using NDependencyInjection.interfaces;
 
 namespace NDependencyInjection
 {
-    public class Conduit<T> :IInterceptor ,IConduit<T>
+    public class Conduit : IInterceptor, IConduit
     {
-        private readonly T proxy;
-        private T target;
+        private readonly object proxy;
+        private object target;
 
-        public Conduit()
+        public Conduit(Type serviceType)
         {
-            ProxyFactory factory  = new ProxyFactory();
-            proxy = factory.CreateProxy<T>(this);
+            ProxyFactory factory = new ProxyFactory();
+            proxy = factory.CreateProxy(serviceType, this);
         }
 
-        public T Proxy
+        public object Proxy
         {
             get { return proxy; }
         }
 
-        public void SetTarget(T target)
+        public void SetTarget(object target)
         {
             this.target = target;
         }
@@ -32,7 +33,7 @@ namespace NDependencyInjection
             {
                 return info.TargetMethod.Invoke(target, info.Arguments);
             }
-            catch(TargetInvocationException ex)
+            catch (TargetInvocationException ex)
             {
                 throw ex.InnerException;
             }

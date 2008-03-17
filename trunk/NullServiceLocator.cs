@@ -1,3 +1,4 @@
+using System;
 using NDependencyInjection.interfaces;
 
 
@@ -5,12 +6,12 @@ namespace NDependencyInjection
 {
     internal class NullServiceLocator : IServiceLocator
     {
-        public T1 Get<T1>()
+        public object GetService(Type serviceType, Type serviceInterface)
         {
-            throw new UnknownTypeException(typeof (T1));
+            throw new UnknownTypeException(serviceType);
         }
 
-        public bool Has<T>()
+        public bool HasService(Type serviceType)
         {
             return false;
         }

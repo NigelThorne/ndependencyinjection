@@ -1,9 +1,10 @@
-using NDependencyInjection.interfaces;
+using System;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection.Tests.ExampleClasses
 {
-    public class SP : IServiceProvider<IMyTestClassA>
+    public class SP : IServiceProvider
     {
         private readonly IMyTestClassA service;
         public bool gotCalled = false;
@@ -13,7 +14,7 @@ namespace NDependencyInjection.Tests.ExampleClasses
             this.service = service;
         }
 
-        public IMyTestClassA GetService()
+        public object GetService(Type serviceType, Type interfaceType)
         {
             gotCalled = true;
             return service;

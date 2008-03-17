@@ -1,9 +1,13 @@
 namespace NDependencyInjection.interfaces
 {
-    public interface IInjectionScope: IServiceLocator
+    public interface ISystemDefinition
     {
-        void Bind<InterfaceType, ConcreteType>() where ConcreteType : InterfaceType;
-        void Singleton<ConcreteType>() where ConcreteType : class;
-        void SingletonInstance<InterfaceType>(InterfaceType instance);
+        ISystemComponent HasInstance<S>(S instance);
+        ISystemComponent HasFactory<S>();
+        ISystemComponent HasSingleton<S>();
+        ISystemComponent HasCollection(params ISubsystemBuilder[] subsystems);
+        ISystemComponent HasSubsystem(ISubsystemBuilder subsystemBuilder);
+
+        Service Get<Service>();
     }
 }

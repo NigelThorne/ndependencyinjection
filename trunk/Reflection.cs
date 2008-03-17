@@ -11,7 +11,7 @@ namespace NDependencyInjection
         {
             try
             {
-                return (T)subject.GetType().GetMethod(methodName, parameterTypes).Invoke(subject, parameters);
+                return (T) subject.GetType().GetMethod(methodName, parameterTypes).Invoke(subject, parameters);
             }
             catch (TargetInvocationException ex)
             {
@@ -23,7 +23,7 @@ namespace NDependencyInjection
         {
             try
             {
-                return (InterfaceType)constructor.Invoke(parameters);
+                return (InterfaceType) constructor.Invoke(parameters);
             }
             catch (TargetInvocationException ex)
             {
@@ -31,13 +31,14 @@ namespace NDependencyInjection
             }
         }
 
-        public static T CallGenericMethod<T>(string methodName, Type subjectType, object subject, Type[] types, object[] parameters)
+        public static T CallGenericMethod<T>(string methodName, Type subjectType, object subject, Type[] types,
+                                             object[] parameters)
         {
             MethodInfo genericMethod = subjectType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
             MethodInfo resolvedMethod = genericMethod.MakeGenericMethod(types);
             try
             {
-                return (T)resolvedMethod.Invoke(subject, parameters);
+                return (T) resolvedMethod.Invoke(subject, parameters);
             }
             catch (TargetInvocationException ex)
             {
@@ -61,7 +62,7 @@ namespace NDependencyInjection
             object[] attributes = info.GetCustomAttributes(false);
             foreach (object attribute in attributes)
             {
-                if(typeof (AttributeType).IsAssignableFrom(attribute.GetType())) return true;
+                if (typeof (AttributeType).IsAssignableFrom(attribute.GetType())) return true;
             }
             return false;
         }

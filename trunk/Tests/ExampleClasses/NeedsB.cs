@@ -1,5 +1,4 @@
 using System;
-using NDependencyInjection.interfaces;
 
 
 namespace NDependencyInjection.Tests.ExampleClasses
