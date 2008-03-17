@@ -1,18 +1,19 @@
-using NDependencyInjection.interfaces;
+using System;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection
 {
-    public class FixedInstanceServiceProvider<InterfaceType> : IServiceProvider<InterfaceType>
+    public class FixedInstanceServiceProvider : IServiceProvider
     {
-        private readonly InterfaceType instance;
+        private readonly object instance;
 
-        public FixedInstanceServiceProvider(InterfaceType instance)
+        public FixedInstanceServiceProvider(object instance)
         {
             this.instance = instance;
         }
 
-        public InterfaceType GetService()
+        public object GetService(Type serviceType, Type interfaceType)
         {
             return instance;
         }

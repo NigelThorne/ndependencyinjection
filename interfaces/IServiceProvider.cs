@@ -1,7 +1,10 @@
+using System;
+
+
 namespace NDependencyInjection.interfaces
 {
-    public interface IServiceProvider<ServiceType>
+    public interface IServiceProvider
     {
-        ServiceType GetService();
+        object GetService(Type serviceType, Type interfaceType);
     }
 }

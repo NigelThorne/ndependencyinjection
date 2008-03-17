@@ -2,24 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NDependencyInjection.interfaces;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection
 {
-
     /// <summary>
-    /// Calls the constructor for the ServiceType when GetService is called. Any Parameters are resolved first
+    /// Calls the constructor for the ConcreteType when GetService is called. Any Parameters are resolved first
     /// </summary>
-    public class ConstructorResolvingServiceProvider<ConcreteType> : IServiceProvider<ConcreteType> 
+    /// <typeparam name="ConcreteType"></typeparam>
+    public class DependencyResolvingServiceProvider<ConcreteType> : IServiceProvider
     {
         private readonly IServiceLocator locator;
 
-        public ConstructorResolvingServiceProvider(IServiceLocator locator)
+        public DependencyResolvingServiceProvider(IServiceLocator locator)
         {
             this.locator = locator;
         }
 
-        public ConcreteType GetService()
+        public object GetService(Type serviceType, Type interfaceType)
         {
             ConstructorInfo constructor = GetCallableConstructor();
             return Reflection.CallConstructor<ConcreteType>(constructor, GetParameters(constructor));
@@ -35,14 +36,15 @@ namespace NDependencyInjection
             List<object> list = new List<object>();
             foreach (Type type in types)
             {
-                list.Add(Reflection.CallGenericMethod<object>("Get",typeof(IServiceLocator), locator, new Type[]{type}, new object[0]));
+                list.Add(locator.GetService(type, type));
             }
             return list.ToArray();
         }
 
         private ConstructorInfo GetCallableConstructor()
         {
-            ConstructorInfo constructor = PickConstructor(typeof(ConcreteType).GetConstructors(BindingFlags.Public | BindingFlags.Instance));
+            ConstructorInfo constructor =
+                PickConstructor(typeof (ConcreteType).GetConstructors(BindingFlags.Public | BindingFlags.Instance));
             EnsureConstructorIsCallable(constructor);
             return constructor;
         }
@@ -53,9 +55,12 @@ namespace NDependencyInjection
 
             foreach (ConstructorInfo info in constructors)
             {
-                if (Reflection.HasAttribute< InjectionConstructor>(info)) return info;
+                if (Reflection.HasAttribute<InjectionConstructorAttribute>(info)) return info;
             }
-            throw new ApplicationException(string.Format("Type {0} has more or less than one constructor. Indicate the constructor to use with a [ConstructorToCall] attribute", typeof(ConcreteType)));
+            throw new ApplicationException(
+                string.Format(
+                    "Type {0} has more or less than one constructor. Indicate the constructor to use with a [InjectionConstructor] attribute",
+                    typeof (ConcreteType)));
         }
 
         private void EnsureConstructorIsCallable(ConstructorInfo info)
@@ -65,7 +70,7 @@ namespace NDependencyInjection
             {
                 throw new ApplicationException(
                     string.Format("Constructor for {0} referenced types unknown within this scope: \n{1}",
-                                  typeof (ConcreteType),TypesToString(unknownTypes)));
+                                  typeof (ConcreteType), TypesToString(unknownTypes)));
             }
         }
 
@@ -74,7 +79,7 @@ namespace NDependencyInjection
             string message = "";
             foreach (Type type in types)
             {
-                message += string.Format("{0} \n",type.FullName);
+                message += string.Format("{0} \n", type.FullName);
             }
             return message;
         }
@@ -84,14 +89,9 @@ namespace NDependencyInjection
             List<Type> unknownTypes = new List<Type>();
             foreach (ParameterInfo parameter in info.GetParameters())
             {
-                if (!HasType(locator, parameter)) unknownTypes.Add(parameter.ParameterType);
+                if (!locator.HasService(parameter.ParameterType)) unknownTypes.Add(parameter.ParameterType);
             }
             return unknownTypes;
-        }
-
-        private static bool HasType(IServiceLocator locator, ParameterInfo parameter)
-        {
-            return Reflection.CallGenericMethod<bool>("Has",typeof(IServiceLocator),locator,new Type[]{parameter.ParameterType}, new object[0]);
         }
     }
 }

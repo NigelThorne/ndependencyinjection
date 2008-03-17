@@ -1,40 +1,28 @@
 using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Varian.Tests.Utilities;
 
 
 namespace NDependencyInjection.Tests
 {
-    public abstract class RhinoMockingTestFixture
+    public abstract class RhinoMockingTestFixture : MockingTestFixture
     {
         public MockRepository mocks;
 
-        protected IDisposable Ordered
+        protected override IDisposable Ordered
         {
             get { return mocks.Ordered(); }
         }
 
         [SetUp]
-        public void MockSetUp()
+        public override void MockSetUp()
         {
             mocks = new MockRepository();
             SetUp();
         }
 
-        protected abstract void SetUp();
-
-        [TearDown]
-        public virtual void MockTearDown()
-        {
-            TearDown();
-            VerifyExpectations();
-        }
-
-        protected virtual void TearDown()
-        {
-        }
-
-        public T NewMock<T>()
+        public override T NewMock<T>()
         {
             return mocks.DynamicMock<T>();
         }
@@ -44,13 +32,9 @@ namespace NDependencyInjection.Tests
             return mocks.Stub<T>();
         }
 
-        public void VerifyExpectations()
+        public override void VerifyExpectations()
         {
             mocks.VerifyAll();
-        }
-
-        protected static void IgnoreReturnValue(object ignored)
-        {
         }
 
         protected void SetupComplete()

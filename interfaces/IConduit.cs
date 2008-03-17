@@ -1,8 +1,8 @@
 namespace NDependencyInjection.interfaces
 {
-    public interface IConduit<T>
+    public interface IConduit
     {
-        T Proxy{ get;}
-        void SetTarget(T target);
+        object Proxy { get; }
+        void SetTarget(object target);
     }
 }

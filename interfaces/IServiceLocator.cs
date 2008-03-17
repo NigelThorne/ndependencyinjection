@@ -1,8 +1,10 @@
+using System;
+
+
 namespace NDependencyInjection.interfaces
 {
-    public interface IServiceLocator
+    public interface IServiceLocator : IServiceProvider
     {
-        T Get<T>();
-        bool Has<T>();
+        bool HasService(Type serviceType);
     }
 }

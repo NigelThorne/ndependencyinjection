@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using NDependencyInjection.interfaces;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
+
 
 namespace NDependencyInjection
 {
     public class ServiceRepository : IServiceRepository
     {
-        private readonly Dictionary<Type, object> dictionary = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, IServiceProvider> dictionary = new Dictionary<Type, IServiceProvider>();
 
-        public void RegisterService<T>(IServiceProvider<T> provider)
+        public void RegisterServiceProvider<T>(IServiceProvider provider)
         {
             if (dictionary.ContainsKey(typeof (T)))
                 throw new InvalidOperationException(String.Format("Type {0} is already registered", typeof (T)));
@@ -17,19 +18,17 @@ namespace NDependencyInjection
             dictionary[typeof (T)] = provider;
         }
 
-        public T Get<T>()
+        public object GetService(Type serviceType, Type serviceInterface)
         {
-            Type type = typeof (T);
-            if (!dictionary.ContainsKey(type))
-                throw new InvalidOperationException(String.Format("Type {0} is not registered", type));
+            if (!HasService(serviceType))
+                throw new InvalidOperationException(String.Format("Type {0} is not registered", serviceType));
 
-            object obj = dictionary[type];
-            return Reflection.CallMethod<T>(obj, "GetService", new Type[0], new object[0]);
+            return dictionary[serviceType].GetService(serviceType, serviceInterface);
         }
 
-        public bool Has<T>()
+        public bool HasService(Type serviceType)
         {
-            return dictionary.ContainsKey(typeof(T));
+            return dictionary.ContainsKey(serviceType);
         }
     }
 }
