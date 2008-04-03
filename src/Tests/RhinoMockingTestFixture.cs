@@ -1,7 +1,7 @@
 using System;
+using NMockExtensions;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Varian.Tests.Utilities;
 
 
 namespace NDependencyInjection.Tests

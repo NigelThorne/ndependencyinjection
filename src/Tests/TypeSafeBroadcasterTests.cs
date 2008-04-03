@@ -1,8 +1,8 @@
 using System;
 using NDependencyInjection.Generics;
 using NMock2;
+using NMockExtensions;
 using NUnit.Framework;
-using Varian.Tests.Utilities;
 
 
 namespace NDependencyInjection.Tests

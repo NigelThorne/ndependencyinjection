@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
@@ -36,14 +37,15 @@ namespace NDependencyInjection
 
         public void RegisterServiceListener<EventsInterface>(IServiceProvider provider)
         {
-            if (!broadcasters.ContainsKey(typeof (EventsInterface)))
-            {
-                broadcasters[typeof (EventsInterface)] =
-                    new BroadcasterProvider<EventsInterface>();
-                repository.RegisterServiceProvider<EventsInterface>(broadcasters[typeof (EventsInterface)]);
-            }
+            TypeResolvingConduit<EventsInterface> resolvingConduit = new TypeResolvingConduit<EventsInterface>(provider);
+            GetService<IBroadcaster<EventsInterface>>().AddListeners(resolvingConduit.Proxy);
+        }
 
-            broadcasters[typeof (EventsInterface)].AddListenerProvider(provider);
+        public void RegisterBroadcaster<EventsInterface>()
+        {
+            BroadcasterProvider<EventsInterface> provider = new BroadcasterProvider<EventsInterface>();
+            repository.RegisterServiceProvider<IBroadcaster<EventsInterface>>(provider);
+            repository.RegisterServiceProvider<EventsInterface>(provider);
         }
 
         public bool HasService(Type serviceType)
@@ -60,5 +62,11 @@ namespace NDependencyInjection
         {
             return new SystemWiring(new ScopedServiceRepository(this));
         }
+
+        private T GetService<T>()
+        {
+            return (T) repository.GetService(typeof (T), typeof (T));
+        }
     }
+
 }

@@ -4,6 +4,7 @@ namespace NDependencyInjection.interfaces
     {
         void RegisterServiceProvider<T1>(IServiceProvider provider);
         void RegisterServiceListener<T1>(IServiceProvider provider);
+        void RegisterBroadcaster<EventsInterface>();
         ISystemWiring CreateSubsystem();
     }
 }

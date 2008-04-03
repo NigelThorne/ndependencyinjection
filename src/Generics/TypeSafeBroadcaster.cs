@@ -7,7 +7,7 @@ using NDependencyInjection.interfaces;
 
 namespace NDependencyInjection.Generics
 {
-    public class TypeSafeBroadcaster<ListenerType> : ITypeSafeBroadcaster<ListenerType>, IInterceptor
+    public class TypeSafeBroadcaster<ListenerType> : IBroadcaster<ListenerType>, IInterceptor
     {
         private readonly ListenerType listener;
         private readonly List<ListenerType> listeners = new List<ListenerType>();

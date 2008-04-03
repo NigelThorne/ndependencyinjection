@@ -29,8 +29,17 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NDependencyInjectionOnly|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\NDependencyInjectionOnly\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LinFu.DynamicProxy, Version=1.0.2936.24750, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.2946.19275, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
@@ -38,9 +47,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\NMock2.dll</HintPath>
     </Reference>
+    <Reference Include="NMockExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NMockExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.4.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\NUnit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\Lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -76,14 +89,6 @@
     <Compile Include="SingletonServiceProviderDecoratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NMockExtensions\NMockExtensions.csproj">
-      <Project>{97711593-9431-4DD5-A711-47E37A1026F6}</Project>
-      <Name>NMockExtensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TestUtilities\TestUtilities.csproj">
-      <Project>{87F45740-E8C7-40E1-9693-A39F7C339946}</Project>
-      <Name>TestUtilities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NDependencyInjection.csproj">
       <Project>{34206C97-167A-4A15-8FEF-C331001326B8}</Project>
       <Name>NDependencyInjection</Name>

@@ -1,8 +1,9 @@
 using System;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Tests.ExampleClasses;
+using NMockExtensions;
 using NUnit.Framework;
-using Varian.Tests.Utilities;
+using Assert=NUnit.Framework.Assert;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 

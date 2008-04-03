@@ -41,6 +41,11 @@ namespace NDependencyInjection
             return (Service) wiring.GetService(typeof (Service), typeof (Service));
         }
 
+        public void Broadcasts<S>()
+        {
+            wiring.RegisterBroadcaster<S>();
+        }
+
         public ISystemComponent HasInstance<S>(S instance)
         {
             return new SystemComponent(wiring, new FixedInstanceServiceProvider(instance));

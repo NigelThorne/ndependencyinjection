@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Tests.ExampleClasses;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ namespace NDependencyInjection.Tests
     [TestFixture]
     public class SystemDefinitionUATs
     {
-        private ISystemDefinition definition;
+        #region Setup/Teardown
 
         [SetUp]
         public void SetUp()
@@ -17,122 +18,108 @@ namespace NDependencyInjection.Tests
             definition = new SystemDefinition();
         }
 
-        [Test, ExpectedException(typeof(UnknownTypeException))]
-        public void Get_ThrowsAnException_WhenTypeIsNotRegistered()
+        #endregion
+
+        private ISystemDefinition definition;
+
+        public interface IListener
         {
-            definition.Get<Object>();
+            void OnMessage(int m);
+        }
+
+        public class Reciever : IListener
+        {
+            public List<int> recieved = new List<int>();
+
+            public void OnMessage(int m)
+            {
+                recieved.Add(m);
+            }
+        }
+
+        public interface ISender
+        {
+            void SendMessage(int m);
+        }
+
+        public class Sender : ISender
+        {
+            private readonly IListener listener;
+
+            public Sender(IListener listener)
+            {
+                this.listener = listener;
+            }
+
+            public void SendMessage(int m)
+            {
+                listener.OnMessage(m);
+            }
+        }
+
+        private class Page
+        {
+        }
+
+        private static void Page2(ISystemDefinition scope)
+        {
+            scope.HasInstance(new Page()).Provides<Page>();
+        }
+
+        private static void Page1(ISystemDefinition scope)
+        {
+            scope.HasSingleton<Page>().Provides<Page>();
         }
 
         [Test]
-        public void Get_ReturnsAnInstanceOfType_WhenTypeIsRegistered()
+        public void Broadcasts_RegistersABroadcasterWithTheGivenInterface()
         {
-            definition.HasInstance(new Object()).Provides<Object>();
-            Assert.IsNotNull(definition.Get<Object>());
+            ISystemDefinition subsystem = new SystemDefinition();
+            subsystem.Broadcasts<IListener>();
+
+            Reciever reciever = new Reciever();
+            subsystem.HasInstance(reciever).ListensTo<IListener>();
+            subsystem.HasSingleton<Sender>().Provides<ISender>();
+
+            ISender sender = subsystem.Get<ISender>();
+
+            sender.SendMessage(2);
+            sender.SendMessage(4);
+
+            Assert.AreEqual(2, reciever.recieved[0]);
+            Assert.AreEqual(4, reciever.recieved[1]);
         }
 
         [Test]
-        public void Get_ReturnsASpecificInstance_WhenHasInstanceWasUsedToRegisterTheType()
+        public void Broadcasts_RegistersABroadcasterWithTheGivenInterface_AndCanBeListenedToWithinSubsystems()
         {
-            object instance = new Object();
-            definition.HasInstance(instance).Provides<Object>();
-            Assert.AreSame(instance, definition.Get<Object>());
-        }
+            ISystemDefinition subsystem = new SystemDefinition();
+            subsystem.Broadcasts<IListener>();
 
-        [Test]
-        public void Get_ReturnsSameInstance_WhenHasInstanceProvidesMultipleTypes()
-        {
-            ClassA instance = new ClassA();
-            definition.HasInstance(instance).Provides<Object>().Provides<ClassA>();
-            Assert.AreSame(definition.Get<Object>(), definition.Get<ClassA>());            
-        }
-
-        [Test]
-        public void Get_ReturnsSameInstance_WhenHasInstanceUsedToRegisterTheType()
-        {
-            definition.HasInstance(new Object()).Provides<Object>();
-            Assert.AreSame(definition.Get<Object>(), definition.Get<Object>());            
-        }
-
-        [Test]
-        public void Get_ReturnsNewInstance_WhenHasFactoryWasUsedToRegisterTheType()
-        {
-            definition.HasFactory<Object>().Provides<Object>();
-            Assert.AreNotSame(definition.Get<Object>(), definition.Get<Object>());
-        }
-
-        [Test]
-        public void Get_ReturnsNewInstance_WhenHasFactoryWasUsedToRegisterMultipleTypes()
-        {
-            definition.HasFactory<ClassA>().Provides<ClassA>().Provides<Object>();
-            Assert.AreNotSame(definition.Get<Object>(), definition.Get<ClassA>());
-        }
-
-        [Test]
-        public void Get_ReturnsSameInstance_WhenHasSingletonWasUsedToRegisterTheType()
-        {
-            definition.HasSingleton<ClassA>().Provides<ClassA>().Provides<Object>();
-            Assert.AreSame(definition.Get<ClassA>(), definition.Get<Object>());
-        }
-
-        [Test, ExpectedException(typeof(InvalidOperationException))]
-        public void Provides_ThrowsAnException_WhenTypeTypeGivenIsAlreadyKnown()
-        {
-            definition.HasSingleton<Object>().Provides<Object>();
-            definition.HasInstance(new Object()).Provides<Object>();
-        }
-
-        [Test]
-        public void Get_ReturnsInstanceFromOuterSystem_WhenCalledFromASubsystemThatDoesNotHaveAProviderForThatType()
-        {
-            object expected = new Object();
-            object actual = null;
-            definition.HasInstance(expected).Provides<Object>();
-            definition.HasSubsystem(
+            Reciever reciever = new Reciever();
+            subsystem.HasSubsystem(
                 new DelegateExecutingBuilder(
                     delegate(ISystemDefinition scope)
                         {
-                            actual = scope.Get<Object>();
+                            scope.HasInstance(reciever).ListensTo<IListener>();
                         }));
-            Assert.AreSame(expected, actual);
-        }
-                
-        [Test]
-        public void Get_ReturnsInstanceFromInnerSystem_WhenCalledFromASubsystemThatDoesHaveAProviderForThatType()
-        {
-            object expected = new Object();
-            object actual = null;
+            subsystem.HasSingleton<Sender>().Provides<ISender>();
 
-            definition.HasFactory<Object>().Provides<Object>();
-            definition.HasSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope)
-                        {
-                            scope.HasInstance(expected).Provides<Object>();
-                            actual = scope.Get<Object>();
-                        }));
-            Assert.AreSame(expected, actual);
-        }
-        
-        [Test, ExpectedException(typeof(UnknownTypeException))]
-        public void Get_ThrowsAnException_WhenCalledFromASubsystemThatDoesHaveAProviderForThatTypeAndItIsUnknownInTheParentScope()
-        {
-            definition.HasSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope)
-                        {
-                            scope.Get<Object>();
-                        }));
+            ISender sender = subsystem.Get<ISender>();
+
+            sender.SendMessage(2);
+            sender.SendMessage(4);
+
+            Assert.AreEqual(2, reciever.recieved[0]);
+            Assert.AreEqual(4, reciever.recieved[1]);
         }
 
-        [Test, ExpectedException(typeof(UnknownTypeException))]
+        [Test, ExpectedException(typeof (UnknownTypeException))]
         public void Get_CannotAccessTypesRegisteredInASubsystem()
         {
             definition.HasSubsystem(
                 new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope)
-                        {
-                            scope.HasInstance(new Object()).Provides<Object>();
-                        }));
+                    delegate(ISystemDefinition scope) { scope.HasInstance(new Object()).Provides<Object>(); }));
             definition.Get<Object>();
         }
 
@@ -143,7 +130,7 @@ namespace NDependencyInjection.Tests
             definition.HasSingleton<ClassB>().Provides<IB>();
 
             Assert.IsNotNull(definition.Get<IB>());
-            Assert.AreSame(definition.Get<IA>(),definition.Get<IB>().A);
+            Assert.AreSame(definition.Get<IA>(), definition.Get<IB>().A);
         }
 
         [Test]
@@ -153,7 +140,7 @@ namespace NDependencyInjection.Tests
             definition.HasSingleton<NeedsB>().Provides<IA>();
             IB b = definition.Get<IB>();
             Assert.IsNotNull(b);
-            Assert.IsNotNull(b.A);            
+            Assert.IsNotNull(b.A);
         }
 
         [Test]
@@ -172,28 +159,10 @@ namespace NDependencyInjection.Tests
             Assert.IsNotNull(actual.A);
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
-        public void ListensTo_ThrowsAnException_WhenTheInterfaceIsProvidedAlready()
-        {
-            definition.HasFactory<Object>().Provides<Object>();
-            definition.HasSingleton<Object>().ListensTo<Object>();
-        }
-
-        [Test]
-        public void ListensTo_DefinesAListenerForAGivenInterface_()
-        {
-            TestListener realListener = new TestListener();
-            definition.HasInstance(realListener).ListensTo<ITestListener>();
-            ITestListener listener = definition.Get<ITestListener>();
-
-            listener.OnEvent();
-
-            Assert.AreEqual("Called", realListener.log);
-        }
-
         [Test]
         public void Get_ReturnsABroadcaster_WhenMultipleListenersAreRegisteredForAType()
         {
+            definition.Broadcasts<ITestListener>();
             TestListener realListener1 = new TestListener();
             TestListener realListener2 = new TestListener();
             definition.HasInstance(realListener1).ListensTo<ITestListener>();
@@ -205,13 +174,6 @@ namespace NDependencyInjection.Tests
             Assert.AreEqual("Called", realListener1.log);
             Assert.AreEqual("Called", realListener2.log);
         }
-        
-        [Test]
-        public void ListensTo_DefinesASecondListener_WhenTheInterfaceIsListenedToAlready()
-        {
-            definition.HasFactory<Object>().ListensTo<Object>();
-            definition.HasSingleton<Object>().ListensTo<Object>();
-        }
 
         [Test]
         public void Get_ReturnsACollectionConstructedFromTheProvidersOfThatType_WhenThereIsMoreThanOneProvider()
@@ -222,33 +184,122 @@ namespace NDependencyInjection.Tests
             Assert.AreEqual(2, book.Get<Page[]>().Length);
         }
 
-        public class DelegateExecutingBuilder : ISubsystemBuilder
+        [Test]
+        public void Get_ReturnsAnInstanceOfType_WhenTypeIsRegistered()
         {
-            private readonly CreateSubsystem method;
-
-            public DelegateExecutingBuilder(CreateSubsystem method)
-            {
-                this.method = method;
-            }
-
-            public void Build(ISystemDefinition system)
-            {
-                method(system);
-            }
+            definition.HasInstance(new Object()).Provides<Object>();
+            Assert.IsNotNull(definition.Get<Object>());
         }
 
-        private class Page
+        [Test]
+        public void Get_ReturnsASpecificInstance_WhenHasInstanceWasUsedToRegisterTheType()
         {
+            object instance = new Object();
+            definition.HasInstance(instance).Provides<Object>();
+            Assert.AreSame(instance, definition.Get<Object>());
         }
 
-        private static void Page2(ISystemDefinition scope)
+        [Test]
+        public void Get_ReturnsInstanceFromInnerSystem_WhenCalledFromASubsystemThatDoesHaveAProviderForThatType()
         {
-            scope.HasInstance(new Page()).Provides<Page>();
+            object expected = new Object();
+            object actual = null;
+
+            definition.HasFactory<Object>().Provides<Object>();
+            definition.HasSubsystem(
+                new DelegateExecutingBuilder(
+                    delegate(ISystemDefinition scope)
+                        {
+                            scope.HasInstance(expected).Provides<Object>();
+                            actual = scope.Get<Object>();
+                        }));
+            Assert.AreSame(expected, actual);
         }
 
-        private static void Page1(ISystemDefinition scope)
+        [Test]
+        public void Get_ReturnsInstanceFromOuterSystem_WhenCalledFromASubsystemThatDoesNotHaveAProviderForThatType()
         {
-            scope.HasSingleton<Page>().Provides<Page>();
+            object expected = new Object();
+            object actual = null;
+            definition.HasInstance(expected).Provides<Object>();
+            definition.HasSubsystem(
+                new DelegateExecutingBuilder(
+                    delegate(ISystemDefinition scope) { actual = scope.Get<Object>(); }));
+            Assert.AreSame(expected, actual);
+        }
+
+        [Test]
+        public void Get_ReturnsNewInstance_WhenHasFactoryWasUsedToRegisterMultipleTypes()
+        {
+            definition.HasFactory<ClassA>().Provides<ClassA>().Provides<Object>();
+            Assert.AreNotSame(definition.Get<Object>(), definition.Get<ClassA>());
+        }
+
+        [Test]
+        public void Get_ReturnsNewInstance_WhenHasFactoryWasUsedToRegisterTheType()
+        {
+            definition.HasFactory<Object>().Provides<Object>();
+            Assert.AreNotSame(definition.Get<Object>(), definition.Get<Object>());
+        }
+
+        [Test]
+        public void Get_ReturnsSameInstance_WhenHasInstanceProvidesMultipleTypes()
+        {
+            ClassA instance = new ClassA();
+            definition.HasInstance(instance).Provides<Object>().Provides<ClassA>();
+            Assert.AreSame(definition.Get<Object>(), definition.Get<ClassA>());
+        }
+
+        [Test]
+        public void Get_ReturnsSameInstance_WhenHasInstanceUsedToRegisterTheType()
+        {
+            definition.HasInstance(new Object()).Provides<Object>();
+            Assert.AreSame(definition.Get<Object>(), definition.Get<Object>());
+        }
+
+        [Test]
+        public void Get_ReturnsSameInstance_WhenHasSingletonWasUsedToRegisterTheType()
+        {
+            definition.HasSingleton<ClassA>().Provides<ClassA>().Provides<Object>();
+            Assert.AreSame(definition.Get<ClassA>(), definition.Get<Object>());
+        }
+
+        [Test, ExpectedException(typeof (UnknownTypeException))]
+        public void
+            Get_ThrowsAnException_WhenCalledFromASubsystemThatDoesHaveAProviderForThatTypeAndItIsUnknownInTheParentScope
+            ()
+        {
+            definition.HasSubsystem(
+                new DelegateExecutingBuilder(
+                    delegate(ISystemDefinition scope) { scope.Get<Object>(); }));
+        }
+
+        [Test, ExpectedException(typeof (UnknownTypeException))]
+        public void Get_ThrowsAnException_WhenTypeIsNotRegistered()
+        {
+            definition.Get<Object>();
+        }
+
+        [Test]
+        public void ListensTo_DefinesASecondListener_WhenTheInterfaceIsListenedToAlready()
+        {
+            definition.Broadcasts<Object>();
+            definition.HasFactory<Object>().ListensTo<Object>();
+            definition.HasSingleton<Object>().ListensTo<Object>();
+        }
+
+        [Test, ExpectedException(typeof (UnknownTypeException))]
+        public void ListensTo_ThrowsAnException_WhenNoBroadcasterIsRegistered()
+        {
+            definition.HasFactory<Object>().Provides<Object>();
+            definition.HasSingleton<Object>().ListensTo<Object>();
+        }
+
+        [Test, ExpectedException(typeof (InvalidOperationException))]
+        public void Provides_ThrowsAnException_WhenTypeTypeGivenIsAlreadyKnown()
+        {
+            definition.HasSingleton<Object>().Provides<Object>();
+            definition.HasInstance(new Object()).Provides<Object>();
         }
     }
 }

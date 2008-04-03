@@ -10,7 +10,7 @@ namespace NDependencyInjection
     public class BroadcasterProvider<EventsInterface> : IBroadcasterProvider
     {
         private readonly List<IServiceProvider> listeners;
-        private ITypeSafeBroadcaster<EventsInterface> broadcaster;
+        private IBroadcaster<EventsInterface> broadcaster;
 
         public BroadcasterProvider()
         {
@@ -19,7 +19,8 @@ namespace NDependencyInjection
 
         public object GetService(Type serviceType, Type interfaceType)
         {
-            if (!typeof (EventsInterface).IsAssignableFrom(interfaceType))
+            if (!typeof (EventsInterface).IsAssignableFrom(interfaceType) 
+                && !typeof (IBroadcaster<EventsInterface>).IsAssignableFrom(interfaceType))
                 throw new InvalidProgramException(
                     string.Format("Broadcaster supports type {0} not {1}", typeof (EventsInterface), interfaceType));
 
@@ -31,6 +32,11 @@ namespace NDependencyInjection
                     list.Add((EventsInterface) provider.GetService(serviceType, interfaceType));
                 }
                 broadcaster = new TypeSafeBroadcaster<EventsInterface>(list.ToArray());
+            }
+
+            if (serviceType == typeof(IBroadcaster<EventsInterface>))
+            {
+                return broadcaster;
             }
             return broadcaster.Listener;
         }
