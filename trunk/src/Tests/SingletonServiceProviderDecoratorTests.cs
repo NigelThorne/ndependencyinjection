@@ -1,11 +1,11 @@
+using System;
 using System.Reflection;
-using NDependencyInjection.interfaces;
 using NDependencyInjection.Tests.ExampleClasses;
 using NMock2;
+using NMockExtensions;
 using NUnit.Framework;
-using Varian.NMockExtensions;
-using Varian.Tests.Utilities;
 using Assert=NUnit.Framework.Assert;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection.Tests
@@ -68,7 +68,7 @@ namespace NDependencyInjection.Tests
             Assert.AreEqual(3, service2.DoSomething(1, 2));
         }
 
-        [Test, ExpectedException(typeof (TargetException))]
+        [Test, ExpectedException(typeof(NullReferenceException))]
         public void UsingTheConduitBeforeItIsInitialIzed_ThrowsAnException()
         {
             IA realService = NewMock<IA>();

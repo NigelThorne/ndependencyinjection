@@ -9,5 +9,6 @@ namespace NDependencyInjection.interfaces
         ISystemComponent HasSubsystem(ISubsystemBuilder subsystemBuilder);
 
         Service Get<Service>();
+        void Broadcasts<T1>();
     }
 }

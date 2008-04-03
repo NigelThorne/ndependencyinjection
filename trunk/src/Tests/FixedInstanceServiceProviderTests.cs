@@ -1,5 +1,6 @@
+using NMockExtensions;
 using NUnit.Framework;
-using Varian.Tests.Utilities;
+using Assert=NMockExtensions.Assert;
 
 
 namespace NDependencyInjection.Tests

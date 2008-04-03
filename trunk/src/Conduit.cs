@@ -31,6 +31,8 @@ namespace NDependencyInjection
         {
             try
             {
+                if (target == null) 
+                    throw new NullReferenceException(string.Format("Target not set for {0} conduit, when method {1} was called from {2}", proxy.GetType(), info.TargetMethod, info.CallingMethod));
                 return info.TargetMethod.Invoke(target, info.Arguments);
             }
             catch (TargetInvocationException ex)

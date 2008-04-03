@@ -4,4 +4,11 @@ namespace NDependencyInjection.interfaces
     {
         object Listener { get; }
     }
+
+    public interface IBroadcaster<ListenerType>
+    {
+        ListenerType Listener { get; }
+        void AddListeners(params ListenerType[] newListerners);
+        void RemoveListeners(params ListenerType[] oldListeners);
+    }
 }

@@ -29,10 +29,23 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NDependencyInjectionOnly|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\NDependencyInjectionOnly\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LinFu.DynamicProxy, Version=1.0.2936.24750, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.2946.19275, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="NMockExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\NMockExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -41,8 +54,10 @@
     <Compile Include="BroadcastProviderFactory.cs" />
     <Compile Include="CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
+    <Compile Include="DelegateExecutingBuilder.cs" />
     <Compile Include="DependencyResolvingServiceProvider.cs" />
     <Compile Include="FixedInstanceServiceProvider.cs" />
+    <Compile Include="Generics\TypeResolvingConduit.cs" />
     <Compile Include="interfaces\IBroadcasterProvider.cs" />
     <Compile Include="interfaces\IBroadcastProviderFactory.cs" />
     <Compile Include="InjectionConstructorAttribute.cs" />
@@ -53,7 +68,6 @@
     <Compile Include="interfaces\IServiceProvider.cs" />
     <Compile Include="interfaces\IServiceRepository.cs" />
     <Compile Include="interfaces\ISubsystemBuilder.cs" />
-    <Compile Include="interfaces\ITypeSafeBroadcaster.cs" />
     <Compile Include="interfaces\ITypeSafeConduit.cs" />
     <Compile Include="interfaces\ISystemComponent.cs" />
     <Compile Include="interfaces\ISystemWiring.cs" />

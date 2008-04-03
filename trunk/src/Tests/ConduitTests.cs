@@ -3,8 +3,9 @@ using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Tests.ExampleClasses;
 using NMock2;
+using NMockExtensions;
 using NUnit.Framework;
-using Varian.Tests.Utilities;
+using Assert=NUnit.Framework.Assert;
 
 
 namespace NDependencyInjection.Tests
