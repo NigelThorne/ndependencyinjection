@@ -1,3 +1,4 @@
+//Copyright (c) 2008 Nigel Thorne
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Tests.ExampleClasses;
 using NUnit.Framework;
