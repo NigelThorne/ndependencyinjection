@@ -1,3 +1,4 @@
+//Copyright (c) 2008 Nigel Thorne
 using NMockExtensions;
 using NUnit.Framework;
 using Assert=NMockExtensions.Assert;
