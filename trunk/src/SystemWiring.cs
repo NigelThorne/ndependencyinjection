@@ -73,7 +73,7 @@ namespace NDependencyInjection
         {
             ISystemWiring subsystem = CreateSubsystem();
             subsystem.RegisterServiceProvider<InterfaceType>(repository.GetServiceProvider<InterfaceType>());
-            repository.ReplaceServiceProvider<InterfaceType>(new DependencyResolvingServiceProvider<DecoratingType>(subsystem));
+            repository.ReplaceServiceProvider<InterfaceType>(new DecoratorDependencyResolvingServiceProvider<DecoratingType, InterfaceType>(subsystem));
         }
 
         private T GetService<T>()

@@ -311,6 +311,18 @@ namespace NDependencyInjection.Tests
             IDoSomething addThenDouble = definition.Get<IDoSomething>();
             Assert.AreEqual(60, addThenDouble.DoSomething(10,20));
         }
+        
+        
+        [Test]
+        public void DecoratorsActLikeTheDecoratedClass_SingletonOrFactory()
+        {
+            definition.HasSingleton<CountCalls>().Provides<IDoSomething>();
+            definition.Decorate<IDoSomething>().With<CountAndAdd>();
+
+            Assert.AreEqual(0, definition.Get<IDoSomething>().DoSomething(0, 0));
+            Assert.AreEqual(2, definition.Get<IDoSomething>().DoSomething(0, 0));
+            Assert.AreEqual(4, definition.Get<IDoSomething>().DoSomething(0, 0));
+        }
 
         [Test]
         public void Decoraters_ChainSoAllApply()
@@ -332,11 +344,35 @@ namespace NDependencyInjection.Tests
             Assert.AreEqual(120, addThenDouble.DoSomething(10,20));
         }
 
+        class CountCalls : IDoSomething
+        {
+            private int count = 0;
+            public int DoSomething(int x, int y)
+            {
+                return count++;
+            }
+        }
+        
         class Add : IDoSomething
         {
             public int DoSomething(int x, int y)
             {
                 return x + y;
+            }
+        }
+
+        class CountAndAdd : IDoSomething
+        {
+            private readonly IDoSomething something;
+            private int count = 0;
+            public CountAndAdd(IDoSomething something)
+            {
+                this.something = something;
+            }
+
+            public int DoSomething(int x, int y)
+            {
+                return something.DoSomething(x, y) + count++;
             }
         }
 

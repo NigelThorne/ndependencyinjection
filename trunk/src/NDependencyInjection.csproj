@@ -55,6 +55,7 @@
     <Compile Include="CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
     <Compile Include="DecoratingContext.cs" />
+    <Compile Include="DecoratorDependencyResolvingServiceProvider.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
     <Compile Include="DependencyResolvingServiceProvider.cs" />
     <Compile Include="FixedInstanceServiceProvider.cs" />
