@@ -19,6 +19,13 @@ namespace NDependencyInjection
             dictionary[typeof (T)] = provider;
         }
 
+        public void ReplaceServiceProvider<T1>(IServiceProvider provider)
+        {
+            if (!dictionary.ContainsKey(typeof(T1)))
+                throw new InvalidOperationException(String.Format("Type {0} not defined so you can't replace it", typeof(T1)));
+            dictionary[typeof(T1)] = provider;
+        }
+
         public object GetService(Type serviceType, Type serviceInterface)
         {
             if (!HasService(serviceType))
@@ -30,6 +37,11 @@ namespace NDependencyInjection
         public bool HasService(Type serviceType)
         {
             return dictionary.ContainsKey(serviceType);
+        }
+
+        public IServiceProvider GetServiceProvider<ServiceType>()
+        {
+            return dictionary[typeof (ServiceType)];
         }
     }
 }

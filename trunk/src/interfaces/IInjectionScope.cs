@@ -11,5 +11,6 @@ namespace NDependencyInjection.interfaces
 
         Service Get<Service>();
         void Broadcasts<T1>();
+        IDecoratingContext Decorate<T1>();
     }
 }

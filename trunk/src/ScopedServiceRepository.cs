@@ -26,6 +26,20 @@ namespace NDependencyInjection
             repository.RegisterServiceProvider<T>(provider);
         }
 
+        public void ReplaceServiceProvider<T1>(IServiceProvider provider)
+        {
+            repository.ReplaceServiceProvider<T1>(provider);
+        }
+
+        public IServiceProvider GetServiceProvider<ServiceType>()
+        {
+            if (repository.HasService(typeof(ServiceType)))
+            {
+                return repository.GetServiceProvider<ServiceType>();
+            }
+            return parentScope.GetServiceProvider<ServiceType>();
+        }
+
         public bool HasService(Type serviceType)
         {
             if (repository.HasService(serviceType)) return true;
