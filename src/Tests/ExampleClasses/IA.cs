@@ -7,6 +7,11 @@ namespace NDependencyInjection.Tests.ExampleClasses
         int DoSomething(int x, int y);
     }
 
+    public interface IDoSomething
+    {
+        int DoSomething(int x, int y);
+    }
+
     public interface X<T>
     {
         T DoSomething();

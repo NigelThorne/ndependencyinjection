@@ -47,6 +47,11 @@ namespace NDependencyInjection
             wiring.RegisterBroadcaster<S>();
         }
 
+        public IDecoratingContext Decorate<T1>()
+        {
+            return new DecoratingContext<T1>(wiring);
+        }
+
         public ISystemComponent HasInstance<S>(S instance)
         {
             return new SystemComponent(wiring, new FixedInstanceServiceProvider(instance));

@@ -54,6 +54,7 @@
     <Compile Include="BroadcastProviderFactory.cs" />
     <Compile Include="CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
+    <Compile Include="DecoratingContext.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
     <Compile Include="DependencyResolvingServiceProvider.cs" />
     <Compile Include="FixedInstanceServiceProvider.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="InjectionConstructorAttribute.cs" />
     <Compile Include="interfaces\IBroadcaster.cs" />
     <Compile Include="interfaces\IConduit.cs" />
+    <Compile Include="interfaces\IDecoratingContext.cs" />
     <Compile Include="interfaces\IInjectionScope.cs" />
     <Compile Include="interfaces\IServiceLocator.cs" />
     <Compile Include="interfaces\IServiceProvider.cs" />

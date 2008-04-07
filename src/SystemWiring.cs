@@ -54,6 +54,11 @@ namespace NDependencyInjection
             return repository.HasService(serviceType);
         }
 
+        public IServiceProvider GetServiceProvider<T1>()
+        {
+            return repository.GetServiceProvider<T1>();
+        }
+
         public object GetService(Type serviceType, Type interfaceType)
         {
             return repository.GetService(serviceType, interfaceType);
@@ -62,6 +67,13 @@ namespace NDependencyInjection
         public ISystemWiring CreateSubsystem()
         {
             return new SystemWiring(new ScopedServiceRepository(this));
+        }
+
+        public void DecorateService<InterfaceType, DecoratingType>()
+        {
+            ISystemWiring subsystem = CreateSubsystem();
+            subsystem.RegisterServiceProvider<InterfaceType>(repository.GetServiceProvider<InterfaceType>());
+            repository.ReplaceServiceProvider<InterfaceType>(new DependencyResolvingServiceProvider<DecoratingType>(subsystem));
         }
 
         private T GetService<T>()

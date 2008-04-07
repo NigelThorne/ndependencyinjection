@@ -1,6 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using NDependencyInjection.interfaces;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection
@@ -15,6 +16,11 @@ namespace NDependencyInjection
         public bool HasService(Type serviceType)
         {
             return false;
+        }
+
+        public IServiceProvider GetServiceProvider<ServiceType>()
+        {
+            throw new UnknownTypeException(typeof(ServiceType));
         }
     }
 }
