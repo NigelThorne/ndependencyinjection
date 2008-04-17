@@ -1,0 +1,7 @@
+NDI purposely limits the ways in which objects can be connected to promote the use of subsystems definitions. 
+
+By defining your architecture in terms of systems and subsystems you create a layering within your design.
+
+Each layer has a level of granularity within the system. 
+
+You may be able to visualize your layers using a DesignStructureMatrix
