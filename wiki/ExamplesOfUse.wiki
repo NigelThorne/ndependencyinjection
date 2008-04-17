@@ -1,7 +1,7 @@
 Work In Progress... 
 
-HasInstance
-HasSingleton
-HasFactory
-HasCollection
-HasSubsystem
+ * HasInstance
+ * HasSingleton
+ * HasFactory
+ * HasCollection
+ * HasSubsystem
