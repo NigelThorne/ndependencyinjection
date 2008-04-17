@@ -1,0 +1,7 @@
+Work In Progress... 
+
+HasInstance
+HasSingleton
+HasFactory
+HasCollection
+HasSubsystem
