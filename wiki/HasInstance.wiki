@@ -1,0 +1,11 @@
+#summary Allows an instance to be used to provide services.
+
+{{{
+ISystemDefinition definition = new SystemDefinition();
+
+definition.HasInstance("Test string").Provides<string>();
+
+string theString = definition.Get<string>();
+
+Assert.AreEqual("Test string", theString);
+}}}
