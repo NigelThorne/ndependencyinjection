@@ -1,0 +1,30 @@
+#summary Defines a subsystem based on a SubsystemBuilder so it can provide services
+
+Say you define a subsystemBuilder that populates a SystemDefinition with a service provider. (In this case IFruit)
+
+{{{
+class BananaBuilder: ISubsystemBuilder
+{
+  public void Build(ISystemDefinition system)
+  {
+    system.HasSingelton<Banana>().Provides<IFruit>();
+    system.HasSingelton<Bowl>().Provides<IFruitHolder>();
+  }
+}
+}}}
+
+Then you can use this builder to be the source of the types within it.
+{{{
+ISubsystemBuilder bananaBuilder = new BananaBuilder();
+
+ISystemDefinition system = new SystemDefinition();
+
+system.HasSubsystem(bananaBuilder)
+  .Provides<IFruit>()
+  .Provides<IFruitHolder>();
+
+IFruit fruit = system.Get<IFruit>();
+IFruitHolder fruitHolder = system.Get<IFruitHolder>();
+}}}
+
+Any Get's for types provided by the subsystem are passed on to the subsystem to resolve.
