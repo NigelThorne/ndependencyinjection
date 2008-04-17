@@ -1,7 +1,8 @@
-Work In Progress... 
+Key words... 
 
  * HasInstance
  * HasSingleton
  * HasFactory
  * HasCollection
  * HasSubsystem
+ * [Broadcasts]
