@@ -27,7 +27,8 @@ namespace NDependencyInjection.Generics
                 if (info.TargetMethod.ReturnType != typeof (void))
                     throw new InvalidOperationException("You can only broadcast void methods.");
 
-                foreach (ListenerType childListeners in listeners)
+                ListenerType[] copyOfListeners = listeners.ToArray();
+                foreach (ListenerType childListeners in copyOfListeners)
                 {
                     info.TargetMethod.Invoke(childListeners, info.Arguments);
                 }
