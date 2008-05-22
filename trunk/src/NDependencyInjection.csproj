@@ -55,7 +55,7 @@
     <Compile Include="CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
-    <Compile Include="DependencyResolvingServiceProvider.cs" />
+    <Compile Include="FactoryServiceProvider.cs" />
     <Compile Include="FixedInstanceServiceProvider.cs" />
     <Compile Include="Generics\TypeResolvingConduit.cs" />
     <Compile Include="interfaces\IBroadcasterProvider.cs" />

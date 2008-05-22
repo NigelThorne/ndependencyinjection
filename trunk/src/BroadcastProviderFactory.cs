@@ -13,7 +13,7 @@ namespace NDependencyInjection
 
         public IServiceProvider CreateConstructorCallingProvider<ConcreteType>(IServiceLocator locator)
         {
-            return new DependencyResolvingServiceProvider<ConcreteType>(locator);
+            return new FactoryServiceProvider<ConcreteType>(locator);
         }
     }
 }
