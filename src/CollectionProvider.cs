@@ -25,5 +25,10 @@ namespace NDependencyInjection
             }
             return list.ToArray(interfaceType.GetElementType());
         }
+
+        public void AddMapping(Type serviceType)
+        {
+            
+        }
     }
 }

@@ -69,6 +69,10 @@ namespace NDependencyInjection.Tests
             {
                 throw new ApplicationException();
             }
+
+            public void AddMapping(Type serviceType)
+            {
+            }
         }
     }
 }

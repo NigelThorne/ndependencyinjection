@@ -8,5 +8,8 @@ namespace NDependencyInjection.interfaces
     {
         object GetService(Type serviceType);
         bool HasService(Type serviceType);
+
+        // SMELL
+        IServiceLocator Parent { get; }
     }
 }
