@@ -37,7 +37,7 @@ namespace NDependencyInjection
             List<object> list = new List<object>();
             foreach (Type type in types)
             {
-                list.Add(locator.GetService(type, type));
+                list.Add(locator.GetService(type));
             }
             return list.ToArray();
         }

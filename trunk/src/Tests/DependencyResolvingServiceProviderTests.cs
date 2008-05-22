@@ -30,8 +30,8 @@ namespace NDependencyInjection.Tests
 
             SetupResult.For(serviceLocator.HasService(typeof (IA))).Return(true);
             SetupResult.For(serviceLocator.HasService(typeof (IB))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IA), typeof (IA))).Return(ia);
-            SetupResult.For(serviceLocator.GetService(typeof (IB), typeof (IB))).Return(ib);
+            SetupResult.For(serviceLocator.GetService(typeof (IA))).Return(ia);
+            SetupResult.For(serviceLocator.GetService(typeof (IB))).Return(ib);
             SetupComplete();
 
             IC service = (IC) dependencyResolvingServiceProvider.GetService(typeof (IC), typeof (IC));
@@ -51,9 +51,9 @@ namespace NDependencyInjection.Tests
             IB ib = NewStub<IB>();
 
             SetupResult.For(serviceLocator.HasService(typeof (IA))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IA), typeof (IA))).Return(ia);
+            SetupResult.For(serviceLocator.GetService(typeof (IA))).Return(ia);
             SetupResult.For(serviceLocator.HasService(typeof (IB))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IB), typeof (IB))).Return(ib);
+            SetupResult.For(serviceLocator.GetService(typeof (IB))).Return(ib);
             SetupComplete();
 
             IC service = (IC) provider.GetService(typeof (IC), typeof (IC));
@@ -81,9 +81,9 @@ namespace NDependencyInjection.Tests
             IB ib = NewStub<IB>();
 
             SetupResult.For(serviceLocator.HasService(typeof (IA))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IA), typeof (IA))).Return(ia);
+            SetupResult.For(serviceLocator.GetService(typeof (IA))).Return(ia);
             SetupResult.For(serviceLocator.HasService(typeof (IB))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IB), typeof (IB))).Return(ib);
+            SetupResult.For(serviceLocator.GetService(typeof (IB))).Return(ib);
             SetupComplete();
             provider.GetService(typeof (IC), typeof (IC));
         }

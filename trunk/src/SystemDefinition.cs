@@ -39,17 +39,12 @@ namespace NDependencyInjection
 
         public Service Get<Service>()
         {
-            return (Service) wiring.GetService(typeof (Service), typeof (Service));
+            return (Service) wiring.GetService(typeof (Service));
         }
 
         public void Broadcasts<S>()
         {
             wiring.RegisterBroadcaster<S>();
-        }
-
-        public IDecoratingContext Decorate<T1>()
-        {
-            return new DecoratingContext<T1>(wiring);
         }
 
         public ISystemComponent HasInstance<S>(S instance)
