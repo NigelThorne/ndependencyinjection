@@ -62,7 +62,7 @@ namespace NDependencyInjection
 
         private T GetService<T>()
         {
-            return (T) repository.GetService(typeof (T));
+            return (T) GetService(typeof (T));
         }
     }
 
