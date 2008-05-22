@@ -8,7 +8,7 @@ namespace NDependencyInjection
 {
     internal class NullServiceLocator : IServiceLocator
     {
-        public object GetService(Type serviceType, Type serviceInterface)
+        public object GetService(Type serviceType)
         {
             throw new UnknownTypeException(serviceType);
         }
@@ -16,11 +16,6 @@ namespace NDependencyInjection
         public bool HasService(Type serviceType)
         {
             return false;
-        }
-
-        public IServiceProvider GetServiceProvider<ServiceType>()
-        {
-            throw new UnknownTypeException(typeof(ServiceType));
         }
     }
 }

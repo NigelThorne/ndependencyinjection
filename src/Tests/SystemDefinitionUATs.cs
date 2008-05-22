@@ -303,107 +303,107 @@ namespace NDependencyInjection.Tests
             definition.HasInstance(new Object()).Provides<Object>();
         }
 
-        [Test]
-        public void Decorate_SpecifiesADecoratorToUseForAType()
-        {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
-            Assert.AreEqual(60, addThenDouble.DoSomething(10,20));
-        }
+        //[Test]
+        //public void Decorate_SpecifiesADecoratorToUseForAType()
+        //{
+        //    definition.HasSingleton<Add>().Provides<IDoSomething>();
+        //    definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+        //    IDoSomething addThenDouble = definition.Get<IDoSomething>();
+        //    Assert.AreEqual(60, addThenDouble.DoSomething(10,20));
+        //}
         
         
-        [Test]
-        public void DecoratorsActLikeTheDecoratedClass_SingletonOrFactory()
-        {
-            definition.HasSingleton<CountCalls>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<CountAndAdd>();
+        //[Test]
+        //public void DecoratorsActLikeTheDecoratedClass_SingletonOrFactory()
+        //{
+        //    definition.HasSingleton<CountCalls>().Provides<IDoSomething>();
+        //    definition.Decorate<IDoSomething>().With<CountAndAdd>();
 
-            Assert.AreEqual(0, definition.Get<IDoSomething>().DoSomething(0, 0));
-            Assert.AreEqual(2, definition.Get<IDoSomething>().DoSomething(0, 0));
-            Assert.AreEqual(4, definition.Get<IDoSomething>().DoSomething(0, 0));
-        }
+        //    Assert.AreEqual(0, definition.Get<IDoSomething>().DoSomething(0, 0));
+        //    Assert.AreEqual(2, definition.Get<IDoSomething>().DoSomething(0, 0));
+        //    Assert.AreEqual(4, definition.Get<IDoSomething>().DoSomething(0, 0));
+        //}
 
-        [Test]
-        public void Decoraters_ChainSoAllApply()
-        {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            definition.Decorate<IDoSomething>().With<Increment>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
-            Assert.AreEqual(61, addThenDouble.DoSomething(10,20));
-        }
+        //[Test]
+        //public void Decoraters_ChainSoAllApply()
+        //{
+        //    definition.HasSingleton<Add>().Provides<IDoSomething>();
+        //    definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+        //    definition.Decorate<IDoSomething>().With<Increment>();
+        //    IDoSomething addThenDouble = definition.Get<IDoSomething>();
+        //    Assert.AreEqual(61, addThenDouble.DoSomething(10,20));
+        //}
         
-        [Test]
-        public void Decoraters_ChainSoAllApply_Event_same_twice()
-        {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
-            Assert.AreEqual(120, addThenDouble.DoSomething(10,20));
-        }
+        //[Test]
+        //public void Decoraters_ChainSoAllApply_Event_same_twice()
+        //{
+        //    definition.HasSingleton<Add>().Provides<IDoSomething>();
+        //    definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+        //    definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+        //    IDoSomething addThenDouble = definition.Get<IDoSomething>();
+        //    Assert.AreEqual(120, addThenDouble.DoSomething(10,20));
+        //}
 
-        class CountCalls : IDoSomething
-        {
-            private int count = 0;
-            public int DoSomething(int x, int y)
-            {
-                return count++;
-            }
-        }
+        //class CountCalls : IDoSomething
+        //{
+        //    private int count = 0;
+        //    public int DoSomething(int x, int y)
+        //    {
+        //        return count++;
+        //    }
+        //}
         
-        class Add : IDoSomething
-        {
-            public int DoSomething(int x, int y)
-            {
-                return x + y;
-            }
-        }
+        //class Add : IDoSomething
+        //{
+        //    public int DoSomething(int x, int y)
+        //    {
+        //        return x + y;
+        //    }
+        //}
 
-        class CountAndAdd : IDoSomething
-        {
-            private readonly IDoSomething something;
-            private int count = 0;
-            public CountAndAdd(IDoSomething something)
-            {
-                this.something = something;
-            }
+        //class CountAndAdd : IDoSomething
+        //{
+        //    private readonly IDoSomething something;
+        //    private int count = 0;
+        //    public CountAndAdd(IDoSomething something)
+        //    {
+        //        this.something = something;
+        //    }
 
-            public int DoSomething(int x, int y)
-            {
-                return something.DoSomething(x, y) + count++;
-            }
-        }
+        //    public int DoSomething(int x, int y)
+        //    {
+        //        return something.DoSomething(x, y) + count++;
+        //    }
+        //}
 
-        class DoublingDecorator : IDoSomething
-        {
-            private readonly IDoSomething something;
+        //class DoublingDecorator : IDoSomething
+        //{
+        //    private readonly IDoSomething something;
 
-            public DoublingDecorator(IDoSomething something)
-            {
-                this.something = something;
-            }
+        //    public DoublingDecorator(IDoSomething something)
+        //    {
+        //        this.something = something;
+        //    }
 
-            public int DoSomething(int x, int y)
-            {
-                return something.DoSomething(x, y) * 2;
-            }
-        }
+        //    public int DoSomething(int x, int y)
+        //    {
+        //        return something.DoSomething(x, y) * 2;
+        //    }
+        //}
         
-        class Increment : IDoSomething
-        {
-            private readonly IDoSomething something;
+        //class Increment : IDoSomething
+        //{
+        //    private readonly IDoSomething something;
 
-            public Increment(IDoSomething something)
-            {
-                this.something = something;
-            }
+        //    public Increment(IDoSomething something)
+        //    {
+        //        this.something = something;
+        //    }
 
-            public int DoSomething(int x, int y)
-            {
-                return something.DoSomething(x, y) +1;
-            }
-        }
+        //    public int DoSomething(int x, int y)
+        //    {
+        //        return something.DoSomething(x, y) +1;
+        //    }
+        //}
     }
 }

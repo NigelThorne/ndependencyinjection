@@ -54,8 +54,6 @@
     <Compile Include="BroadcastProviderFactory.cs" />
     <Compile Include="CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
-    <Compile Include="DecoratingContext.cs" />
-    <Compile Include="DecoratorDependencyResolvingServiceProvider.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
     <Compile Include="DependencyResolvingServiceProvider.cs" />
     <Compile Include="FixedInstanceServiceProvider.cs" />
@@ -66,11 +64,11 @@
     <Compile Include="interfaces\IBroadcaster.cs" />
     <Compile Include="interfaces\IConduit.cs" />
     <Compile Include="interfaces\IDecoratingContext.cs" />
-    <Compile Include="interfaces\IInjectionScope.cs" />
     <Compile Include="interfaces\IServiceLocator.cs" />
     <Compile Include="interfaces\IServiceProvider.cs" />
     <Compile Include="interfaces\IServiceRepository.cs" />
     <Compile Include="interfaces\ISubsystemBuilder.cs" />
+    <Compile Include="interfaces\ISystemDefinition.cs" />
     <Compile Include="interfaces\ITypeSafeConduit.cs" />
     <Compile Include="interfaces\ISystemComponent.cs" />
     <Compile Include="interfaces\ISystemWiring.cs" />
@@ -84,7 +82,6 @@
     <Compile Include="SystemComponent.cs" />
     <Compile Include="SystemDefinition.cs" />
     <Compile Include="SystemWiring.cs" />
-    <Compile Include="TypeMapping.cs" />
     <Compile Include="Generics\TypeSafeBroadcaster.cs" />
     <Compile Include="Generics\TypesafeConduit.cs" />
     <Compile Include="UnknownTypeException.cs" />

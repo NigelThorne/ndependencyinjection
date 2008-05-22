@@ -1,6 +1,5 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
-using System.Collections.Generic;
 using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
@@ -10,9 +9,6 @@ namespace NDependencyInjection
 {
     public class SystemWiring : ISystemWiring
     {
-        private readonly Dictionary<Type, IBroadcasterProvider> broadcasters =
-            new Dictionary<Type, IBroadcasterProvider>();
-
         private readonly IServiceRepository repository;
 
         public SystemWiring()
@@ -54,14 +50,9 @@ namespace NDependencyInjection
             return repository.HasService(serviceType);
         }
 
-        public IServiceProvider GetServiceProvider<T1>()
+        public object GetService(Type serviceType)
         {
-            return repository.GetServiceProvider<T1>();
-        }
-
-        public object GetService(Type serviceType, Type interfaceType)
-        {
-            return repository.GetService(serviceType, interfaceType);
+            return repository.GetService(serviceType);
         }
 
         public ISystemWiring CreateSubsystem()
@@ -69,16 +60,9 @@ namespace NDependencyInjection
             return new SystemWiring(new ScopedServiceRepository(this));
         }
 
-        public void DecorateService<InterfaceType, DecoratingType>()
-        {
-            ISystemWiring subsystem = CreateSubsystem();
-            subsystem.RegisterServiceProvider<InterfaceType>(repository.GetServiceProvider<InterfaceType>());
-            repository.ReplaceServiceProvider<InterfaceType>(new DecoratorDependencyResolvingServiceProvider<DecoratingType, InterfaceType>(subsystem));
-        }
-
         private T GetService<T>()
         {
-            return (T) repository.GetService(typeof (T), typeof (T));
+            return (T) repository.GetService(typeof (T));
         }
     }
 

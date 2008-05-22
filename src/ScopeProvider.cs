@@ -17,7 +17,7 @@ namespace NDependencyInjection
 
         public object GetService(Type serviceType, Type interfaceType)
         {
-            return scope.GetService(serviceType, interfaceType);
+            return scope.GetService(interfaceType);
         }
     }
 }

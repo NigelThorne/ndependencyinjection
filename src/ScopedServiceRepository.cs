@@ -26,33 +26,19 @@ namespace NDependencyInjection
             repository.RegisterServiceProvider<T>(provider);
         }
 
-        public void ReplaceServiceProvider<T1>(IServiceProvider provider)
-        {
-            repository.ReplaceServiceProvider<T1>(provider);
-        }
-
-        public IServiceProvider GetServiceProvider<ServiceType>()
-        {
-            if (repository.HasService(typeof(ServiceType)))
-            {
-                return repository.GetServiceProvider<ServiceType>();
-            }
-            return parentScope.GetServiceProvider<ServiceType>();
-        }
-
         public bool HasService(Type serviceType)
         {
             if (repository.HasService(serviceType)) return true;
             return parentScope.HasService(serviceType);
         }
 
-        public object GetService(Type serviceType, Type serviceInterface)
+        public object GetService(Type serviceType)
         {
             if (repository.HasService(serviceType))
             {
-                return repository.GetService(serviceType, serviceInterface);
+                return repository.GetService(serviceType );
             }
-            return parentScope.GetService(serviceType, serviceInterface);
+            return parentScope.GetService(serviceType);
         }
     }
 }
