@@ -42,7 +42,7 @@ namespace NDependencyInjection.Tests
             repository.RegisterServiceProvider<IMyTestClassA>(NewMock<IServiceProvider>());
         }
 
-        [Test, ExpectedException(typeof (InvalidOperationException))]
+        [Test, ExpectedException(typeof(UnknownTypeException))]
         public void ResolveService_ThrowsExpection_WhenTypeNotFound()
         {
             Assert.IsNull(repository.GetService(typeof (IMyTestClassA)));
