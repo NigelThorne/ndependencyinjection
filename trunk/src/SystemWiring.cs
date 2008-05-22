@@ -12,13 +12,13 @@ namespace NDependencyInjection
         private readonly IServiceRepository repository;
 
         public SystemWiring()
-            : this(new ScopedServiceRepository(new NullServiceLocator()))
+            : this(new NullServiceLocator())
         {
         }
 
-        [Obsolete("Use the CreateSubsystem syntax")]
+        // Should this be removed?
         public SystemWiring(IServiceLocator parent)
-            : this(new ScopedServiceRepository(parent))
+            : this(new ServiceRepository(parent))
         {
         }
 
@@ -57,7 +57,7 @@ namespace NDependencyInjection
 
         public ISystemWiring CreateSubsystem()
         {
-            return new SystemWiring(new ScopedServiceRepository(this));
+            return new SystemWiring(new ServiceRepository(this));
         }
 
         private T GetService<T>()

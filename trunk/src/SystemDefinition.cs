@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using NDependencyInjection.interfaces;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection
@@ -24,32 +25,14 @@ namespace NDependencyInjection
         {
         }
 
-        public ISystemComponent HasFactory<S>()
-        {
-            return new SystemComponent(wiring, new DependencyResolvingServiceProvider<S>(wiring));
-        }
-
-        public ISystemComponent HasSingleton<S>()
-        {
-            return
-                new SystemComponent(wiring,
-                                    new SingletonServiceProviderDecorator(
-                                        new DependencyResolvingServiceProvider<S>(wiring)));
-        }
-
-        public Service Get<Service>()
-        {
-            return (Service) wiring.GetService(typeof (Service));
-        }
-
         public void Broadcasts<S>()
         {
             wiring.RegisterBroadcaster<S>();
         }
 
-        public ISystemComponent HasInstance<S>(S instance)
+        public Service Get<Service>()
         {
-            return new SystemComponent(wiring, new FixedInstanceServiceProvider(instance));
+            return (Service) wiring.GetService(typeof (Service));
         }
 
         public ISystemComponent HasCollection(params ISubsystemBuilder[] subsystems)
@@ -59,12 +42,30 @@ namespace NDependencyInjection
             {
                 list.Add(CreateSubsystemWiring(subsystem));
             }
-            return new SystemComponent(wiring, new CollectionProvider(list.ToArray()));
+            return NewComponent(new CollectionProvider(list.ToArray()));
+        }
+
+        public ISystemComponent HasFactory<S>()
+        {
+            return NewComponent(new DependencyResolvingServiceProvider<S>(wiring));
+        }
+
+        public ISystemComponent HasInstance<S>(S instance)
+        {
+            return NewComponent(new FixedInstanceServiceProvider(instance));
+        }
+
+        public ISystemComponent HasSingleton<S>()
+        {
+            return
+                NewComponent(
+                    new SingletonServiceProviderDecorator(
+                        new DependencyResolvingServiceProvider<S>(wiring)));
         }
 
         public ISystemComponent HasSubsystem(ISubsystemBuilder subsystemBuilder)
         {
-            return new SystemComponent(wiring, new SubsystemProvider(CreateSubsystemWiring(subsystemBuilder)));
+            return NewComponent(new SubsystemProvider(CreateSubsystemWiring(subsystemBuilder)));
         }
 
         private IServiceLocator CreateSubsystemWiring(ISubsystemBuilder subsystem)
@@ -72,6 +73,11 @@ namespace NDependencyInjection
             ISystemWiring child = wiring.CreateSubsystem();
             subsystem.Build(new SystemDefinition(child));
             return child;
+        }
+
+        private SystemComponent NewComponent(IServiceProvider provider)
+        {
+            return new SystemComponent(wiring, provider);
         }
     }
 }

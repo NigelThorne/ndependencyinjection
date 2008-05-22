@@ -10,6 +10,17 @@ namespace NDependencyInjection
     public class ServiceRepository : IServiceRepository
     {
         private readonly Dictionary<Type, IServiceProvider> dictionary = new Dictionary<Type, IServiceProvider>();
+        private readonly IServiceLocator parentScope;
+
+        public ServiceRepository()
+            : this(new NullServiceLocator())
+        {
+        }
+
+        public ServiceRepository(IServiceLocator parentScope)
+        {
+            this.parentScope = parentScope;
+        }
 
         public void RegisterServiceProvider<T>(IServiceProvider provider)
         {
@@ -21,15 +32,17 @@ namespace NDependencyInjection
 
         public object GetService(Type serviceType)
         {
-            if (!HasService(serviceType))
-                throw new InvalidOperationException(String.Format("Type {0} is not registered", serviceType));
-
-            return dictionary[serviceType].GetService(serviceType, serviceType);
+            if (dictionary.ContainsKey(serviceType))
+            {
+                return dictionary[serviceType].GetService(serviceType,serviceType);
+            }
+            return parentScope.GetService(serviceType);
         }
 
         public bool HasService(Type serviceType)
         {
-            return dictionary.ContainsKey(serviceType);
+            if ( dictionary.ContainsKey(serviceType)) return true;
+            return parentScope.HasService(serviceType);
         }
     }
 }
