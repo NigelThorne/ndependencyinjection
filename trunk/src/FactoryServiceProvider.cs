@@ -15,6 +15,7 @@ namespace NDependencyInjection
     public class FactoryServiceProvider<ConcreteType> : IServiceProvider
     {
         private readonly IServiceLocator locator;
+        private readonly List<Type> myTypes = new List<Type>();
 
         public FactoryServiceProvider(IServiceLocator locator)
         {
@@ -27,6 +28,11 @@ namespace NDependencyInjection
             return Reflection.CallConstructor<ConcreteType>(constructor, GetParameters(constructor));
         }
 
+        public void AddMapping(Type serviceType)
+        {
+            myTypes.Add(serviceType);
+        }
+
         private object[] GetParameters(ConstructorInfo constructor)
         {
             return GetServices(Reflection.GetParameterTypes(constructor));
@@ -37,10 +43,14 @@ namespace NDependencyInjection
             List<object> list = new List<object>();
             foreach (Type type in types)
             {
-                list.Add(locator.GetService(type));
+                if (myTypes.Contains(type))
+                    list.Add(locator.Parent.GetService(type));
+                else
+                    list.Add(locator.GetService(type));
             }
             return list.ToArray();
         }
+
 
         private ConstructorInfo GetCallableConstructor()
         {

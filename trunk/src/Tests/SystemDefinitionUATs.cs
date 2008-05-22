@@ -11,15 +11,11 @@ namespace NDependencyInjection.Tests
     [TestFixture]
     public class SystemDefinitionUATs
     {
-        #region Setup/Teardown
-
         [SetUp]
         public void SetUp()
         {
             definition = new SystemDefinition();
         }
-
-        #endregion
 
         private ISystemDefinition definition;
 
@@ -100,10 +96,7 @@ namespace NDependencyInjection.Tests
             Reciever reciever = new Reciever();
             subsystem.HasSubsystem(
                 new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope)
-                        {
-                            scope.HasInstance(reciever).ListensTo<IListener>();
-                        }));
+                    delegate(ISystemDefinition scope) { scope.HasInstance(reciever).ListensTo<IListener>(); }));
             subsystem.HasSingleton<Sender>().Provides<ISender>();
 
             ISender sender = subsystem.Get<ISender>();
@@ -113,6 +106,23 @@ namespace NDependencyInjection.Tests
 
             Assert.AreEqual(2, reciever.recieved[0]);
             Assert.AreEqual(4, reciever.recieved[1]);
+        }
+
+        [Test]
+        public void Decorator_GetsInstanceOfParentForServiceItProvides()
+        {
+            DecoratorA instance = null;
+
+            IA parent = new ClassA();
+            definition.HasInstance(parent).Provides<IA>();
+            definition.HasSubsystem(new DelegateExecutingBuilder(
+                                        delegate(ISystemDefinition scope)
+                                            {
+                                                scope.HasSingleton<DecoratorA>().Provides<IA>().Provides<DecoratorA>();
+                                                instance = scope.Get<DecoratorA>();
+                                            }));
+
+            Assert.AreEqual(parent,instance.Parent);
         }
 
         [Test, ExpectedException(typeof (UnknownTypeException))]
@@ -311,8 +321,8 @@ namespace NDependencyInjection.Tests
         //    IDoSomething addThenDouble = definition.Get<IDoSomething>();
         //    Assert.AreEqual(60, addThenDouble.DoSomething(10,20));
         //}
-        
-        
+
+
         //[Test]
         //public void DecoratorsActLikeTheDecoratedClass_SingletonOrFactory()
         //{
@@ -333,7 +343,7 @@ namespace NDependencyInjection.Tests
         //    IDoSomething addThenDouble = definition.Get<IDoSomething>();
         //    Assert.AreEqual(61, addThenDouble.DoSomething(10,20));
         //}
-        
+
         //[Test]
         //public void Decoraters_ChainSoAllApply_Event_same_twice()
         //{
@@ -352,7 +362,7 @@ namespace NDependencyInjection.Tests
         //        return count++;
         //    }
         //}
-        
+
         //class Add : IDoSomething
         //{
         //    public int DoSomething(int x, int y)
@@ -390,7 +400,7 @@ namespace NDependencyInjection.Tests
         //        return something.DoSomething(x, y) * 2;
         //    }
         //}
-        
+
         //class Increment : IDoSomething
         //{
         //    private readonly IDoSomething something;

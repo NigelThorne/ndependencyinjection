@@ -30,6 +30,7 @@ namespace NDependencyInjection
         public void RegisterServiceProvider<T1>(IServiceProvider provider)
         {
             repository.RegisterServiceProvider<T1>(provider);
+            provider.AddMapping(typeof(T1));
         }
 
         public void RegisterServiceListener<EventsInterface>(IServiceProvider provider)
@@ -48,6 +49,11 @@ namespace NDependencyInjection
         public bool HasService(Type serviceType)
         {
             return repository.HasService(serviceType);
+        }
+
+        public IServiceLocator Parent
+        {
+            get { return repository.Parent; }
         }
 
         public object GetService(Type serviceType)

@@ -37,6 +37,11 @@ namespace NDependencyInjection
             return instance;
         }
 
+        public void AddMapping(Type serviceType)
+        {
+            serviceProvider.AddMapping(serviceType);
+        }
+
         public object GetService(Type service)
         {
             return GetService(service, service);

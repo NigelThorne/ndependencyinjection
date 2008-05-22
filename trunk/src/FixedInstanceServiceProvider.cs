@@ -18,5 +18,10 @@ namespace NDependencyInjection
         {
             return instance;
         }
+
+        public void AddMapping(Type serviceType)
+        {
+            
+        }
     }
 }

@@ -44,5 +44,10 @@ namespace NDependencyInjection
             if ( dictionary.ContainsKey(serviceType)) return true;
             return parentScope.HasService(serviceType);
         }
+
+        public IServiceLocator Parent
+        {
+            get { return parentScope; }
+        }
     }
 }

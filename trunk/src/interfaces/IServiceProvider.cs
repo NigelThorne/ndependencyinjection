@@ -7,5 +7,6 @@ namespace NDependencyInjection.interfaces
     public interface IServiceProvider
     {
         object GetService(Type serviceType, Type interfaceType);
+        void AddMapping(Type serviceType);
     }
 }

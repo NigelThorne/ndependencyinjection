@@ -19,5 +19,10 @@ namespace NDependencyInjection
         {
             return scope.GetService(interfaceType);
         }
+
+        public void AddMapping(Type serviceType)
+        {
+            
+        }
     }
 }

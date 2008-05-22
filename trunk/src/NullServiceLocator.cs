@@ -16,5 +16,10 @@ namespace NDependencyInjection
         {
             return false;
         }
+
+        public IServiceLocator Parent
+        {
+            get { return this; }
+        }
     }
 }
