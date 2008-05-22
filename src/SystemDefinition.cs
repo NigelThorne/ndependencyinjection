@@ -47,7 +47,7 @@ namespace NDependencyInjection
 
         public ISystemComponent HasFactory<S>()
         {
-            return NewComponent(new DependencyResolvingServiceProvider<S>(wiring));
+            return NewComponent(new FactoryServiceProvider<S>(wiring));
         }
 
         public ISystemComponent HasInstance<S>(S instance)
@@ -60,7 +60,7 @@ namespace NDependencyInjection
             return
                 NewComponent(
                     new SingletonServiceProviderDecorator(
-                        new DependencyResolvingServiceProvider<S>(wiring)));
+                        new FactoryServiceProvider<S>(wiring)));
         }
 
         public ISystemComponent HasSubsystem(ISubsystemBuilder subsystemBuilder)
@@ -75,7 +75,7 @@ namespace NDependencyInjection
             return child;
         }
 
-        private SystemComponent NewComponent(IServiceProvider provider)
+        private ISystemComponent NewComponent(IServiceProvider provider)
         {
             return new SystemComponent(wiring, provider);
         }

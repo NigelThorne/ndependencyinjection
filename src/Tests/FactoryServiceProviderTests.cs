@@ -10,7 +10,7 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 namespace NDependencyInjection.Tests
 {
     [TestFixture]
-    public class DependencyResolvingServiceProviderTests : RhinoMockingTestFixture
+    public class FactoryServiceProviderTests : RhinoMockingTestFixture
     {
         private IServiceProvider dependencyResolvingServiceProvider;
         private IServiceLocator serviceLocator;
@@ -19,7 +19,7 @@ namespace NDependencyInjection.Tests
         {
             serviceLocator = NewMock<IServiceLocator>();
 
-            dependencyResolvingServiceProvider = new DependencyResolvingServiceProvider<ClassC>(serviceLocator);
+            dependencyResolvingServiceProvider = new FactoryServiceProvider<ClassC>(serviceLocator);
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace NDependencyInjection.Tests
             GetService_CallsTheConstructorThatIsAttributed_WhenThereIsMoreThanOneConstructorAndOnlyOneIsAttributed()
         {
             IServiceProvider provider =
-                new DependencyResolvingServiceProvider<TwoConstructorsAttributes>(serviceLocator);
+                new FactoryServiceProvider<TwoConstructorsAttributes>(serviceLocator);
 
             IA ia = NewStub<IA>();
             IB ib = NewStub<IB>();
@@ -76,7 +76,7 @@ namespace NDependencyInjection.Tests
         public void GetService_ThrowsException_WhenThereAreMultipleConstructorsButNoneAreAttributed()
         {
             IServiceProvider provider =
-                new DependencyResolvingServiceProvider<TwoConstructorsNoAttributes>(serviceLocator);
+                new FactoryServiceProvider<TwoConstructorsNoAttributes>(serviceLocator);
             IA ia = NewStub<IA>();
             IB ib = NewStub<IB>();
 
@@ -92,7 +92,7 @@ namespace NDependencyInjection.Tests
         public void GetService_ThrowsException_WhenThereAreMultipleConstructorsThatAreAttributed()
         {
             IServiceProvider provider =
-                new DependencyResolvingServiceProvider<TwoConstructorsTwoAttributes>(serviceLocator);
+                new FactoryServiceProvider<TwoConstructorsTwoAttributes>(serviceLocator);
 
             SetupComplete();
             provider.GetService(typeof (IC), typeof (IC));
