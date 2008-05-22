@@ -12,14 +12,14 @@ namespace NDependencyInjection.Tests
     [TestFixture]
     public class FactoryServiceProviderTests : RhinoMockingTestFixture
     {
-        private IServiceProvider dependencyResolvingServiceProvider;
+        private IServiceProvider serviceProvider;
         private IServiceLocator serviceLocator;
 
         protected override void SetUp()
         {
             serviceLocator = NewMock<IServiceLocator>();
 
-            dependencyResolvingServiceProvider = new FactoryServiceProvider<ClassC>(serviceLocator);
+            serviceProvider = new FactoryServiceProvider<ClassC>(serviceLocator);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace NDependencyInjection.Tests
             SetupResult.For(serviceLocator.GetService(typeof (IB))).Return(ib);
             SetupComplete();
 
-            IC service = (IC) dependencyResolvingServiceProvider.GetService(typeof (IC), typeof (IC));
+            IC service = (IC) serviceProvider.GetService(typeof (IC), typeof (IC));
 
             Assert.AreEqual(ia, service.A);
             Assert.AreEqual(ib, service.B);
@@ -69,7 +69,7 @@ namespace NDependencyInjection.Tests
             SetupResult.For(serviceLocator.HasService(typeof (IB))).Return(true);
             SetupComplete();
 
-            dependencyResolvingServiceProvider.GetService(typeof (IC), typeof (IC));
+            serviceProvider.GetService(typeof (IC), typeof (IC));
         }
 
         [Test, ExpectedException(typeof (ApplicationException))]
