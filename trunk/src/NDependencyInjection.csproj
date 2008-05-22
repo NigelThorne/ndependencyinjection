@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BroadcasterProvider.cs" />
-    <Compile Include="BroadcastProviderFactory.cs" />
     <Compile Include="CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />

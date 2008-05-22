@@ -12,11 +12,11 @@ namespace NDependencyInjection
     /// Calls the constructor for the ConcreteType when GetService is called. Any Parameters are resolved first
     /// </summary>
     /// <typeparam name="ConcreteType"></typeparam>
-    public class DependencyResolvingServiceProvider<ConcreteType> : IServiceProvider
+    public class FactoryServiceProvider<ConcreteType> : IServiceProvider
     {
         private readonly IServiceLocator locator;
 
-        public DependencyResolvingServiceProvider(IServiceLocator locator)
+        public FactoryServiceProvider(IServiceLocator locator)
         {
             this.locator = locator;
         }
