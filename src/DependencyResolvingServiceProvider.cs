@@ -12,12 +12,11 @@ namespace NDependencyInjection
     /// Calls the constructor for the ConcreteType when GetService is called. Any Parameters are resolved first
     /// </summary>
     /// <typeparam name="ConcreteType"></typeparam>
-    public class FactoryServiceProvider<ConcreteType> : IServiceProvider
+    public class DependencyResolvingServiceProvider<ConcreteType> : IServiceProvider
     {
         private readonly IServiceLocator locator;
-        private readonly List<Type> myTypes = new List<Type>();
 
-        public FactoryServiceProvider(IServiceLocator locator)
+        public DependencyResolvingServiceProvider(IServiceLocator locator)
         {
             this.locator = locator;
         }
@@ -26,11 +25,6 @@ namespace NDependencyInjection
         {
             ConstructorInfo constructor = GetCallableConstructor();
             return Reflection.CallConstructor<ConcreteType>(constructor, GetParameters(constructor));
-        }
-
-        public void AddMapping(Type serviceType)
-        {
-            myTypes.Add(serviceType);
         }
 
         private object[] GetParameters(ConstructorInfo constructor)
@@ -43,14 +37,10 @@ namespace NDependencyInjection
             List<object> list = new List<object>();
             foreach (Type type in types)
             {
-                if (myTypes.Contains(type))
-                    list.Add(locator.Parent.GetService(type));
-                else
-                    list.Add(locator.GetService(type));
+                list.Add(locator.GetService(type, type));
             }
             return list.ToArray();
         }
-
 
         private ConstructorInfo GetCallableConstructor()
         {

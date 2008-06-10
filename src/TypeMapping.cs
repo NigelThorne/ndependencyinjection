@@ -6,18 +6,18 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection
 {
-    internal class SubsystemProvider : IServiceProvider
+    public class TypeMapping<T> : IServiceProvider
     {
-        private readonly IServiceLocator scope;
+        private readonly IServiceLocator locator;
 
-        public SubsystemProvider(IServiceLocator scope)
+        public TypeMapping(IServiceLocator locator)
         {
-            this.scope = scope;
+            this.locator = locator;
         }
 
         public object GetService(Type serviceType, Type interfaceType)
         {
-            return scope.GetService(serviceType, interfaceType);
+            return locator.GetService(typeof (T), interfaceType);
         }
     }
 }

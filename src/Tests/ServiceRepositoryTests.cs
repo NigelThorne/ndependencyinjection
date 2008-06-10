@@ -32,7 +32,7 @@ namespace NDependencyInjection.Tests
         {
             IServiceProvider serviceProvider = new MockExceptionThrowingServiceProvider();
             repository.RegisterServiceProvider<IA>(serviceProvider);
-            repository.GetService(typeof (IA));
+            repository.GetService(typeof (IA), typeof (IA));
         }
 
         [Test, ExpectedException(typeof (InvalidOperationException))]
@@ -42,10 +42,10 @@ namespace NDependencyInjection.Tests
             repository.RegisterServiceProvider<IMyTestClassA>(NewMock<IServiceProvider>());
         }
 
-        [Test, ExpectedException(typeof(UnknownTypeException))]
+        [Test, ExpectedException(typeof (InvalidOperationException))]
         public void ResolveService_ThrowsExpection_WhenTypeNotFound()
         {
-            Assert.IsNull(repository.GetService(typeof (IMyTestClassA)));
+            Assert.IsNull(repository.GetService(typeof (IMyTestClassA), typeof (IMyTestClassA)));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace NDependencyInjection.Tests
             IServiceProvider serviceProvider = new SP(a);
             repository.RegisterServiceProvider<IMyTestClassA>(serviceProvider);
 
-            Assert.AreSame(a, repository.GetService(typeof (IMyTestClassA)));
+            Assert.AreSame(a, repository.GetService(typeof (IMyTestClassA), typeof (IMyTestClassA)));
             Assert.IsTrue(((SP) serviceProvider).gotCalled);
         }
 
@@ -68,10 +68,6 @@ namespace NDependencyInjection.Tests
             public object GetService(Type serviceType, Type interfaceType)
             {
                 throw new ApplicationException();
-            }
-
-            public void AddMapping(Type serviceType)
-            {
             }
         }
     }

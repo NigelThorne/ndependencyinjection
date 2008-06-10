@@ -4,12 +4,9 @@ using System;
 
 namespace NDependencyInjection.interfaces
 {
-    public interface IServiceLocator 
+    public interface IServiceLocator : IServiceProvider
     {
-        object GetService(Type serviceType);
         bool HasService(Type serviceType);
-
-        // SMELL
-        IServiceLocator Parent { get; }
+        IServiceProvider GetServiceProvider<T1>();
     }
 }

@@ -10,16 +10,16 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 namespace NDependencyInjection.Tests
 {
     [TestFixture]
-    public class FactoryServiceProviderTests : RhinoMockingTestFixture
+    public class DependencyResolvingServiceProviderTests : RhinoMockingTestFixture
     {
-        private IServiceProvider serviceProvider;
+        private IServiceProvider dependencyResolvingServiceProvider;
         private IServiceLocator serviceLocator;
 
         protected override void SetUp()
         {
             serviceLocator = NewMock<IServiceLocator>();
 
-            serviceProvider = new FactoryServiceProvider<ClassC>(serviceLocator);
+            dependencyResolvingServiceProvider = new DependencyResolvingServiceProvider<ClassC>(serviceLocator);
         }
 
         [Test]
@@ -30,11 +30,11 @@ namespace NDependencyInjection.Tests
 
             SetupResult.For(serviceLocator.HasService(typeof (IA))).Return(true);
             SetupResult.For(serviceLocator.HasService(typeof (IB))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IA))).Return(ia);
-            SetupResult.For(serviceLocator.GetService(typeof (IB))).Return(ib);
+            SetupResult.For(serviceLocator.GetService(typeof (IA), typeof (IA))).Return(ia);
+            SetupResult.For(serviceLocator.GetService(typeof (IB), typeof (IB))).Return(ib);
             SetupComplete();
 
-            IC service = (IC) serviceProvider.GetService(typeof (IC), typeof (IC));
+            IC service = (IC) dependencyResolvingServiceProvider.GetService(typeof (IC), typeof (IC));
 
             Assert.AreEqual(ia, service.A);
             Assert.AreEqual(ib, service.B);
@@ -45,15 +45,15 @@ namespace NDependencyInjection.Tests
             GetService_CallsTheConstructorThatIsAttributed_WhenThereIsMoreThanOneConstructorAndOnlyOneIsAttributed()
         {
             IServiceProvider provider =
-                new FactoryServiceProvider<TwoConstructorsAttributes>(serviceLocator);
+                new DependencyResolvingServiceProvider<TwoConstructorsAttributes>(serviceLocator);
 
             IA ia = NewStub<IA>();
             IB ib = NewStub<IB>();
 
             SetupResult.For(serviceLocator.HasService(typeof (IA))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IA))).Return(ia);
+            SetupResult.For(serviceLocator.GetService(typeof (IA), typeof (IA))).Return(ia);
             SetupResult.For(serviceLocator.HasService(typeof (IB))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IB))).Return(ib);
+            SetupResult.For(serviceLocator.GetService(typeof (IB), typeof (IB))).Return(ib);
             SetupComplete();
 
             IC service = (IC) provider.GetService(typeof (IC), typeof (IC));
@@ -69,21 +69,21 @@ namespace NDependencyInjection.Tests
             SetupResult.For(serviceLocator.HasService(typeof (IB))).Return(true);
             SetupComplete();
 
-            serviceProvider.GetService(typeof (IC), typeof (IC));
+            dependencyResolvingServiceProvider.GetService(typeof (IC), typeof (IC));
         }
 
         [Test, ExpectedException(typeof (ApplicationException))]
         public void GetService_ThrowsException_WhenThereAreMultipleConstructorsButNoneAreAttributed()
         {
             IServiceProvider provider =
-                new FactoryServiceProvider<TwoConstructorsNoAttributes>(serviceLocator);
+                new DependencyResolvingServiceProvider<TwoConstructorsNoAttributes>(serviceLocator);
             IA ia = NewStub<IA>();
             IB ib = NewStub<IB>();
 
             SetupResult.For(serviceLocator.HasService(typeof (IA))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IA))).Return(ia);
+            SetupResult.For(serviceLocator.GetService(typeof (IA), typeof (IA))).Return(ia);
             SetupResult.For(serviceLocator.HasService(typeof (IB))).Return(true);
-            SetupResult.For(serviceLocator.GetService(typeof (IB))).Return(ib);
+            SetupResult.For(serviceLocator.GetService(typeof (IB), typeof (IB))).Return(ib);
             SetupComplete();
             provider.GetService(typeof (IC), typeof (IC));
         }
@@ -92,7 +92,7 @@ namespace NDependencyInjection.Tests
         public void GetService_ThrowsException_WhenThereAreMultipleConstructorsThatAreAttributed()
         {
             IServiceProvider provider =
-                new FactoryServiceProvider<TwoConstructorsTwoAttributes>(serviceLocator);
+                new DependencyResolvingServiceProvider<TwoConstructorsTwoAttributes>(serviceLocator);
 
             SetupComplete();
             provider.GetService(typeof (IC), typeof (IC));

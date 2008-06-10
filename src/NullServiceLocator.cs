@@ -1,13 +1,14 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using NDependencyInjection.interfaces;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection
 {
     internal class NullServiceLocator : IServiceLocator
     {
-        public object GetService(Type serviceType)
+        public object GetService(Type serviceType, Type serviceInterface)
         {
             throw new UnknownTypeException(serviceType);
         }
@@ -17,9 +18,9 @@ namespace NDependencyInjection
             return false;
         }
 
-        public IServiceLocator Parent
+        public IServiceProvider GetServiceProvider<ServiceType>()
         {
-            get { return this; }
+            throw new UnknownTypeException(typeof(ServiceType));
         }
     }
 }

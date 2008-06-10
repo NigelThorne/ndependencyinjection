@@ -20,10 +20,5 @@ namespace NDependencyInjection.Tests.ExampleClasses
             gotCalled = true;
             return service;
         }
-
-        public void AddMapping(Type serviceType)
-        {
-            
-        }
     }
 }

@@ -21,14 +21,9 @@ namespace NDependencyInjection
             ArrayList list = new ArrayList();
             foreach (IServiceLocator subsystem in subsystems)
             {
-                list.Add(subsystem.GetService(interfaceType.GetElementType()));
+                list.Add(subsystem.GetService(serviceType.GetElementType(), interfaceType.GetElementType()));
             }
             return list.ToArray(interfaceType.GetElementType());
-        }
-
-        public void AddMapping(Type serviceType)
-        {
-            
         }
     }
 }

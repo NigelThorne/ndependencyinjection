@@ -1,5 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
+using System.Collections.Generic;
 using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
@@ -9,16 +10,19 @@ namespace NDependencyInjection
 {
     public class SystemWiring : ISystemWiring
     {
+        private readonly Dictionary<Type, IBroadcasterProvider> broadcasters =
+            new Dictionary<Type, IBroadcasterProvider>();
+
         private readonly IServiceRepository repository;
 
         public SystemWiring()
-            : this(new NullServiceLocator())
+            : this(new ScopedServiceRepository(new NullServiceLocator()))
         {
         }
 
-        // Should this be removed?
+        [Obsolete("Use the CreateSubsystem syntax")]
         public SystemWiring(IServiceLocator parent)
-            : this(new ServiceRepository(parent))
+            : this(new ScopedServiceRepository(parent))
         {
         }
 
@@ -30,7 +34,6 @@ namespace NDependencyInjection
         public void RegisterServiceProvider<T1>(IServiceProvider provider)
         {
             repository.RegisterServiceProvider<T1>(provider);
-            provider.AddMapping(typeof(T1));
         }
 
         public void RegisterServiceListener<EventsInterface>(IServiceProvider provider)
@@ -51,24 +54,31 @@ namespace NDependencyInjection
             return repository.HasService(serviceType);
         }
 
-        public IServiceLocator Parent
+        public IServiceProvider GetServiceProvider<T1>()
         {
-            get { return repository.Parent; }
+            return repository.GetServiceProvider<T1>();
         }
 
-        public object GetService(Type serviceType)
+        public object GetService(Type serviceType, Type interfaceType)
         {
-            return repository.GetService(serviceType);
+            return repository.GetService(serviceType, interfaceType);
         }
 
         public ISystemWiring CreateSubsystem()
         {
-            return new SystemWiring(new ServiceRepository(this));
+            return new SystemWiring(new ScopedServiceRepository(this));
+        }
+
+        public void DecorateService<InterfaceType, DecoratingType>()
+        {
+            ISystemWiring subsystem = CreateSubsystem();
+            subsystem.RegisterServiceProvider<InterfaceType>(repository.GetServiceProvider<InterfaceType>());
+            repository.ReplaceServiceProvider<InterfaceType>(new DecoratorDependencyResolvingServiceProvider<DecoratingType, InterfaceType>(subsystem));
         }
 
         private T GetService<T>()
         {
-            return (T) GetService(typeof (T));
+            return (T) repository.GetService(typeof (T), typeof (T));
         }
     }
 

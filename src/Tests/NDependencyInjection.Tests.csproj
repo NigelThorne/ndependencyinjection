@@ -68,7 +68,7 @@
     <Compile Include="BroadcasterProviderTests.cs" />
     <Compile Include="SystemDefinitionUATs.cs" />
     <Compile Include="TypeSafeBroadcasterTests.cs" />
-    <Compile Include="FactoryServiceProviderTests.cs" />
+    <Compile Include="DependencyResolvingServiceProviderTests.cs" />
     <Compile Include="ExampleClasses\ClassA.cs" />
     <Compile Include="ExampleClasses\ClassB.cs" />
     <Compile Include="ExampleClasses\ClassC.cs" />

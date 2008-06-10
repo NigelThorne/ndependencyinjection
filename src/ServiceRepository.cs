@@ -10,17 +10,6 @@ namespace NDependencyInjection
     public class ServiceRepository : IServiceRepository
     {
         private readonly Dictionary<Type, IServiceProvider> dictionary = new Dictionary<Type, IServiceProvider>();
-        private readonly IServiceLocator parentScope;
-
-        public ServiceRepository()
-            : this(new NullServiceLocator())
-        {
-        }
-
-        public ServiceRepository(IServiceLocator parentScope)
-        {
-            this.parentScope = parentScope;
-        }
 
         public void RegisterServiceProvider<T>(IServiceProvider provider)
         {
@@ -30,24 +19,29 @@ namespace NDependencyInjection
             dictionary[typeof (T)] = provider;
         }
 
-        public object GetService(Type serviceType)
+        public void ReplaceServiceProvider<T1>(IServiceProvider provider)
         {
-            if (dictionary.ContainsKey(serviceType))
-            {
-                return dictionary[serviceType].GetService(serviceType,serviceType);
-            }
-            return parentScope.GetService(serviceType);
+            if (!dictionary.ContainsKey(typeof(T1)))
+                throw new InvalidOperationException(String.Format("Type {0} not defined so you can't replace it", typeof(T1)));
+            dictionary[typeof(T1)] = provider;
+        }
+
+        public object GetService(Type serviceType, Type serviceInterface)
+        {
+            if (!HasService(serviceType))
+                throw new InvalidOperationException(String.Format("Type {0} is not registered", serviceType));
+
+            return dictionary[serviceType].GetService(serviceType, serviceInterface);
         }
 
         public bool HasService(Type serviceType)
         {
-            if ( dictionary.ContainsKey(serviceType)) return true;
-            return parentScope.HasService(serviceType);
+            return dictionary.ContainsKey(serviceType);
         }
 
-        public IServiceLocator Parent
+        public IServiceProvider GetServiceProvider<ServiceType>()
         {
-            get { return parentScope; }
+            return dictionary[typeof (ServiceType)];
         }
     }
 }

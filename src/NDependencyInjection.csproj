@@ -51,10 +51,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BroadcasterProvider.cs" />
+    <Compile Include="BroadcastProviderFactory.cs" />
     <Compile Include="CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
+    <Compile Include="DecoratingContext.cs" />
+    <Compile Include="DecoratorDependencyResolvingServiceProvider.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
-    <Compile Include="FactoryServiceProvider.cs" />
+    <Compile Include="DependencyResolvingServiceProvider.cs" />
     <Compile Include="FixedInstanceServiceProvider.cs" />
     <Compile Include="Generics\TypeResolvingConduit.cs" />
     <Compile Include="interfaces\IBroadcasterProvider.cs" />
@@ -63,23 +66,25 @@
     <Compile Include="interfaces\IBroadcaster.cs" />
     <Compile Include="interfaces\IConduit.cs" />
     <Compile Include="interfaces\IDecoratingContext.cs" />
+    <Compile Include="interfaces\IInjectionScope.cs" />
     <Compile Include="interfaces\IServiceLocator.cs" />
     <Compile Include="interfaces\IServiceProvider.cs" />
     <Compile Include="interfaces\IServiceRepository.cs" />
     <Compile Include="interfaces\ISubsystemBuilder.cs" />
-    <Compile Include="interfaces\ISystemDefinition.cs" />
     <Compile Include="interfaces\ITypeSafeConduit.cs" />
     <Compile Include="interfaces\ISystemComponent.cs" />
     <Compile Include="interfaces\ISystemWiring.cs" />
     <Compile Include="NullServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection.cs" />
+    <Compile Include="ScopedServiceRepository.cs" />
     <Compile Include="ScopeProvider.cs" />
     <Compile Include="ServiceRepository.cs" />
     <Compile Include="SingletonServiceProviderDecorator.cs" />
     <Compile Include="SystemComponent.cs" />
     <Compile Include="SystemDefinition.cs" />
     <Compile Include="SystemWiring.cs" />
+    <Compile Include="TypeMapping.cs" />
     <Compile Include="Generics\TypeSafeBroadcaster.cs" />
     <Compile Include="Generics\TypesafeConduit.cs" />
     <Compile Include="UnknownTypeException.cs" />

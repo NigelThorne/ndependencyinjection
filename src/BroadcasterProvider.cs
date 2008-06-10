@@ -42,11 +42,6 @@ namespace NDependencyInjection
             return broadcaster.Listener;
         }
 
-        public void AddMapping(Type serviceType)
-        {
-            
-        }
-
         public void AddListenerProvider(IServiceProvider listenerProvider)
         {
             if (broadcaster != null)
