@@ -80,7 +80,7 @@
     <Compile Include="SystemDefinition.cs" />
     <Compile Include="Generics\TypeSafeBroadcaster.cs" />
     <Compile Include="Generics\TypesafeConduit.cs" />
-    <Compile Include="UnknownTypeException.cs" />
+    <Compile Include="Exceptions\UnknownTypeException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

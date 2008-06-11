@@ -1,6 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using System.Collections.Generic;
+using NDependencyInjection.Exceptions;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Tests.ExampleClasses;
 using NUnit.Framework;
