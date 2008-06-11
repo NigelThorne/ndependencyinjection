@@ -1,13 +1,16 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using System.Collections.Generic;
+using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
+using NDependencyInjection.Providers;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
-
 
 namespace NDependencyInjection
 {
-    public class ServiceRepository : IServiceRepository
+    /// <summary>
+    /// </summary>
+    public class ServiceRepository : IServiceScope
     {
         private readonly Dictionary<Type, IServiceProvider> dictionary = new Dictionary<Type, IServiceProvider>();
         private readonly IServiceLocator parentScope;
@@ -28,26 +31,49 @@ namespace NDependencyInjection
                 throw new InvalidOperationException(String.Format("Type {0} is already registered", typeof (T)));
 
             dictionary[typeof (T)] = provider;
+            provider.AddMapping(typeof (T));
+        }
+
+        public void RegisterServiceListener<EventsInterface>(IServiceProvider provider)
+        {
+            GetService<IBroadcaster<EventsInterface>>().AddListeners(new TypeResolvingConduit<EventsInterface>(provider).Proxy);
+        }
+
+        public void RegisterBroadcaster<EventsInterface>()
+        {
+            BroadcasterProvider<EventsInterface> provider = new BroadcasterProvider<EventsInterface>();
+            RegisterServiceProvider<IBroadcaster<EventsInterface>>(provider);
+            RegisterServiceProvider<EventsInterface>(provider);
+        }
+
+        public bool HasService(Type serviceType)
+        {
+            if (dictionary.ContainsKey(serviceType)) return true;
+            return parentScope.HasService(serviceType);
         }
 
         public object GetService(Type serviceType)
         {
             if (dictionary.ContainsKey(serviceType))
             {
-                return dictionary[serviceType].GetService(serviceType,serviceType);
+                return dictionary[serviceType].GetService(serviceType, serviceType);
             }
             return parentScope.GetService(serviceType);
-        }
-
-        public bool HasService(Type serviceType)
-        {
-            if ( dictionary.ContainsKey(serviceType)) return true;
-            return parentScope.HasService(serviceType);
         }
 
         public IServiceLocator Parent
         {
             get { return parentScope; }
+        }
+
+        public IServiceScope CreateChildScope()
+        {
+            return new ServiceRepository(this);
+        }
+
+        private T GetService<T>()
+        {
+            return (T) GetService(typeof (T));
         }
     }
 }

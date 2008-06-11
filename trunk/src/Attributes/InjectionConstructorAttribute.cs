@@ -2,7 +2,7 @@
 using System;
 
 
-namespace NDependencyInjection
+namespace NDependencyInjection.Attributes
 {
     [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false)]
     public class InjectionConstructorAttribute : Attribute

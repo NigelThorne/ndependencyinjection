@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using NDependencyInjection.Attributes;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
@@ -50,7 +51,6 @@ namespace NDependencyInjection.Providers
             }
             return list.ToArray();
         }
-
 
         private ConstructorInfo GetCallableConstructor()
         {

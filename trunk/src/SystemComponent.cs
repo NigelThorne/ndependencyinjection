@@ -7,23 +7,23 @@ namespace NDependencyInjection
     internal class SystemComponent : ISystemComponent
     {
         private readonly IServiceProvider provider;
-        private readonly ISystemWiring wiring;
+        private readonly IServiceScope scope;
 
-        public SystemComponent(ISystemWiring wiring, IServiceProvider provider)
+        public SystemComponent(IServiceScope scope, IServiceProvider provider)
         {
-            this.wiring = wiring;
+            this.scope = scope;
             this.provider = provider;
         }
 
         public ISystemComponent Provides<Interface>()
         {
-            wiring.RegisterServiceProvider<Interface>(provider);
+            scope.RegisterServiceProvider<Interface>(provider);
             return this;
         }
 
         public ISystemComponent ListensTo<EventsListener>()
         {
-            wiring.RegisterServiceListener<EventsListener>(provider);
+            scope.RegisterServiceListener<EventsListener>(provider);
             return this;
         }
     }
