@@ -1,6 +1,5 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
-using System.Reflection;
 using NDependencyInjection.Providers;
 using NDependencyInjection.Tests.ExampleClasses;
 using NMock2;
@@ -8,7 +7,6 @@ using NMockExtensions;
 using NUnit.Framework;
 using Assert=NUnit.Framework.Assert;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
-
 
 namespace NDependencyInjection.Tests
 {
@@ -34,7 +32,7 @@ namespace NDependencyInjection.Tests
                     delegate { conduit = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA), typeof (IA)); }),
                 Return.Value(realService));
 
-            IA service = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA));
+            IA service = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA), typeof (IA));
 
             Expect.Once.On(realService).Method("DoSomething").With(1, 2).Will(Return.Value(3));
             Assert.AreEqual(3, service.DoSomething(1, 2));
@@ -50,7 +48,7 @@ namespace NDependencyInjection.Tests
             Expect.Once.On(serviceProvider).Method("GetService").Will(
                 Return.Value(realService));
 
-            IA service = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA));
+            IA service = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA), typeof (IA));
 
             Expect.Once.On(realService).Method("DoSomething").With(1, 2).Will(Return.Value(3));
             Assert.AreEqual(3, service.DoSomething(1, 2));
@@ -63,20 +61,24 @@ namespace NDependencyInjection.Tests
             Expect.Once.On(serviceProvider).Method("GetService").Will(
                 Return.Value(realService));
 
-            IA service1 = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA));
-            IA service2 = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA));
+            IA service1 = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA), typeof (IA));
+            IA service2 = (IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA), typeof (IA));
 
             Expect.Once.On(realService).Method("DoSomething").With(1, 2).Will(Return.Value(3));
             Assert.AreEqual(3, service2.DoSomething(1, 2));
         }
 
-        [Test, ExpectedException(typeof(NullReferenceException))]
+        [Test, ExpectedException(typeof (NullReferenceException))]
         public void UsingTheConduitBeforeItIsInitialIzed_ThrowsAnException()
         {
             IA realService = NewMock<IA>();
             Expect.Once.On(serviceProvider).Method("GetService").Will(
                 Execute.Delegate(
-                    delegate { ((IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA))).DoSomething(4, 6); }),
+                    delegate
+                        {
+                            ((IA) conduitGeneratingServiceProviderDecorator.GetService(typeof (IA), typeof (IA))).
+                                DoSomething(4, 6);
+                        }),
                 Return.Value(realService));
 
             conduitGeneratingServiceProviderDecorator.GetService(typeof (IA), typeof (IA));

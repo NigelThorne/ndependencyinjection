@@ -10,7 +10,7 @@ namespace NDependencyInjection.Providers
     {
         private readonly IServiceProvider serviceProvider;
         private bool buildingInstance = false;
-        private List<Conduit> conduits = new List<Conduit>();
+        private readonly List<Conduit> conduits = new List<Conduit>();
         private object instance;
 
         public SingletonServiceProviderDecorator(IServiceProvider serviceProvider)
@@ -40,11 +40,6 @@ namespace NDependencyInjection.Providers
         public void AddMapping(Type serviceType)
         {
             serviceProvider.AddMapping(serviceType);
-        }
-
-        public object GetService(Type service)
-        {
-            return GetService(service, service);
         }
 
         private object NewProxy(Type interfaceType)

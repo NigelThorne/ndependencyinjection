@@ -58,8 +58,6 @@
     <Compile Include="Providers\FactoryServiceProvider.cs" />
     <Compile Include="Providers\InstanceServiceProvider.cs" />
     <Compile Include="Generics\TypeResolvingConduit.cs" />
-    <Compile Include="interfaces\IBroadcasterProvider.cs" />
-    <Compile Include="interfaces\IBroadcastProviderFactory.cs" />
     <Compile Include="Attributes\InjectionConstructorAttribute.cs" />
     <Compile Include="interfaces\IBroadcaster.cs" />
     <Compile Include="interfaces\IConduit.cs" />

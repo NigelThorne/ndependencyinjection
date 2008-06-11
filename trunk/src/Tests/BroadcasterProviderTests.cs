@@ -1,5 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
+using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
 using NMock2;
 using NMockExtensions;
@@ -22,46 +23,6 @@ namespace NDependencyInjection.Tests
         protected override void SetUp()
         {
             broadcasterProvider = new BroadcasterProvider<IXListener>();
-        }
-
-        [Test]
-        public void GetService_ReturnsABroadcasterWithTwoListeners_WhenTwoServiceProvidersAreRegistered()
-        {
-            IXListener l1 = NewMock<IXListener>();
-            IServiceProvider provider1 = NewMock<IServiceProvider>();
-            Stub.On(provider1).Method("GetService").With(typeof (IXListener), typeof (IXListener)).Will(Return.Value(l1));
-
-            IXListener l2 = NewMock<IXListener>();
-            IServiceProvider provider2 = NewMock<IServiceProvider>();
-            Stub.On(provider2).Method("GetService").With(typeof (IXListener), typeof (IXListener)).Will(Return.Value(l2));
-
-            broadcasterProvider.AddListenerProvider(provider1);
-            broadcasterProvider.AddListenerProvider(provider2);
-
-            Expect.Once.On(l1).Method("OnEvent");
-            Expect.Once.On(l2).Method("OnEvent");
-            ((IXListener)broadcasterProvider.GetService(typeof (IXListener), typeof (IXListener))).OnEvent();
-        }
-
-        [Test]
-        public void AddListenerProvider_IncludesTheListenersInTheExistingBroadcastersListeners()
-        {
-            IXListener l1 = NewMock<IXListener>();
-            IServiceProvider provider1 = NewMock<IServiceProvider>();
-            Stub.On(provider1).Method("GetService").With(typeof (IXListener), typeof (IXListener)).Will(Return.Value(l1));
-
-            IXListener l2 = NewMock<IXListener>();
-            IServiceProvider provider2 = NewMock<IServiceProvider>();
-            Stub.On(provider2).Method("GetService").With(typeof (IXListener), typeof (IXListener)).Will(Return.Value(l2));
-
-            IXListener listener = (IXListener)broadcasterProvider.GetService(typeof(IXListener), typeof(IXListener));
-
-            broadcasterProvider.AddListenerProvider(provider1);
-            broadcasterProvider.AddListenerProvider(provider2);
-
-            Expect.Once.On(l1).Method("OnEvent");
-            Expect.Once.On(l2).Method("OnEvent");
-            listener.OnEvent();
         }
 
         [Test]

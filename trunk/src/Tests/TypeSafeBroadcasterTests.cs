@@ -40,7 +40,8 @@ namespace NDependencyInjection.Tests
         [Test]
         public void ForwardsCallsToListeners()
         {
-            broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>(listener1, listener2);
+            broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>();
+            broadcaster.AddListeners(new IBroadcasterTestsListener[] { listener1, listener2 });
             Expect.Once.On(listener1).Method("OnBanana").With(1, 2);
             Expect.Once.On(listener2).Method("OnBanana").With(1, 2);
             broadcaster.Listener.OnBanana(1, 2);
@@ -49,7 +50,8 @@ namespace NDependencyInjection.Tests
         [Test, ExpectedException(typeof (ArgumentException))]
         public void RethrowsExceptionWhenListenThorwsException()
         {
-            broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>(listener1);
+            broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>();
+            broadcaster.AddListeners(listener1);
             Stub.On(listener1).Method("OnBanana").With(1, 2).Will(Throw.Exception(new ArgumentException()));
             broadcaster.Listener.OnBanana(1, 2);
         }
@@ -57,7 +59,8 @@ namespace NDependencyInjection.Tests
         [Test, ExpectedException(typeof (InvalidOperationException))]
         public void ThrowsExceptionWhenNonVoidMethodIsCalled()
         {
-            broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>(listener1);
+            broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>();
+            broadcaster.AddListeners(listener1);
             broadcaster.Listener.GetSomething();
         }
 
@@ -65,17 +68,7 @@ namespace NDependencyInjection.Tests
         public void AddListeners_DoesNothing_IfPassedAnEmptyArray()
         {
             broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>();
-            broadcaster.AddListeners(new IBroadcasterTestsListener[0]);
-            broadcaster.Listener.OnBanana(1, 2);
-        }
-
-        [Test]
-        public void AddListeners_AddsListeners_IfPassedAny()
-        {
-            broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>();
-            broadcaster.AddListeners(new IBroadcasterTestsListener[]{listener1,listener2});
-            Expect.Once.On(listener1).Method("OnBanana").With(1, 2);
-            Expect.Once.On(listener2).Method("OnBanana").With(1, 2);
+            broadcaster.AddListeners();
             broadcaster.Listener.OnBanana(1, 2);
         }
 
@@ -83,7 +76,7 @@ namespace NDependencyInjection.Tests
         public void RemoveListeners_DoesNothing_IfPassedAnEmptyArray()
         {
             broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>();
-            broadcaster.RemoveListeners(new IBroadcasterTestsListener[0]);
+            broadcaster.RemoveListeners();
             broadcaster.Listener.OnBanana(1, 2);
         }
 
@@ -91,7 +84,7 @@ namespace NDependencyInjection.Tests
         public void RemoveListeners_DoesNothing_IfPassedListenersNotInTheBroadcaster()
         {
             broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>();
-            broadcaster.RemoveListeners(new IBroadcasterTestsListener[] { listener1, listener2 });
+            broadcaster.RemoveListeners( listener1, listener2 );
             broadcaster.Listener.OnBanana(1, 2);
         }
 
@@ -99,8 +92,8 @@ namespace NDependencyInjection.Tests
         public void RemoveListeners_RemovesListeners_IfPassedKnownListeners()
         {
             broadcaster = new TypeSafeBroadcaster<IBroadcasterTestsListener>();
-            broadcaster.AddListeners(new IBroadcasterTestsListener[] { listener1, listener2 });
-            broadcaster.RemoveListeners(new IBroadcasterTestsListener[] { listener1, listener2 });
+            broadcaster.AddListeners( listener1, listener2 );
+            broadcaster.RemoveListeners( listener1, listener2 );
             broadcaster.Listener.OnBanana(1, 2);
         }
 
