@@ -18,8 +18,6 @@ namespace NDependencyInjection
             this.scope = scope;
         }
 
-        #region ISystemDefinition Members
-
         public void Broadcasts<S>()
         {
             scope.RegisterBroadcaster<S>();
@@ -30,7 +28,7 @@ namespace NDependencyInjection
             return (Service) scope.GetService(typeof (Service));
         }
 
-        public ISystemComponent HasCollection(params ISubsystemBuilder[] subsystems)
+        public IServiceDefinition HasCollection(params ISubsystemBuilder[] subsystems)
         {
             List<IServiceLocator> list = new List<IServiceLocator>();
             foreach (ISubsystemBuilder subsystem in subsystems)
@@ -40,17 +38,17 @@ namespace NDependencyInjection
             return NewComponent(new CollectionProvider(list.ToArray()));
         }
 
-        public ISystemComponent HasFactory<S>()
+        public IServiceDefinition HasFactory<S>()
         {
             return NewComponent(new FactoryServiceProvider<S>(scope));
         }
 
-        public ISystemComponent HasInstance<S>(S instance)
+        public IServiceDefinition HasInstance<S>(S instance)
         {
-            return NewComponent(new FixedInstanceServiceProvider(instance));
+            return NewComponent(new InstanceServiceProvider(instance));
         }
 
-        public ISystemComponent HasSingleton<S>()
+        public IServiceDefinition HasSingleton<S>()
         {
             return
                 NewComponent(
@@ -58,12 +56,10 @@ namespace NDependencyInjection
                         new FactoryServiceProvider<S>(scope)));
         }
 
-        public ISystemComponent HasSubsystem(ISubsystemBuilder subsystemBuilder)
+        public IServiceDefinition HasSubsystem(ISubsystemBuilder subsystemBuilder)
         {
             return NewComponent(new SubsystemProvider(CreateSubsystemWiring(subsystemBuilder)));
         }
-
-        #endregion
 
         /// <summary>
         /// Are you sure you don't want to use "HasSubsystem"? 
@@ -81,9 +77,9 @@ namespace NDependencyInjection
             return child;
         }
 
-        private ISystemComponent NewComponent(IServiceProvider provider)
+        private IServiceDefinition NewComponent(IServiceProvider provider)
         {
-            return new SystemComponent(scope, provider);
+            return new ServiceDefinition(scope, provider);
         }
     }
 }

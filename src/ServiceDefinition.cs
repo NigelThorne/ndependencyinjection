@@ -4,24 +4,24 @@ using NDependencyInjection.interfaces;
 
 namespace NDependencyInjection
 {
-    internal class SystemComponent : ISystemComponent
+    internal class ServiceDefinition : IServiceDefinition
     {
         private readonly IServiceProvider provider;
         private readonly IServiceScope scope;
 
-        public SystemComponent(IServiceScope scope, IServiceProvider provider)
+        public ServiceDefinition(IServiceScope scope, IServiceProvider provider)
         {
             this.scope = scope;
             this.provider = provider;
         }
 
-        public ISystemComponent Provides<Interface>()
+        public IServiceDefinition Provides<Interface>()
         {
             scope.RegisterServiceProvider<Interface>(provider);
             return this;
         }
 
-        public ISystemComponent ListensTo<EventsListener>()
+        public IServiceDefinition ListensTo<EventsListener>()
         {
             scope.RegisterServiceListener<EventsListener>(provider);
             return this;
