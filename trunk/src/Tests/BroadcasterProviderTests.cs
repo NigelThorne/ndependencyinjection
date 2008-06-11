@@ -1,5 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
+using NDependencyInjection.Providers;
 using NMock2;
 using NMockExtensions;
 using NUnit.Framework;

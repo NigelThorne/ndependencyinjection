@@ -2,6 +2,7 @@
 using System;
 using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
+using NDependencyInjection.Providers;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 

@@ -1,6 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using NDependencyInjection.interfaces;
+using NDependencyInjection.Providers;
 using NDependencyInjection.Tests.ExampleClasses;
 using NUnit.Framework;
 using Rhino.Mocks;
