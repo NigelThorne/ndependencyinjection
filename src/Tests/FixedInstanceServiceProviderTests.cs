@@ -1,4 +1,5 @@
 //Copyright (c) 2008 Nigel Thorne
+using NDependencyInjection.Providers;
 using NMockExtensions;
 using NUnit.Framework;
 using Assert=NMockExtensions.Assert;

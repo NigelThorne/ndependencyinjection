@@ -6,7 +6,7 @@ using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
-namespace NDependencyInjection
+namespace NDependencyInjection.Providers
 {
     /// <summary>
     /// Calls the constructor for the ConcreteType when GetService is called. Any Parameters are resolved first

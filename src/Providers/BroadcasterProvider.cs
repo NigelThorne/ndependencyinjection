@@ -6,7 +6,7 @@ using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
-namespace NDependencyInjection
+namespace NDependencyInjection.Providers
 {
     public class BroadcasterProvider<EventsInterface> : IBroadcasterProvider
     {
