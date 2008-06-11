@@ -1,10 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
-using System;
 using System.Collections.Generic;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
-using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
-
 
 namespace NDependencyInjection
 {
@@ -16,19 +13,12 @@ namespace NDependencyInjection
         {
         }
 
-        public SystemDefinition(IServiceScope scope)
+        private SystemDefinition(IServiceScope scope)
         {
             this.scope = scope;
         }
 
-        /// <summary>
-        /// Are you sure you don't want to use "HasSubsystem"? 
-        /// </summary>
-        /// <returns></returns>
-        public ISystemDefinition CreateSubsystem()
-        {
-            return new SystemDefinition(scope.CreateChildScope());
-        }
+        #region ISystemDefinition Members
 
         public void Broadcasts<S>()
         {
@@ -71,6 +61,17 @@ namespace NDependencyInjection
         public ISystemComponent HasSubsystem(ISubsystemBuilder subsystemBuilder)
         {
             return NewComponent(new SubsystemProvider(CreateSubsystemWiring(subsystemBuilder)));
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Are you sure you don't want to use "HasSubsystem"? 
+        /// </summary>
+        /// <returns></returns>
+        public ISystemDefinition CreateSubsystem()
+        {
+            return new SystemDefinition(scope.CreateChildScope());
         }
 
         private IServiceLocator CreateSubsystemWiring(ISubsystemBuilder subsystem)
