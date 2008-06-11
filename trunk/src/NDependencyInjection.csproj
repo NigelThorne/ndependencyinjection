@@ -50,12 +50,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BroadcasterProvider.cs" />
-    <Compile Include="CollectionProvider.cs" />
+    <Compile Include="Providers\BroadcasterProvider.cs" />
+    <Compile Include="Providers\CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
-    <Compile Include="FactoryServiceProvider.cs" />
-    <Compile Include="FixedInstanceServiceProvider.cs" />
+    <Compile Include="Providers\FactoryServiceProvider.cs" />
+    <Compile Include="Providers\FixedInstanceServiceProvider.cs" />
     <Compile Include="Generics\TypeResolvingConduit.cs" />
     <Compile Include="interfaces\IBroadcasterProvider.cs" />
     <Compile Include="interfaces\IBroadcastProviderFactory.cs" />
@@ -74,7 +74,7 @@
     <Compile Include="NullServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection.cs" />
-    <Compile Include="ScopeProvider.cs" />
+    <Compile Include="Providers\ScopeProvider.cs" />
     <Compile Include="ServiceRepository.cs" />
     <Compile Include="SingletonServiceProviderDecorator.cs" />
     <Compile Include="SystemComponent.cs" />
