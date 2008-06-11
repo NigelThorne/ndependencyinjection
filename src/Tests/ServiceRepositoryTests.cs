@@ -24,7 +24,7 @@ namespace NDependencyInjection.Tests
         public void CanGetInstance()
         {
             Assert.IsNotNull(repository);
-            Assert.IsInstanceOfType(typeof (IServiceRepository), repository);
+            Assert.IsInstanceOfType(typeof (IServiceScope), repository);
         }
 
         [Test, ExpectedException(typeof (ApplicationException))]

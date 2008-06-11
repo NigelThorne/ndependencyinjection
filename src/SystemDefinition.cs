@@ -10,30 +10,34 @@ namespace NDependencyInjection
 {
     public class SystemDefinition : ISystemDefinition
     {
-        private readonly ISystemWiring wiring;
+        private readonly IServiceScope scope;
 
-        public SystemDefinition() : this(new SystemWiring())
+        public SystemDefinition() : this(new ServiceRepository())
         {
         }
 
-        public SystemDefinition(ISystemWiring wiring)
+        public SystemDefinition(IServiceScope scope)
         {
-            this.wiring = wiring;
+            this.scope = scope;
         }
 
-        [Obsolete("use the HasSubsystem Syntax")]
-        public SystemDefinition(SystemDefinition parent) : this(parent.wiring.CreateSubsystem())
+        /// <summary>
+        /// Are you sure you don't want to use "HasSubsystem"? 
+        /// </summary>
+        /// <returns></returns>
+        public ISystemDefinition CreateSubsystem()
         {
+            return new SystemDefinition(scope.CreateChildScope());
         }
 
         public void Broadcasts<S>()
         {
-            wiring.RegisterBroadcaster<S>();
+            scope.RegisterBroadcaster<S>();
         }
 
         public Service Get<Service>()
         {
-            return (Service) wiring.GetService(typeof (Service));
+            return (Service) scope.GetService(typeof (Service));
         }
 
         public ISystemComponent HasCollection(params ISubsystemBuilder[] subsystems)
@@ -48,7 +52,7 @@ namespace NDependencyInjection
 
         public ISystemComponent HasFactory<S>()
         {
-            return NewComponent(new FactoryServiceProvider<S>(wiring));
+            return NewComponent(new FactoryServiceProvider<S>(scope));
         }
 
         public ISystemComponent HasInstance<S>(S instance)
@@ -61,7 +65,7 @@ namespace NDependencyInjection
             return
                 NewComponent(
                     new SingletonServiceProviderDecorator(
-                        new FactoryServiceProvider<S>(wiring)));
+                        new FactoryServiceProvider<S>(scope)));
         }
 
         public ISystemComponent HasSubsystem(ISubsystemBuilder subsystemBuilder)
@@ -71,14 +75,14 @@ namespace NDependencyInjection
 
         private IServiceLocator CreateSubsystemWiring(ISubsystemBuilder subsystem)
         {
-            ISystemWiring child = wiring.CreateSubsystem();
+            IServiceScope child = scope.CreateChildScope();
             subsystem.Build(new SystemDefinition(child));
             return child;
         }
 
         private ISystemComponent NewComponent(IServiceProvider provider)
         {
-            return new SystemComponent(wiring, provider);
+            return new SystemComponent(scope, provider);
         }
     }
 }

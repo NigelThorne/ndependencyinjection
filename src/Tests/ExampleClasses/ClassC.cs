@@ -1,4 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
+using NDependencyInjection.Attributes;
+
 namespace NDependencyInjection.Tests.ExampleClasses
 {
     public class ClassC : IC

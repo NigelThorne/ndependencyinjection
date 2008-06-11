@@ -15,13 +15,13 @@ namespace NDependencyInjection.Tests
         private IProviderFactory providerFactory;
         private IServiceLocator serviceLocator;
         private IServiceProvider serviceProvider;
-        private IServiceRepository serviceRepository;
-        private ISystemWiring wiring;
+        private IServiceScope serviceScope;
+        private IServiceScope scope;
 
         protected override void SetUp()
         {
             serviceLocator = NewMock<IServiceLocator>();
-            serviceRepository = NewMock<IServiceRepository>();
+            serviceScope = NewMock<IServiceScope>();
 
 
             providerFactory = NewStub<IProviderFactory>();
@@ -29,9 +29,9 @@ namespace NDependencyInjection.Tests
             SetupResult.On(providerFactory).Call(providerFactory.CreateBroadcasterProvider<IA>()).Return(
                 broadcastProvider);
             serviceProvider = NewMock<IServiceProvider>();
-            SetupResult.On(providerFactory).Call(providerFactory.CreateConstructorCallingProvider<IA>(serviceRepository)).Return(serviceProvider);
+            SetupResult.On(providerFactory).Call(providerFactory.CreateConstructorCallingProvider<IA>(serviceScope)).Return(serviceProvider);
 
-            wiring = new SystemWiring(serviceRepository);
+            scope = new ServiceRepository(serviceScope);
         }
 
     }
