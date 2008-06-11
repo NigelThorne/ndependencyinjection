@@ -5,11 +5,11 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection.Providers
 {
-    public class FixedInstanceServiceProvider : IServiceProvider
+    public class InstanceServiceProvider : IServiceProvider
     {
         private readonly object instance;
 
-        public FixedInstanceServiceProvider(object instance)
+        public InstanceServiceProvider(object instance)
         {
             this.instance = instance;
         }

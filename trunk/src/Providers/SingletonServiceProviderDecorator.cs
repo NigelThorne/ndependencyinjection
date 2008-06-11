@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
-namespace NDependencyInjection
+namespace NDependencyInjection.Providers
 {
     public class SingletonServiceProviderDecorator : IServiceProvider
     {

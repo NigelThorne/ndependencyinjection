@@ -1,6 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using System.Reflection;
+using NDependencyInjection.Providers;
 using NDependencyInjection.Tests.ExampleClasses;
 using NMock2;
 using NMockExtensions;
