@@ -13,9 +13,8 @@ namespace NDependencyInjection.Generics
         private readonly ListenerType listener;
         private readonly List<ListenerType> listeners = new List<ListenerType>();
 
-        public TypeSafeBroadcaster(params ListenerType[] listeners)
+        public TypeSafeBroadcaster()
         {
-            this.listeners.AddRange(listeners);
             ProxyFactory factory = new ProxyFactory();
             listener = factory.CreateProxy<ListenerType>(this);
         }

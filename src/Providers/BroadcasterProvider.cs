@@ -1,6 +1,5 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
-using System.Collections.Generic;
 using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
@@ -8,15 +7,9 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection.Providers
 {
-    public class BroadcasterProvider<EventsInterface> : IBroadcasterProvider
+    public class BroadcasterProvider<EventsInterface> : IServiceProvider
     {
-        private readonly List<IServiceProvider> listeners;
         private IBroadcaster<EventsInterface> broadcaster;
-
-        public BroadcasterProvider()
-        {
-            listeners = new List<IServiceProvider>();
-        }
 
         public object GetService(Type serviceType, Type interfaceType)
         {
@@ -27,12 +20,7 @@ namespace NDependencyInjection.Providers
 
             if (broadcaster == null)
             {
-                List<EventsInterface> list = new List<EventsInterface>();
-                foreach (IServiceProvider provider in listeners)
-                {
-                    list.Add((EventsInterface) provider.GetService(serviceType, interfaceType));
-                }
-                broadcaster = new TypeSafeBroadcaster<EventsInterface>(list.ToArray());
+                broadcaster = new TypeSafeBroadcaster<EventsInterface>();
             }
 
             if (serviceType == typeof(IBroadcaster<EventsInterface>))
@@ -45,18 +33,6 @@ namespace NDependencyInjection.Providers
         public void AddMapping(Type serviceType)
         {
             
-        }
-
-        public void AddListenerProvider(IServiceProvider listenerProvider)
-        {
-            if (broadcaster != null)
-            {
-                broadcaster.AddListeners((EventsInterface) listenerProvider.GetService(typeof(EventsInterface), typeof(EventsInterface)));
-            }
-            else
-            {
-                listeners.Add(listenerProvider);
-            }
         }
     }
 }

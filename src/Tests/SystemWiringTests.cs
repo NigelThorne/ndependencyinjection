@@ -11,8 +11,6 @@ namespace NDependencyInjection.Tests
     [TestFixture]
     public class SystemWiringTests : RhinoMockingTestFixture
     {
-        private IBroadcasterProvider broadcastProvider;
-        private IProviderFactory providerFactory;
         private IServiceLocator serviceLocator;
         private IServiceProvider serviceProvider;
         private IScope serviceScope;
@@ -24,12 +22,7 @@ namespace NDependencyInjection.Tests
             serviceScope = NewMock<IScope>();
 
 
-            providerFactory = NewStub<IProviderFactory>();
-            broadcastProvider = NewMock<IBroadcasterProvider>();
-            SetupResult.On(providerFactory).Call(providerFactory.CreateBroadcasterProvider<IA>()).Return(
-                broadcastProvider);
             serviceProvider = NewMock<IServiceProvider>();
-            SetupResult.On(providerFactory).Call(providerFactory.CreateConstructorCallingProvider<IA>(serviceScope)).Return(serviceProvider);
 
             scope = new ServiceRepository(serviceScope);
         }
