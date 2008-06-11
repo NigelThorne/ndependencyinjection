@@ -7,9 +7,9 @@ namespace NDependencyInjection
     internal class ServiceDefinition : IServiceDefinition
     {
         private readonly IServiceProvider provider;
-        private readonly IServiceScope scope;
+        private readonly IScope scope;
 
-        public ServiceDefinition(IServiceScope scope, IServiceProvider provider)
+        public ServiceDefinition(IScope scope, IServiceProvider provider)
         {
             this.scope = scope;
             this.provider = provider;

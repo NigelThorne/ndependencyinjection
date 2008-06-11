@@ -15,13 +15,13 @@ namespace NDependencyInjection.Tests
         private IProviderFactory providerFactory;
         private IServiceLocator serviceLocator;
         private IServiceProvider serviceProvider;
-        private IServiceScope serviceScope;
-        private IServiceScope scope;
+        private IScope serviceScope;
+        private IScope scope;
 
         protected override void SetUp()
         {
             serviceLocator = NewMock<IServiceLocator>();
-            serviceScope = NewMock<IServiceScope>();
+            serviceScope = NewMock<IScope>();
 
 
             providerFactory = NewStub<IProviderFactory>();
