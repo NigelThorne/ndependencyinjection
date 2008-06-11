@@ -2,7 +2,7 @@
 using System;
 
 
-namespace NDependencyInjection
+namespace NDependencyInjection.Exceptions
 {
     public class UnknownTypeException : Exception
     {
