@@ -50,7 +50,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="interfaces\IServiceScope.cs" />
+    <Compile Include="interfaces\IScope.cs" />
     <Compile Include="Providers\BroadcasterProvider.cs" />
     <Compile Include="Providers\CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />

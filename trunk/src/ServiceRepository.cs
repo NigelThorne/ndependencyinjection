@@ -10,7 +10,7 @@ namespace NDependencyInjection
 {
     /// <summary>
     /// </summary>
-    public class ServiceRepository : IServiceScope
+    public class ServiceRepository : IScope
     {
         private readonly Dictionary<Type, IServiceProvider> dictionary = new Dictionary<Type, IServiceProvider>();
         private readonly IServiceLocator parentScope;
@@ -66,7 +66,7 @@ namespace NDependencyInjection
             get { return parentScope; }
         }
 
-        public IServiceScope CreateChildScope()
+        public IScope CreateChildScope()
         {
             return new ServiceRepository(this);
         }

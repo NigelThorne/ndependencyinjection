@@ -3,6 +3,7 @@ using System;
 using NDependencyInjection.Exceptions;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Tests.ExampleClasses;
+using NMock2;
 using NMockExtensions;
 using NUnit.Framework;
 using Assert=NUnit.Framework.Assert;
@@ -25,7 +26,7 @@ namespace NDependencyInjection.Tests
         public void CanGetInstance()
         {
             Assert.IsNotNull(repository);
-            Assert.IsInstanceOfType(typeof (IServiceScope), repository);
+            Assert.IsInstanceOfType(typeof (IScope), repository);
         }
 
         [Test, ExpectedException(typeof (ApplicationException))]
@@ -37,9 +38,11 @@ namespace NDependencyInjection.Tests
         }
 
         [Test, ExpectedException(typeof (InvalidOperationException))]
-        public void RegisterService_ReplacesOldObject_WhenSameTypeIsAddedTwice()
+        public void RegisterService_ThrowsException_WhenSameTypeIsRegisteredTwice()
         {
-            repository.RegisterServiceProvider<IMyTestClassA>(NewMock<IServiceProvider>());
+            IServiceProvider mock = NewMock<IServiceProvider>();
+            Stub.On(mock).Method("AddMapping");
+            repository.RegisterServiceProvider<IMyTestClassA>(mock);
             repository.RegisterServiceProvider<IMyTestClassA>(NewMock<IServiceProvider>());
         }
 

@@ -7,13 +7,13 @@ namespace NDependencyInjection
 {
     public class SystemDefinition : ISystemDefinition
     {
-        private readonly IServiceScope scope;
+        private readonly IScope scope;
 
         public SystemDefinition() : this(new ServiceRepository())
         {
         }
 
-        private SystemDefinition(IServiceScope scope)
+        private SystemDefinition(IScope scope)
         {
             this.scope = scope;
         }
@@ -72,7 +72,7 @@ namespace NDependencyInjection
 
         private IServiceLocator CreateSubsystemWiring(ISubsystemBuilder subsystem)
         {
-            IServiceScope child = scope.CreateChildScope();
+            IScope child = scope.CreateChildScope();
             subsystem.Build(new SystemDefinition(child));
             return child;
         }
