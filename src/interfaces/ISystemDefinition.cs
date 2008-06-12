@@ -8,6 +8,7 @@ namespace NDependencyInjection.interfaces
         IServiceDefinition HasSingleton<S>();
         IServiceDefinition HasCollection(params ISubsystemBuilder[] subsystems);
         IServiceDefinition HasSubsystem(ISubsystemBuilder subsystemBuilder);
+        IServiceDefinition HasSubsystem(CreateSubsystem method);
 
         Service Get<Service>();
         void Broadcasts<T1>();

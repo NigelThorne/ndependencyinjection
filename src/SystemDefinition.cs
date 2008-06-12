@@ -61,6 +61,11 @@ namespace NDependencyInjection
             return NewComponent(new SubsystemProvider(CreateSubsystemWiring(subsystemBuilder)));
         }
 
+        public IServiceDefinition HasSubsystem(CreateSubsystem method)
+        {
+            return HasSubsystem(new DelegateExecutingBuilder(method));
+        }
+
         /// <summary>
         /// Are you sure you don't want to use "HasSubsystem"? 
         /// </summary>
