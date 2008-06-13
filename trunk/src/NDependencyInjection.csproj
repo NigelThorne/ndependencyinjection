@@ -50,12 +50,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DecoratingContext.cs" />
     <Compile Include="interfaces\IScope.cs" />
     <Compile Include="Providers\BroadcasterProvider.cs" />
     <Compile Include="Providers\CollectionProvider.cs" />
     <Compile Include="Conduit.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
-    <Compile Include="Providers\FactoryServiceProvider.cs" />
+    <Compile Include="Providers\DecoratingServiceProvider.cs" />
     <Compile Include="Providers\InstanceServiceProvider.cs" />
     <Compile Include="Generics\TypeResolvingConduit.cs" />
     <Compile Include="Attributes\InjectionConstructorAttribute.cs" />

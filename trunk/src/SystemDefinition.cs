@@ -40,7 +40,7 @@ namespace NDependencyInjection
 
         public IServiceDefinition HasFactory<S>()
         {
-            return NewComponent(new FactoryServiceProvider<S>(scope));
+            return NewComponent(new DecoratingServiceProvider<S>(scope));
         }
 
         public IServiceDefinition HasInstance<S>(S instance)
@@ -53,7 +53,7 @@ namespace NDependencyInjection
             return
                 NewComponent(
                     new SingletonServiceProviderDecorator(
-                        new FactoryServiceProvider<S>(scope)));
+                        new DecoratingServiceProvider<S>(scope)));
         }
 
         public IServiceDefinition HasSubsystem(ISubsystemBuilder subsystemBuilder)
@@ -66,13 +66,20 @@ namespace NDependencyInjection
             return HasSubsystem(new DelegateExecutingBuilder(method));
         }
 
+        public IDecoratingContext Decorate<S>()
+        {
+            return new DecoratingContext<S>(scope);
+        }
+
         /// <summary>
         /// Are you sure you don't want to use "HasSubsystem"? 
         /// </summary>
         /// <returns></returns>
-        public ISystemDefinition CreateSubsystem()
+        public ISystemDefinition CreateSubsystem(ISubsystemBuilder subsystem)
         {
-            return new SystemDefinition(scope.CreateChildScope());
+            ISystemDefinition system = new SystemDefinition(scope.CreateChildScope());
+            subsystem.Build(system);
+            return system;
         }
 
         private IServiceLocator CreateSubsystemWiring(ISubsystemBuilder subsystem)
@@ -87,4 +94,5 @@ namespace NDependencyInjection
             return new ServiceDefinition(scope, provider);
         }
     }
+
 }
