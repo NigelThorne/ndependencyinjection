@@ -71,9 +71,53 @@ namespace NDependencyInjection
             return new ServiceRepository(this);
         }
 
+        public void DecorateService<InterfaceType, DecoratingType>()
+        {
+            if (!HasService(typeof(InterfaceType)))
+                throw new InvalidOperationException(String.Format("Type {0} not defined", typeof(InterfaceType)));
+
+            IScope subsystem = CreateChildScope();
+            subsystem.RegisterServiceProvider<InterfaceType>(dictionary[typeof(InterfaceType)]);
+         
+            dictionary[typeof(InterfaceType)] = new DecoratingFactoryServiceProvider<DecoratingType>(subsystem);
+        }
+
+
+        public void ReplaceServiceProvider<T1>(IServiceProvider provider)
+        {
+            if (!dictionary.ContainsKey(typeof(T1)))
+                throw new InvalidOperationException(String.Format("Type {0} not defined so you can't replace it", typeof(T1)));
+            dictionary[typeof(T1)] = provider;
+        }
+
         private T GetService<T>()
         {
             return (T) GetService(typeof (T));
+        }
+    }
+
+    /// <summary>
+    ///  TODO: Needs to create new instance only when the subsystem is creating a new instance.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    internal class DecoratingFactoryServiceProvider<T> : IServiceProvider
+    {
+        private readonly IScope subsystem;
+        private IServiceProvider factory;
+        public DecoratingFactoryServiceProvider(IScope subsystem)
+        {
+
+            factory = new FactoryServiceProvider<T>(subsystem);
+            this.subsystem = subsystem;
+        }
+
+        public object GetService(Type serviceType, Type interfaceType)
+        {
+
+        }
+
+        public void AddMapping(Type serviceType)
+        {
         }
     }
 }

@@ -7,5 +7,6 @@ namespace NDependencyInjection.interfaces
         void RegisterServiceListener<T1>(IServiceProvider provider);
         void RegisterBroadcaster<EventsInterface>();
         IScope CreateChildScope();
+        void DecorateService<T1, T2>();
     }
 }

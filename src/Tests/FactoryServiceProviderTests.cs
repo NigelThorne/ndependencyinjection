@@ -20,7 +20,7 @@ namespace NDependencyInjection.Tests
         {
             serviceLocator = NewMock<IServiceLocator>();
 
-            serviceProvider = new FactoryServiceProvider<ClassC>(serviceLocator);
+            serviceProvider = new DecoratingServiceProvider<ClassC>(serviceLocator);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace NDependencyInjection.Tests
             GetService_CallsTheConstructorThatIsAttributed_WhenThereIsMoreThanOneConstructorAndOnlyOneIsAttributed()
         {
             IServiceProvider provider =
-                new FactoryServiceProvider<TwoConstructorsAttributes>(serviceLocator);
+                new DecoratingServiceProvider<TwoConstructorsAttributes>(serviceLocator);
 
             IA ia = NewStub<IA>();
             IB ib = NewStub<IB>();
@@ -77,7 +77,7 @@ namespace NDependencyInjection.Tests
         public void GetService_ThrowsException_WhenThereAreMultipleConstructorsButNoneAreAttributed()
         {
             IServiceProvider provider =
-                new FactoryServiceProvider<TwoConstructorsNoAttributes>(serviceLocator);
+                new DecoratingServiceProvider<TwoConstructorsNoAttributes>(serviceLocator);
             IA ia = NewStub<IA>();
             IB ib = NewStub<IB>();
 
@@ -93,7 +93,7 @@ namespace NDependencyInjection.Tests
         public void GetService_ThrowsException_WhenThereAreMultipleConstructorsThatAreAttributed()
         {
             IServiceProvider provider =
-                new FactoryServiceProvider<TwoConstructorsTwoAttributes>(serviceLocator);
+                new DecoratingServiceProvider<TwoConstructorsTwoAttributes>(serviceLocator);
 
             SetupComplete();
             provider.GetService(typeof (IC), typeof (IC));
