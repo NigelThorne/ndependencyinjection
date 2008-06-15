@@ -15,18 +15,13 @@ namespace NDependencyInjection.Providers
     /// <typeparam name="ConcreteType"></typeparam>
     public class FactoryServiceProvider<ConcreteType> : IServiceProvider
     {
-        private readonly IServiceLocator locator;
         private readonly List<Type> myTypes = new List<Type>();
 
-        public FactoryServiceProvider(IServiceLocator locator)
-        {
-            this.locator = locator;
-        }
-
-        public object GetService(Type serviceType, Type interfaceType)
+        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             ConstructorInfo constructor = GetCallableConstructor();
-            return Reflection.CallConstructor<ConcreteType>(constructor, GetParameters(constructor));
+            EnsureConstructorIsCallable(constructor, context);
+            return Reflection.CallConstructor<ConcreteType>(constructor, GetParameters(constructor, context));
         }
 
         public void AddMapping(Type serviceType)
@@ -34,29 +29,28 @@ namespace NDependencyInjection.Providers
             myTypes.Add(serviceType);
         }
 
-        private object[] GetParameters(ConstructorInfo constructor)
+        private object[] GetParameters(ConstructorInfo constructor, IServiceLocator context)
         {
-            return GetServices(Reflection.GetParameterTypes(constructor));
+            return GetServices(Reflection.GetParameterTypes(constructor), context);
         }
 
-        private object[] GetServices(IEnumerable<Type> types)
+        private object[] GetServices(IEnumerable<Type> types, IServiceLocator context)
         {
             List<object> list = new List<object>();
             foreach (Type type in types)
             {
                 if (myTypes.Contains(type))
-                    list.Add(locator.Parent.GetService(type));
+                    list.Add(context.Parent.GetService(type));
                 else
-                    list.Add(locator.GetService(type));
+                    list.Add(context.GetService(type));
             }
             return list.ToArray();
         }
 
-        private ConstructorInfo GetCallableConstructor()
+        private static ConstructorInfo GetCallableConstructor()
         {
             ConstructorInfo constructor =
                 PickConstructor(typeof (ConcreteType).GetConstructors(BindingFlags.Public | BindingFlags.Instance));
-            EnsureConstructorIsCallable(constructor);
             return constructor;
         }
 
@@ -74,9 +68,9 @@ namespace NDependencyInjection.Providers
                     typeof (ConcreteType)));
         }
 
-        private void EnsureConstructorIsCallable(ConstructorInfo info)
+        private static void EnsureConstructorIsCallable(ConstructorInfo info, IServiceLocator context)
         {
-            List<Type> unknownTypes = GetUnknownTypes(info);
+            List<Type> unknownTypes = GetUnknownTypes(info, context);
             if (unknownTypes.Count > 0)
             {
                 throw new ApplicationException(
@@ -95,12 +89,12 @@ namespace NDependencyInjection.Providers
             return message;
         }
 
-        private List<Type> GetUnknownTypes(ConstructorInfo info)
+        private static List<Type> GetUnknownTypes(ConstructorInfo info, IServiceLocator context)
         {
             List<Type> unknownTypes = new List<Type>();
             foreach (ParameterInfo parameter in info.GetParameters())
             {
-                if (!locator.HasService(parameter.ParameterType)) unknownTypes.Add(parameter.ParameterType);
+                if (!context.HasService(parameter.ParameterType)) unknownTypes.Add(parameter.ParameterType);
             }
             return unknownTypes;
         }

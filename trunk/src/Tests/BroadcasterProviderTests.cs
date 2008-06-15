@@ -19,22 +19,24 @@ namespace NDependencyInjection.Tests
     public class BroadcasterProviderTests : MockingTestFixture
     {
         private BroadcasterProvider<IXListener> broadcasterProvider;
+        private IServiceLocator context;
 
         protected override void SetUp()
         {
             broadcasterProvider = new BroadcasterProvider<IXListener>();
+            context = NewMock<IServiceLocator>();
         }
 
         [Test]
         public void GetService_ReturnsAnEmptyBroadcaster_WhenNoListenersAreRegistered()
         {
-            ((IXListener)broadcasterProvider.GetService(typeof(IXListener), typeof(IXListener))).OnEvent();
+            ((IXListener)broadcasterProvider.GetService(typeof(IXListener), typeof(IXListener), context)).OnEvent();
         }
 
         [Test, ExpectedException(typeof (InvalidProgramException))]
         public void GetService_ThrowsException_WhenAskedForIncorrectType()
         {
-            broadcasterProvider.GetService(typeof (int), typeof (object));
+            broadcasterProvider.GetService(typeof (int), typeof (object), context);
         }
     }
 }

@@ -2,11 +2,11 @@ using NDependencyInjection.interfaces;
 
 namespace NDependencyInjection
 {
-    public class DecoratingContext<Interface> : IDecoratingContext
+    public class DecoratorDefinition<Interface> : IDecoratingContext
     {
         private readonly IScope wiring;
 
-        public DecoratingContext(IScope wiring)
+        public DecoratorDefinition(IScope wiring)
         {
             this.wiring = wiring;
         }

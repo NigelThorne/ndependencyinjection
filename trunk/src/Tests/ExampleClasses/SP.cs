@@ -1,5 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
+using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
@@ -15,7 +16,7 @@ namespace NDependencyInjection.Tests.ExampleClasses
             this.service = service;
         }
 
-        public object GetService(Type serviceType, Type interfaceType)
+        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             gotCalled = true;
             return service;

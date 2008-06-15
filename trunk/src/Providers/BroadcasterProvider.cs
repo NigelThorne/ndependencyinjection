@@ -11,7 +11,7 @@ namespace NDependencyInjection.Providers
     {
         private IBroadcaster<EventsInterface> broadcaster;
 
-        public object GetService(Type serviceType, Type interfaceType)
+        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             if (!typeof (EventsInterface).IsAssignableFrom(interfaceType) 
                 && !typeof (IBroadcaster<EventsInterface>).IsAssignableFrom(interfaceType))

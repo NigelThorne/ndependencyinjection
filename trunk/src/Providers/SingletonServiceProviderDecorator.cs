@@ -1,6 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using System.Collections.Generic;
+using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
@@ -18,7 +19,7 @@ namespace NDependencyInjection.Providers
             this.serviceProvider = serviceProvider;
         }
 
-        public object GetService(Type service, Type interfaceType)
+        public object GetService(Type service, Type interfaceType, IServiceLocator context)
         {
             if (instance != null)
             {
@@ -31,7 +32,7 @@ namespace NDependencyInjection.Providers
             }
 
             buildingInstance = true;
-            instance = serviceProvider.GetService(service, interfaceType);
+            instance = serviceProvider.GetService(service, interfaceType, context);
             buildingInstance = false;
             ResolveProxies();
             return instance;
