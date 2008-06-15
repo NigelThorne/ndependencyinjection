@@ -15,6 +15,7 @@ namespace NDependencyInjection.Providers
             this.scope = scope;
         }
 
+        // SMELL! ignores context
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             return scope.GetService(interfaceType);
