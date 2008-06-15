@@ -4,16 +4,16 @@ namespace NDependencyInjection
 {
     public class DecoratorDefinition<Interface> : IDecoratingContext
     {
-        private readonly IScope wiring;
+        private readonly IScope scope;
 
-        public DecoratorDefinition(IScope wiring)
+        public DecoratorDefinition(IScope scope)
         {
-            this.wiring = wiring;
+            this.scope = scope;
         }
 
         public void With<DecoratingType>()
         {
-            wiring.DecorateService<Interface, DecoratingType>();
+            scope.DecorateService<Interface, DecoratingType>();
         }
     }
 }
