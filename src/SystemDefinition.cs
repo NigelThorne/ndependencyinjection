@@ -30,10 +30,10 @@ namespace NDependencyInjection
 
         public IServiceDefinition HasCollection(params ISubsystemBuilder[] subsystems)
         {
-            List<IServiceLocator> list = new List<IServiceLocator>();
+            List<IServiceProvider> list = new List<IServiceProvider>();
             foreach (ISubsystemBuilder subsystem in subsystems)
             {
-                list.Add(CreateSubsystemWiring(subsystem));
+                list.Add(CreateSubsystemProvider(subsystem));
             }
             return NewComponent(new CollectionProvider(list.ToArray()));
         }
@@ -58,7 +58,12 @@ namespace NDependencyInjection
 
         public IServiceDefinition HasSubsystem(ISubsystemBuilder subsystemBuilder)
         {
-            return NewComponent(new SubsystemProvider(CreateSubsystemWiring(subsystemBuilder)));
+            return NewComponent(CreateSubsystemProvider(subsystemBuilder));
+        }
+
+        private IServiceProvider CreateSubsystemProvider(ISubsystemBuilder subsystemBuilder)
+        {
+            return new SubsystemProvider(CreateSubsystemWiring(subsystemBuilder));
         }
 
         public IServiceDefinition HasSubsystem(CreateSubsystem method)

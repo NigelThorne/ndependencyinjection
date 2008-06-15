@@ -9,9 +9,9 @@ namespace NDependencyInjection.Providers
 {
     internal class CollectionProvider : IServiceProvider
     {
-        private readonly IServiceLocator[] subsystems;
+        private readonly IServiceProvider[] subsystems;
 
-        public CollectionProvider(IServiceLocator[] subsystems)
+        public CollectionProvider(IServiceProvider[] subsystems)
         {
             this.subsystems = subsystems;
         }
@@ -19,9 +19,9 @@ namespace NDependencyInjection.Providers
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             ArrayList list = new ArrayList();
-            foreach (IServiceLocator subsystem in subsystems)
+            foreach (IServiceProvider subsystem in subsystems)
             {
-                list.Add(subsystem.GetService(interfaceType.GetElementType()));
+                list.Add(subsystem.GetService(serviceType.GetElementType(), interfaceType.GetElementType(), context));
             }
             return list.ToArray(interfaceType.GetElementType());
         }
