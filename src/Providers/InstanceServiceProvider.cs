@@ -1,5 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
+using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
@@ -14,7 +15,7 @@ namespace NDependencyInjection.Providers
             this.instance = instance;
         }
 
-        public object GetService(Type serviceType, Type interfaceType)
+        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             return instance;
         }

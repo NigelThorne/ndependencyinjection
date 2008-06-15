@@ -81,7 +81,6 @@
     <Compile Include="ExampleClasses\IB.cs" />
     <Compile Include="ExampleClasses\IC.cs" />
     <Compile Include="FixedInstanceServiceProviderTests.cs" />
-    <Compile Include="SystemWiringTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConduitTests.cs" />
     <Compile Include="RhinoMockingTestFixture.cs" />

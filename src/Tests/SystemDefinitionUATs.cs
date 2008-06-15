@@ -314,14 +314,14 @@ namespace NDependencyInjection.Tests
             definition.HasInstance(new Object()).Provides<Object>();
         }
 
-        [Test]
-        public void Decorate_SpecifiesADecoratorToUseForAType()
-        {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
-            Assert.AreEqual(60, addThenDouble.DoSomething(10, 20));
-        }
+        //[Test]
+        //public void Decorate_SpecifiesADecoratorToUseForAType()
+        //{
+        //    definition.HasSingleton<Add>().Provides<IDoSomething>();
+        //    definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+        //    IDoSomething addThenDouble = definition.Get<IDoSomething>();
+        //    Assert.AreEqual(60, addThenDouble.DoSomething(10, 20));
+        //}
 
 
         //[Test]

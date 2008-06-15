@@ -10,19 +10,19 @@ namespace NDependencyInjection
 {
     /// <summary>
     /// </summary>
-    public class ServiceRepository : IScope
+    public class Scope : IScope
     {
         private readonly Dictionary<Type, IServiceProvider> dictionary = new Dictionary<Type, IServiceProvider>();
-        private readonly IServiceLocator parentScope;
+        private readonly IServiceLocator outerScope;
 
-        public ServiceRepository()
+        public Scope()
             : this(new NullServiceLocator())
         {
         }
 
-        public ServiceRepository(IServiceLocator parentScope)
+        public Scope(IServiceLocator outerScope)
         {
-            this.parentScope = parentScope;
+            this.outerScope = outerScope;
         }
 
         public void RegisterServiceProvider<T>(IServiceProvider provider)
@@ -36,7 +36,7 @@ namespace NDependencyInjection
 
         public void RegisterServiceListener<EventsInterface>(IServiceProvider provider)
         {
-            GetService<IBroadcaster<EventsInterface>>().AddListeners(new TypeResolvingConduit<EventsInterface>(provider).Proxy);
+            GetService<IBroadcaster<EventsInterface>>().AddListeners(new TypeResolvingConduit<EventsInterface>(provider, this).Proxy);
         }
 
         public void RegisterBroadcaster<EventsInterface>()
@@ -49,26 +49,26 @@ namespace NDependencyInjection
         public bool HasService(Type serviceType)
         {
             if (dictionary.ContainsKey(serviceType)) return true;
-            return parentScope.HasService(serviceType);
+            return outerScope.HasService(serviceType);
         }
 
         public object GetService(Type serviceType)
         {
             if (dictionary.ContainsKey(serviceType))
             {
-                return dictionary[serviceType].GetService(serviceType, serviceType);
+                return dictionary[serviceType].GetService(serviceType, serviceType, this);
             }
-            return parentScope.GetService(serviceType);
+            return outerScope.GetService(serviceType);
         }
 
         public IServiceLocator Parent
         {
-            get { return parentScope; }
+            get { return outerScope; }
         }
 
-        public IScope CreateChildScope()
+        public IScope CreateInnerScope()
         {
-            return new ServiceRepository(this);
+            return new Scope(this);
         }
 
         public void DecorateService<InterfaceType, DecoratingType>()
@@ -76,10 +76,10 @@ namespace NDependencyInjection
             if (!HasService(typeof(InterfaceType)))
                 throw new InvalidOperationException(String.Format("Type {0} not defined", typeof(InterfaceType)));
 
-            IScope subsystem = CreateChildScope();
+            IScope subsystem = CreateInnerScope();
             subsystem.RegisterServiceProvider<InterfaceType>(dictionary[typeof(InterfaceType)]);
          
-            dictionary[typeof(InterfaceType)] = new DecoratingFactoryServiceProvider<DecoratingType>(subsystem);
+            dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<DecoratingType>();
         }
 
 
@@ -93,31 +93,6 @@ namespace NDependencyInjection
         private T GetService<T>()
         {
             return (T) GetService(typeof (T));
-        }
-    }
-
-    /// <summary>
-    ///  TODO: Needs to create new instance only when the subsystem is creating a new instance.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    internal class DecoratingFactoryServiceProvider<T> : IServiceProvider
-    {
-        private readonly IScope subsystem;
-        private IServiceProvider factory;
-        public DecoratingFactoryServiceProvider(IScope subsystem)
-        {
-
-            factory = new FactoryServiceProvider<T>(subsystem);
-            this.subsystem = subsystem;
-        }
-
-        public object GetService(Type serviceType, Type interfaceType)
-        {
-
-        }
-
-        public void AddMapping(Type serviceType)
-        {
         }
     }
 }

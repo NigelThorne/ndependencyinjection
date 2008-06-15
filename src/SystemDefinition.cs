@@ -9,7 +9,7 @@ namespace NDependencyInjection
     {
         private readonly IScope scope;
 
-        public SystemDefinition() : this(new ServiceRepository())
+        public SystemDefinition() : this(new Scope())
         {
         }
 
@@ -40,7 +40,7 @@ namespace NDependencyInjection
 
         public IServiceDefinition HasFactory<S>()
         {
-            return NewComponent(new DecoratingServiceProvider<S>(scope));
+            return NewComponent(new FactoryServiceProvider<S>());
         }
 
         public IServiceDefinition HasInstance<S>(S instance)
@@ -53,7 +53,7 @@ namespace NDependencyInjection
             return
                 NewComponent(
                     new SingletonServiceProviderDecorator(
-                        new DecoratingServiceProvider<S>(scope)));
+                        new FactoryServiceProvider<S>()));
         }
 
         public IServiceDefinition HasSubsystem(ISubsystemBuilder subsystemBuilder)
@@ -68,7 +68,7 @@ namespace NDependencyInjection
 
         public IDecoratingContext Decorate<S>()
         {
-            return new DecoratingContext<S>(scope);
+            return new DecoratorDefinition<S>(scope);
         }
 
         /// <summary>
@@ -77,14 +77,14 @@ namespace NDependencyInjection
         /// <returns></returns>
         public ISystemDefinition CreateSubsystem(ISubsystemBuilder subsystem)
         {
-            ISystemDefinition system = new SystemDefinition(scope.CreateChildScope());
+            ISystemDefinition system = new SystemDefinition(scope.CreateInnerScope());
             subsystem.Build(system);
             return system;
         }
 
         private IServiceLocator CreateSubsystemWiring(ISubsystemBuilder subsystem)
         {
-            IScope child = scope.CreateChildScope();
+            IScope child = scope.CreateInnerScope();
             subsystem.Build(new SystemDefinition(child));
             return child;
         }

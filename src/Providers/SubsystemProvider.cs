@@ -15,7 +15,7 @@ namespace NDependencyInjection.Providers
             this.scope = scope;
         }
 
-        public object GetService(Type serviceType, Type interfaceType)
+        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             return scope.GetService(interfaceType);
         }

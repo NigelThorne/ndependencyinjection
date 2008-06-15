@@ -12,10 +12,12 @@ namespace NDependencyInjection.Generics
         private readonly InterfaceType proxy;
         private bool targetSet = false;
         private InterfaceType target = default(InterfaceType);
+        private readonly IServiceLocator context;
 
-        public TypeResolvingConduit(IServiceProvider provider)
+        public TypeResolvingConduit(IServiceProvider provider, IServiceLocator context)
         {
             this.provider = provider;
+            this.context = context;
             proxy = new ProxyFactory().CreateProxy<InterfaceType>(this);
         }
 
@@ -31,7 +33,7 @@ namespace NDependencyInjection.Generics
                 if(!targetSet)
                 {
                     targetSet = true;
-                    target = (InterfaceType) provider.GetService(typeof (InterfaceType), typeof (InterfaceType));                    
+                    target = (InterfaceType) provider.GetService(typeof (InterfaceType), typeof (InterfaceType), context);                    
                 }
                 return info.TargetMethod.Invoke(target, info.Arguments);
             }

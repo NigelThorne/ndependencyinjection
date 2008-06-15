@@ -15,11 +15,11 @@ namespace NDependencyInjection.Tests
     [TestFixture]
     public class ServiceRepositoryTests : MockingTestFixture
     {
-        private ServiceRepository repository;
+        private Scope repository;
 
         protected override void SetUp()
         {
-            repository = new ServiceRepository();
+            repository = new Scope();
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace NDependencyInjection.Tests
 
         private class MockExceptionThrowingServiceProvider : IServiceProvider
         {
-            public object GetService(Type serviceType, Type interfaceType)
+            public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
             {
                 throw new ApplicationException();
             }

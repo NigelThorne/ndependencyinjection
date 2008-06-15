@@ -16,7 +16,7 @@ namespace NDependencyInjection.Providers
             this.subsystems = subsystems;
         }
 
-        public object GetService(Type serviceType, Type interfaceType)
+        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             ArrayList list = new ArrayList();
             foreach (IServiceLocator subsystem in subsystems)

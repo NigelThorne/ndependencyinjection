@@ -50,11 +50,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DecoratingContext.cs" />
+    <Compile Include="DecoratorDefinition.cs" />
+    <Compile Include="DecoratingFactoryServiceProvider.cs" />
     <Compile Include="interfaces\IScope.cs" />
     <Compile Include="Providers\BroadcasterProvider.cs" />
     <Compile Include="Providers\CollectionProvider.cs" />
-    <Compile Include="Conduit.cs" />
+    <Compile Include="Helpers\Conduit.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
     <Compile Include="Providers\DecoratingServiceProvider.cs" />
     <Compile Include="Providers\InstanceServiceProvider.cs" />
@@ -71,9 +72,9 @@
     <Compile Include="interfaces\IServiceDefinition.cs" />
     <Compile Include="NullServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflection.cs" />
+    <Compile Include="Helpers\Reflection.cs" />
     <Compile Include="Providers\SubsystemProvider.cs" />
-    <Compile Include="ServiceRepository.cs" />
+    <Compile Include="Scope.cs" />
     <Compile Include="Providers\SingletonServiceProviderDecorator.cs" />
     <Compile Include="ServiceDefinition.cs" />
     <Compile Include="SystemDefinition.cs" />
