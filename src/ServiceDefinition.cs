@@ -17,7 +17,7 @@ namespace NDependencyInjection
 
         public IServiceDefinition Provides<Interface>()
         {
-            scope.RegisterServiceProvider<Interface>(provider);
+            scope.RegisterServiceProvider(typeof(Interface), provider);
             return this;
         }
 

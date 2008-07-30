@@ -25,13 +25,13 @@ namespace NDependencyInjection
             this.outerScope = outerScope;
         }
 
-        public void RegisterServiceProvider<T>(IServiceProvider provider)
+        public void RegisterServiceProvider(Type serviceType, IServiceProvider provider)
         {
-            if (dictionary.ContainsKey(typeof (T)))
-                throw new InvalidOperationException(String.Format("Type {0} is already registered", typeof (T)));
+            if (dictionary.ContainsKey(serviceType))
+                throw new InvalidOperationException(String.Format("Type {0} is already registered", serviceType));
 
-            dictionary[typeof (T)] = provider;
-            provider.AddMapping(typeof (T));
+            dictionary[serviceType] = provider;
+            provider.AddMapping(serviceType);
         }
 
         public void RegisterServiceListener<EventsInterface>(IServiceProvider provider)
@@ -42,8 +42,8 @@ namespace NDependencyInjection
         public void RegisterBroadcaster<EventsInterface>()
         {
             BroadcasterProvider<EventsInterface> provider = new BroadcasterProvider<EventsInterface>();
-            RegisterServiceProvider<IBroadcaster<EventsInterface>>(provider);
-            RegisterServiceProvider<EventsInterface>(provider);
+            RegisterServiceProvider(typeof(IBroadcaster<EventsInterface>), provider);
+            RegisterServiceProvider(typeof(EventsInterface),provider);
         }
 
         public bool HasService(Type serviceType)
@@ -56,6 +56,7 @@ namespace NDependencyInjection
         {
             if (dictionary.ContainsKey(serviceType))
             {
+                Console.WriteLine("Fetching {0}",serviceType);
                 return dictionary[serviceType].GetService(serviceType, serviceType, this);
             }
             return outerScope.GetService(serviceType);
@@ -76,10 +77,7 @@ namespace NDependencyInjection
             if (!HasService(typeof(InterfaceType)))
                 throw new InvalidOperationException(String.Format("Type {0} not defined", typeof(InterfaceType)));
 
-            IScope subsystem = CreateInnerScope();
-            subsystem.RegisterServiceProvider<InterfaceType>(dictionary[typeof(InterfaceType)]);
-         
-            dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<DecoratingType>();
+            dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<DecoratingType, InterfaceType>(this, dictionary[typeof(InterfaceType)]);
         }
 
 
