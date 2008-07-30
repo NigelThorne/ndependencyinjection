@@ -56,7 +56,6 @@ namespace NDependencyInjection
         {
             if (dictionary.ContainsKey(serviceType))
             {
-                Console.WriteLine("Fetching {0}",serviceType);
                 return dictionary[serviceType].GetService(serviceType, serviceType, this);
             }
             return outerScope.GetService(serviceType);
