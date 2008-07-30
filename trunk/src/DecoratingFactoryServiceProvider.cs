@@ -27,11 +27,8 @@ namespace NDependencyInjection
 
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
-            object original = originalScope.GetService(interfaceType);
-
-            IScope newScope = subsystem.CreateInnerScope();
+            IScope newScope = originalScope.CreateInnerScope();
             newScope.RegisterServiceProvider(typeof(T), factory);
-            newScope.RegisterServiceProvider(typeof(I), new InstanceServiceProvider(original));            
 
             return newScope.GetService(typeof(T));
         }
