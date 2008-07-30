@@ -79,7 +79,6 @@ namespace NDependencyInjection
             dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<DecoratingType, InterfaceType>(this, dictionary[typeof(InterfaceType)]);
         }
 
-
         public void ReplaceServiceProvider<T1>(IServiceProvider provider)
         {
             if (!dictionary.ContainsKey(typeof(T1)))
