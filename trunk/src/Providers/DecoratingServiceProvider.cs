@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using NDependencyInjection.Attributes;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
@@ -27,6 +26,8 @@ namespace NDependencyInjection.Providers
         public void AddMapping(Type serviceType)
         {
             myTypes.Add(serviceType);
+            if (!serviceType.IsAssignableFrom(typeof(ConcreteType))) 
+                throw new InvalidWiringException("Service of type {0} does not implement type {1}", typeof(ConcreteType), serviceType);
         }
 
         private object[] GetParameters(ConstructorInfo constructor, IServiceLocator context)
@@ -97,6 +98,13 @@ namespace NDependencyInjection.Providers
                 if (!context.HasService(parameter.ParameterType)) unknownTypes.Add(parameter.ParameterType);
             }
             return unknownTypes;
+        }
+    }
+
+    public class InvalidWiringException : Exception
+    {
+        public InvalidWiringException(string message, params object[] args) : base(string.Format(message, args))
+        {
         }
     }
 }

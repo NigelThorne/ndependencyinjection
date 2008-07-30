@@ -98,5 +98,22 @@ namespace NDependencyInjection.Tests
             SetupComplete();
             provider.GetService(typeof (IC), typeof (IC), context);
         }
+
+        [Test, ExpectedException(typeof(InvalidWiringException))]
+        public void AddMapping_ThrowsAnException_WhenTheMappingRefersToAServiceYouDontSupport()
+        {
+            IServiceProvider provider =
+                new FactoryServiceProvider<Object>();
+
+            SetupComplete();
+            provider.AddMapping(typeof (IA));
+        }
+
+        [Test]
+        public void AddMapping_DoesNothing_WhenTheMappingRefersToSupportedService()
+        {
+            SetupComplete();
+            serviceProvider.AddMapping(typeof (Object));
+        }
     }
 }

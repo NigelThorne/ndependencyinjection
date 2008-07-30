@@ -33,7 +33,7 @@ namespace NDependencyInjection.Tests
         public void Get_RethrowsUnwrappedReflectionExceptions()
         {
             IServiceProvider serviceProvider = new MockExceptionThrowingServiceProvider();
-            repository.RegisterServiceProvider<IA>(serviceProvider);
+            repository.RegisterServiceProvider(typeof(IA),serviceProvider);
             repository.GetService(typeof (IA));
         }
 
@@ -42,8 +42,8 @@ namespace NDependencyInjection.Tests
         {
             IServiceProvider mock = NewMock<IServiceProvider>();
             Stub.On(mock).Method("AddMapping");
-            repository.RegisterServiceProvider<IMyTestClassA>(mock);
-            repository.RegisterServiceProvider<IMyTestClassA>(NewMock<IServiceProvider>());
+            repository.RegisterServiceProvider(typeof(IMyTestClassA),mock);
+            repository.RegisterServiceProvider(typeof(IMyTestClassA),NewMock<IServiceProvider>());
         }
 
         [Test, ExpectedException(typeof(UnknownTypeException))]
@@ -57,7 +57,7 @@ namespace NDependencyInjection.Tests
         {
             IMyTestClassA a = NewMock<IMyTestClassA>();
             IServiceProvider serviceProvider = new SP(a);
-            repository.RegisterServiceProvider<IMyTestClassA>(serviceProvider);
+            repository.RegisterServiceProvider(typeof(IMyTestClassA),serviceProvider);
 
             Assert.AreSame(a, repository.GetService(typeof (IMyTestClassA)));
             Assert.IsTrue(((SP) serviceProvider).gotCalled);
