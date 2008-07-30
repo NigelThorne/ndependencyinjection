@@ -11,14 +11,12 @@ namespace NDependencyInjection
     /// <typeparam name="T"></typeparam>
     public class DecoratingServiceProvider<T, I> : IServiceProvider
     {
-        private readonly IScope subsystem;
         private readonly FactoryServiceProvider<T> factory;
         private readonly IScope originalScope;
 
         public DecoratingServiceProvider(IScope subsystem, IServiceProvider serviceProvider)
         {
             factory = new FactoryServiceProvider<T>();
-            this.subsystem = subsystem;
             originalScope = subsystem.CreateInnerScope();
             originalScope.RegisterServiceProvider(typeof(I), serviceProvider);
         }
