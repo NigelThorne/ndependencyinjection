@@ -21,9 +21,9 @@ namespace NDependencyInjection.Providers
             return scope.GetService(interfaceType);
         }
 
+        // SMELL: not used
         public void AddMapping(Type serviceType)
         {
-            
         }
     }
 }

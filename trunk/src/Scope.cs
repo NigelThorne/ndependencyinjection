@@ -52,13 +52,18 @@ namespace NDependencyInjection
             return outerScope.HasService(serviceType);
         }
 
+        private Type pendingType = null;
         public object GetService(Type serviceType)
         {
+            if (pendingType == serviceType) throw new InvalidWiringException("You have a scope defined as providing type "+ serviceType + " but it doesn't");
             if (dictionary.ContainsKey(serviceType))
             {
                 return dictionary[serviceType].GetService(serviceType, serviceType, this);
             }
-            return outerScope.GetService(serviceType);
+            pendingType = serviceType;
+            object service = outerScope.GetService(serviceType);
+            pendingType = null;
+            return service;
         }
 
         public IServiceLocator Parent
