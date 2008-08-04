@@ -57,6 +57,7 @@
     <Compile Include="Providers\CollectionProvider.cs" />
     <Compile Include="Helpers\Conduit.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
+    <Compile Include="Providers\ConstructorHelper.cs" />
     <Compile Include="Providers\DecoratingServiceProvider.cs" />
     <Compile Include="Providers\InstanceServiceProvider.cs" />
     <Compile Include="Generics\TypeResolvingConduit.cs" />
