@@ -39,7 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LinFu.DynamicProxy, Version=1.0.2946.19275, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.3139.17910, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
