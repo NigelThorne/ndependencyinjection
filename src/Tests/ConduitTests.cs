@@ -60,18 +60,43 @@ namespace NDependencyInjection.Tests
             Assert.AreEqual(3, proxy.DoSomething(1, 2));
         }
 
-        [Test, Ignore("Can't use for templated types yet")]
+        [Test]
         public void MethodsOnTemplatedType_ArePassedThrough()
         {
-            ITypeSafeConduit<X<IA>> conduit2 = new TypeSafeConduit<X<IA>>();
-            X<IA> mockX = NewMock<X<IA>>();
+            IA ia = NewMock<IA>();
+            IX<IA> mockIX = new MockXIA(ia);
+
+            ITypeSafeConduit<IX<IA>> conduit2 = new TypeSafeConduit<IX<IA>>();
+            conduit2.SetTarget(mockIX);
+
+            Assert.AreSame(ia, conduit2.Proxy.DoSomething());
+        }
+
+        private class MockXIA : IX<IA>
+        {
+            private readonly IA result;
+
+            public MockXIA(IA result)
+            {
+                this.result = result;
+            }
+
+            public IA DoSomething()
+            {
+                return result;
+            }
+        }
+
+        [Test]
+        public void MethodsOnTemplatedType_ArePassedThrough2()
+        {
+            ITypeSafeConduit<IX2> conduit2 = new TypeSafeConduit<IX2>();
+            IA ia = NewMock<IA>();
+            IX2 mockX = new X2(ia);
 
             conduit2.SetTarget(mockX);
 
-            IA ia = NewMock<IA>();
-            Expect.Once.On(mockX).Method("DoSomething").WithNoArguments().Will(Return.Value(ia));
-
-            Assert.AreSame(ia, conduit2.Proxy.DoSomething());
+            Assert.AreSame(ia, conduit2.Proxy.DoSomething<IA>());
         }
 
         [Test]
@@ -88,6 +113,21 @@ namespace NDependencyInjection.Tests
             void IY.Boing()
             {
                 wasCalled = true;
+            }
+        }
+
+        public class X2 : IX2
+        {
+            private readonly object obj;
+
+            public X2(object obj)
+            {
+                this.obj = obj;
+            }
+
+            public T DoSomething<T>()
+            {
+                return (T) obj;
             }
         }
 

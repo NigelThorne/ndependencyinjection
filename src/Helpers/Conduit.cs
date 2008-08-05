@@ -7,6 +7,8 @@ using NDependencyInjection.interfaces;
 
 namespace NDependencyInjection
 {
+
+
     public class Conduit : IInterceptor, IConduit
     {
         private readonly object proxy;

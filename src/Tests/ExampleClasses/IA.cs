@@ -12,8 +12,14 @@ namespace NDependencyInjection.Tests.ExampleClasses
         int DoSomething(int x, int y);
     }
 
-    public interface X<T>
+    public interface IX<T>
     {
         T DoSomething();
     }
+
+    public interface IX2
+    {
+        T DoSomething<T>();
+    }
+
 }
