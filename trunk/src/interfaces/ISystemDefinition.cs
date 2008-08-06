@@ -7,6 +7,7 @@ namespace NDependencyInjection.interfaces
         IServiceDefinition HasFactory<S>();
         IServiceDefinition HasSingleton<S>();
         IServiceDefinition HasCollection(params ISubsystemBuilder[] subsystems);
+        IServiceDefinition HasCollection(params CreateSubsystem[] subsystems);
         IServiceDefinition HasSubsystem(ISubsystemBuilder subsystemBuilder);
         IServiceDefinition HasSubsystem(CreateSubsystem method);
         IDecoratingContext Decorate<S>();

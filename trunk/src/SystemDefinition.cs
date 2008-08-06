@@ -38,6 +38,16 @@ namespace NDependencyInjection
             return NewComponent(new CollectionProvider(list.ToArray()));
         }
 
+        public IServiceDefinition HasCollection(params CreateSubsystem[] subsystems)
+        {
+            ISubsystemBuilder[] builders = new ISubsystemBuilder[subsystems.Length];
+            for (int i = 0; i < subsystems.Length; i++)
+            {
+                builders[i] = new DelegateExecutingBuilder(subsystems[i]);
+            }
+            return HasCollection(builders);
+        }
+
         public IServiceDefinition HasFactory<S>()
         {
             return NewComponent(new FactoryServiceProvider<S>());
