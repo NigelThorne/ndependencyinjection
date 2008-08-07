@@ -48,8 +48,7 @@ namespace NDependencyInjection
 
         public bool HasService(Type serviceType)
         {
-            if (dictionary.ContainsKey(serviceType)) return true;
-            return outerScope.HasService(serviceType);
+            return dictionary.ContainsKey(serviceType) || outerScope.HasService(serviceType);
         }
 
         private Type pendingType = null;
