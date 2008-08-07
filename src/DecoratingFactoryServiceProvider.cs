@@ -9,6 +9,7 @@ namespace NDependencyInjection
     ///  TODO: Needs to create new instance only when the subsystem is creating a new instance.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    /// <typeparam name="I"></typeparam>
     public class DecoratingServiceProvider<T, I> : IServiceProvider
     {
         private readonly FactoryServiceProvider<T> factory;
