@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
@@ -14,6 +15,7 @@ namespace NDependencyInjection
     {
         private readonly FactoryServiceProvider<T> factory;
         private readonly IScope originalScope;
+        private readonly Dictionary<object, object> cache = new Dictionary<object, object>();
 
         public DecoratingServiceProvider(IScope subsystem, IServiceProvider serviceProvider)
         {
@@ -26,10 +28,16 @@ namespace NDependencyInjection
 
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
-            IScope newScope = originalScope.CreateInnerScope();
-            newScope.RegisterServiceProvider(typeof(T), factory);
+            object service = originalScope.GetService(typeof (I));
 
-            return newScope.GetService(typeof(T));
+            if (cache.ContainsKey(service)) return cache[service];
+            
+            IScope newScope = originalScope.CreateInnerScope();
+            newScope.RegisterServiceProvider(typeof (I), new InstanceServiceProvider(service));
+            newScope.RegisterServiceProvider(typeof (T), factory);
+            object decorator = newScope.GetService(typeof (T));
+            cache[service] = decorator;
+            return decorator;
         }
 
         public void AddMapping(Type serviceType)
