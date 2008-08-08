@@ -75,12 +75,12 @@ namespace NDependencyInjection
             return new Scope(this);
         }
 
-        public void DecorateService<InterfaceType, DecoratingType>()
+        public void DecorateService<InterfaceType>(IServiceProvider decorator)
         {
             if (!HasService(typeof(InterfaceType)))
                 throw new InvalidOperationException(String.Format("Type {0} not defined", typeof(InterfaceType)));
 
-            dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<DecoratingType, InterfaceType>(this, dictionary[typeof(InterfaceType)]);
+            dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<InterfaceType>(dictionary[typeof(InterfaceType)], decorator);
         }
 
         public void ReplaceServiceProvider<T1>(IServiceProvider provider)

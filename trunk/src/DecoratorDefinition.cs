@@ -1,4 +1,5 @@
 using NDependencyInjection.interfaces;
+using NDependencyInjection.Providers;
 
 namespace NDependencyInjection
 {
@@ -13,7 +14,7 @@ namespace NDependencyInjection
 
         public void With<DecoratingType>()
         {
-            scope.DecorateService<Interface, DecoratingType>();
+            scope.DecorateService<Interface>(new FactoryServiceProvider<DecoratingType>());
         }
     }
 }

@@ -10,6 +10,6 @@ namespace NDependencyInjection.interfaces
         void RegisterServiceListener<T1>(IServiceProvider provider);
         void RegisterBroadcaster<EventsInterface>();
         IScope CreateInnerScope();
-        void DecorateService<T1, T2>();
+        void DecorateService<InterfaceType>(IServiceProvider decorator);
     }
 }

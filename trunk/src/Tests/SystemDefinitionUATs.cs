@@ -354,6 +354,25 @@ namespace NDependencyInjection.Tests
             Assert.AreEqual(120, addThenDouble.DoSomething(10,20));
         }
 
+        [Test]
+        public void Service_Decorates_Works()
+        {
+            definition.HasSingleton<Add>().Provides<IDoSomething>();
+            definition.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>();
+            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            Assert.AreEqual(60, addThenDouble.DoSomething(10, 20));
+        }
+
+        [Test]
+        public void Service_()
+        {
+            definition.HasSingleton<Add>().Provides<IDoSomething>();
+            definition.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>();
+            definition.HasSingleton<Increment>().Decorates<IDoSomething>();
+            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            Assert.AreEqual(61, addThenDouble.DoSomething(10, 20));
+        }
+
         class CountCalls : IDoSomething
         {
             private int count = 0;

@@ -26,5 +26,11 @@ namespace NDependencyInjection
             scope.RegisterServiceListener<EventsListener>(provider);
             return this;
         }
+
+        public IServiceDefinition Decorates<Interface>()
+        {
+            scope.DecorateService<Interface>(provider);
+            return this;
+        }
     }
 }
