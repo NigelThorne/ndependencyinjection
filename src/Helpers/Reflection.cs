@@ -20,11 +20,11 @@ namespace NDependencyInjection
             }
         }
 
-        public static InterfaceType CallConstructor<InterfaceType>(ConstructorInfo constructor, object[] parameters)
+        public static object CallConstructor(ConstructorInfo constructor, object[] parameters)
         {
             try
             {
-                return (InterfaceType) constructor.Invoke(parameters);
+                return constructor.Invoke(parameters);
             }
             catch (TargetInvocationException ex)
             {

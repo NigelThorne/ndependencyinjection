@@ -23,14 +23,14 @@ namespace NDependencyInjection.Providers
                     concreteType));
         }
 
-        public static void EnsureAllServicesArePresent<ConcreteType>(IServiceLocator context, IEnumerable<Type> types)
+        public static void EnsureAllServicesArePresent(IServiceLocator context, IEnumerable<Type> types, Type concreteType)
         {
             List<Type> unknownTypes = GetUnknownTypes(context, types);
             if (unknownTypes.Count > 0)
             {
                 throw new ApplicationException(
                     string.Format("Constructor for {0} referenced types unknown within this scope: \n{1}",
-                                  typeof (ConcreteType), TypesToString(unknownTypes)));
+                                  concreteType, TypesToString(unknownTypes)));
             }
         }
 

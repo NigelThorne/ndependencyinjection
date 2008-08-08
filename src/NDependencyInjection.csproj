@@ -74,6 +74,7 @@
     <Compile Include="NullServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\Reflection.cs" />
+    <Compile Include="Providers\InvalidWiringException.cs" />
     <Compile Include="Providers\SubsystemProvider.cs" />
     <Compile Include="Scope.cs" />
     <Compile Include="Providers\SingletonServiceProviderDecorator.cs" />

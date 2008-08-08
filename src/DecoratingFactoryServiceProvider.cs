@@ -6,38 +6,37 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection
 {
-    /// <summary>
-    ///  TODO: Needs to create new instance only when the subsystem is creating a new instance.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="I"></typeparam>
-    public class DecoratingServiceProvider<T, I> : IServiceProvider
+    public class DecoratingServiceProvider<I> : IServiceProvider
     {
-        private readonly FactoryServiceProvider<T> factory;
-        private readonly IScope originalScope;
+        private readonly IServiceProvider decoratedProvider;
+        private readonly IServiceProvider decoratorProvider;
         private readonly Dictionary<object, object> cache = new Dictionary<object, object>();
 
-        public DecoratingServiceProvider(IScope subsystem, IServiceProvider serviceProvider)
+        public DecoratingServiceProvider(IServiceProvider decoratedProvider, IServiceProvider decoratorProvider)
         {
-            factory = new FactoryServiceProvider<T>();
-            originalScope = subsystem.CreateInnerScope();
-            originalScope.RegisterServiceProvider(typeof(I), serviceProvider);
+            this.decoratedProvider = decoratedProvider;
+            this.decoratorProvider = decoratorProvider;
         }
 
         #region IServiceProvider Members
 
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
-            object service = originalScope.GetService(typeof (I));
+            IScope scope = new Scope(context);
+            scope.RegisterServiceProvider(typeof(I), decoratedProvider);
+            object decorated = scope.GetService(interfaceType);
 
-            if (cache.ContainsKey(service)) return cache[service];
-            
-            IScope newScope = originalScope.CreateInnerScope();
-            newScope.RegisterServiceProvider(typeof (I), new InstanceServiceProvider(service));
-            newScope.RegisterServiceProvider(typeof (T), factory);
-            object decorator = newScope.GetService(typeof (T));
-            cache[service] = decorator;
-            return decorator;
+            if (cache.ContainsKey(decorated))
+            {
+                return cache[decorated];
+            }
+
+            IScope scope2 = new Scope(context);
+            scope2.RegisterServiceProvider(interfaceType, new InstanceServiceProvider(decorated));
+
+            object service = decoratorProvider.GetService(serviceType, interfaceType, scope2);
+            cache[decorated] = service;
+            return service;
         }
 
         public void AddMapping(Type serviceType)

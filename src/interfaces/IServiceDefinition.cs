@@ -5,5 +5,6 @@ namespace NDependencyInjection.interfaces
     {
         IServiceDefinition Provides<Interface>();
         IServiceDefinition ListensTo<EventsListener>();
+        IServiceDefinition Decorates<Interface>();
     }
 }
