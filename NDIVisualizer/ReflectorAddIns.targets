@@ -1,0 +1,124 @@
+<!-- Adapted from CrossCompile.CSharp.targets. Use of included script samples are subject to the terms specified at http://www.microsoft.com/info/cpyright.htm Written by Jomo Fisher -->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- These two property groups inform VS that there is a Platform called .NET 1.1. --> 
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|.NET 1.1'">
+		<DebugSymbols Condition="'$(DebugSymbols)'==''">true</DebugSymbols>
+		<DebugType Condition="'$(DebugType)'==''">full</DebugType>
+		<Optimize Condition="'$(Optimize)'==''">false</Optimize>
+		<DefineConstants Condition="'$(DefineConstants)'==''">DEBUG;TRACE</DefineConstants>
+		<DefineConstants>$(DefineConstants);TARGETTING_FX_1_1</DefineConstants>
+		<ErrorReport></ErrorReport>
+		<WarningLevel Condition="'$(WarningLevel)'==''">4</WarningLevel>
+		<UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
+		<CscToolPath>$(SystemRoot)\Microsoft.NET\Framework\v1.1.4322</CscToolPath>
+		<TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|.NET 1.1'">
+		<DebugType Condition="'$(DebugType)'==''">pdbonly</DebugType>
+		<Optimize Condition="'$(Optimize)'==''">true</Optimize>
+		<DefineConstants Condition="'$(DefineConstants)'==''">TRACE</DefineConstants>
+		<DefineConstants>$(DefineConstants);TARGETTING_FX_1_1</DefineConstants>
+		<ErrorReport></ErrorReport>
+		<WarningLevel Condition="'$(WarningLevel)'==''">4</WarningLevel>
+		<UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
+		<CscToolPath>$(SystemRoot)\Microsoft.NET\Framework\v1.1.4322</CscToolPath>
+		<TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+	</PropertyGroup>
+
+	<!-- These two property groups inform VS that there is a Platform called .NET 1.0. --> 
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|.NET 1.0'">
+		<DebugSymbols Condition="'$(DebugSymbols)'==''">true</DebugSymbols>
+		<DebugType Condition="'$(DebugType)'==''">full</DebugType>
+		<Optimize Condition="'$(Optimize)'==''">false</Optimize>
+		<DefineConstants Condition="'$(DefineConstants)'==''">DEBUG;TRACE</DefineConstants>
+		<DefineConstants>$(DefineConstants);TARGETTING_FX_1_0</DefineConstants>
+		<ErrorReport></ErrorReport>
+		<WarningLevel Condition="'$(WarningLevel)'==''">4</WarningLevel>
+		<UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
+		<CscToolPath>$(SystemRoot)\Microsoft.NET\Framework\v1.0.3705</CscToolPath>
+		<TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|.NET 1.0'">
+		<DebugType Condition="'$(DebugType)'==''">pdbonly</DebugType>
+		<Optimize Condition="'$(Optimize)'==''">true</Optimize>
+		<DefineConstants Condition="'$(DefineConstants)'==''">TRACE</DefineConstants>
+		<DefineConstants>$(DefineConstants);TARGETTING_FX_1_0</DefineConstants>
+		<ErrorReport></ErrorReport>
+		<WarningLevel Condition="'$(WarningLevel)'==''">4</WarningLevel>
+		<UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
+		<CscToolPath>$(SystemRoot)\Microsoft.NET\Framework\v1.0.3705</CscToolPath>
+		<TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+	</PropertyGroup>
+
+	<!-- Import the standard C# targets -->
+
+	<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+
+	<PropertyGroup Condition="'$(OutputType)'=='Library'">
+		<StartAction>Program</StartAction>
+		<StartProgram>$(ProjectDir)$(OutputPath)Reflector.exe</StartProgram>
+	</PropertyGroup>
+
+	<!-- Now that the standard targets have been brought in. Override some properties and items it created. --> 
+
+	<PropertyGroup>
+		<AvailablePlatforms>$(AvailablePlatforms),.NET 1.0,.NET 1.1</AvailablePlatforms>
+		<AssemblySearchPaths Condition="'$(Platform)'=='.NET 1.1'">
+			{CandidateAssemblyFiles};$(ReferencePath);{HintPathFromItem};{TargetFrameworkDirectory};{AssemblyFolders};$(OutputPath);{GAC}
+		</AssemblySearchPaths>
+		<AssemblySearchPaths Condition="'$(Platform)'=='.NET 1.0'">
+			{CandidateAssemblyFiles};$(ReferencePath);{HintPathFromItem};{TargetFrameworkDirectory};{AssemblyFolders};$(OutputPath);{GAC}
+		</AssemblySearchPaths>
+		<TargetFrameworkDirectory Condition="'$(Platform)'=='.NET 1.1'">
+			$(SystemRoot)\Microsoft.NET\Framework\v1.1.4322
+		</TargetFrameworkDirectory>
+		<TargetFrameworkDirectory Condition="'$(Platform)'=='.NET 1.0'">
+			$(SystemRoot)\Microsoft.NET\Framework\v1.0.3705
+		</TargetFrameworkDirectory>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<CleanDependsOn>$(CleanDependsOn);CleanIntermediatePath;</CleanDependsOn>
+	</PropertyGroup>
+
+	<Target Name="CleanIntermediatePath">
+		<RemoveDir Directories="obj;bin;" Condition="'$(BuildingInsideVisualStudio)'!='true'" />
+	</Target>
+
+	<ItemGroup Condition="'$(Platform)'=='.NET 1.1'">
+		<TargetFrameworkDirectoryItem Include="$(SystemRoot)\Microsoft.NET\Framework\v1.1.4322">
+			<InProject>false</InProject>
+		</TargetFrameworkDirectoryItem>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Platform)'=='.NET 1.0'">
+		<TargetFrameworkDirectoryItem Include="$(SystemRoot)\Microsoft.NET\Framework\v1.0.3705">
+			<InProject>false</InProject>
+		</TargetFrameworkDirectoryItem>
+	</ItemGroup>
+
+	<!-- Override this target from Microsoft.Common.Targets so that we can supply our own value for $(TargetFrameworkDirectory). This controls where assembly resolution logic finds FX assemblies. -->
+	<Target Name="GetFrameworkPaths" DependsOnTargets="$(GetFrameworkPathsDependsOn)">
+
+		<!-- Get the path to the target .NET framework directory. -->
+		<GetFrameworkPath Condition="'$(Platform)'!='.NET 1.1' and '$(Platform)'!='.NET 1.0'">
+			<Output TaskParameter="Path" PropertyName="TargetFrameworkDirectory"/>
+			<Output TaskParameter="Path" ItemName="TargetFrameworkDirectoryItem"/>
+		</GetFrameworkPath>
+
+		<!-- Get the path to the target .NET framework SDK directory. -->
+		<GetFrameworkSDKPath Condition="'$(Platform)'!='.NET 1.1' and '$(Platform)'!='.NET 1.0'">
+			<Output TaskParameter="Path" PropertyName="TargetFrameworkSDKDirectory"/>
+			<Output TaskParameter="Path" ItemName="TargetFrameworkSDKDirectoryItem"/>
+		</GetFrameworkSDKPath>
+
+	</Target>
+
+</Project>
+
+

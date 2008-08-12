@@ -1,0 +1,199 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMetrics", "CodeMetrics\CodeMetrics.csproj", "{C28A22D7-9772-4EE5-834B-666B3F5C27D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComLoader", "ComLoader\ComLoader.csproj", "{86B5D39E-7A2A-467A-B795-A12E65200D67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassView", "ClassView\ClassView.csproj", "{FA08E360-BA53-11DB-96F0-005056C00008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelphiLanguage", "DelphiLanguage\DelphiLanguage.csproj", "{16A056AC-BA54-11DB-96F0-005056C00008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeModelViewer", "CodeModelViewer\CodeModelViewer.csproj", "{49AEF1B0-BA55-11DB-96F0-005056C00008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeModelExample", "CodeModelExample\CodeModelExample.csproj", "{35D2878C-BA6F-11DB-96F0-005056C00008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteController", "RemoteController\RemoteController.csproj", "{D0FCF32E-BA6E-11DB-96F0-005056C00008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalkDisassembler", "BizTalkDisassembler\BizTalkDisassembler.csproj", "{9B5D0F0D-313D-4FD6-A401-87EA00F36643}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCppLanguage", "MCppLanguage\MCppLanguage.csproj", "{031ED048-C11D-11DB-96F8-005056C00008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Review", "Review\Review.csproj", "{5B8E49A8-BE23-4727-ADFE-4ED90C3C40BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSearch", "CodeSearch\CodeSearch.csproj", "{A1551604-C1D2-11DB-96F9-005056C00008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Graph\Graph.csproj", "{A17C3BC4-97A2-4ECA-A9DD-0ABF4045545D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BamlViewer", "BamlViewer\BamlViewer.csproj", "{4D20BEE6-CED7-11DB-9705-005056C00008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerShellLanguage", "PowerShellLanguage\PowerShellLanguage.csproj", "{9434508C-A3F1-4F44-83BE-77C21A1D8FC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightLoader", "SilverlightLoader\SilverlightLoader.csproj", "{707B8D39-F498-4A6A-95DE-D3DF59D8AB87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightBrowser", "SilverlightBrowser\SilverlightBrowser.csproj", "{B881F94F-7F9A-4CF5-9A15-8C31BB39032D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReflectionEmitLanguage", "ReflectionEmitLanguage\ReflectionEmitLanguage.csproj", "{27C21680-9E8F-4F93-B2D6-BAC902729779}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VulcanLanguage", "VulcanLanguage\VulcanLanguage.csproj", "{47CD2E2B-25AB-4A2D-A61E-0C55E56C79CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleSetEditor", "RuleSetEditor\RuleSetEditor.csproj", "{B454C5AF-0C4D-4F46-93ED-C2CEEAD6552E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UmlExporter", "UmlExporter\UmlExporter.csproj", "{5D31EEC7-05AA-4A54-B192-C3FDEBD3C2B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDIGraph", "NDIGraph\NDIGraph.csproj", "{97381CE7-46F6-4FB7-8AD7-10712DC531DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C28A22D7-9772-4EE5-834B-666B3F5C27D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C28A22D7-9772-4EE5-834B-666B3F5C27D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C28A22D7-9772-4EE5-834B-666B3F5C27D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C28A22D7-9772-4EE5-834B-666B3F5C27D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86B5D39E-7A2A-467A-B795-A12E65200D67}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{86B5D39E-7A2A-467A-B795-A12E65200D67}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{86B5D39E-7A2A-467A-B795-A12E65200D67}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{86B5D39E-7A2A-467A-B795-A12E65200D67}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{FA08E360-BA53-11DB-96F0-005056C00008}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{FA08E360-BA53-11DB-96F0-005056C00008}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{FA08E360-BA53-11DB-96F0-005056C00008}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{FA08E360-BA53-11DB-96F0-005056C00008}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{16A056AC-BA54-11DB-96F0-005056C00008}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{16A056AC-BA54-11DB-96F0-005056C00008}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{16A056AC-BA54-11DB-96F0-005056C00008}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{16A056AC-BA54-11DB-96F0-005056C00008}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{49AEF1B0-BA55-11DB-96F0-005056C00008}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{49AEF1B0-BA55-11DB-96F0-005056C00008}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{49AEF1B0-BA55-11DB-96F0-005056C00008}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{49AEF1B0-BA55-11DB-96F0-005056C00008}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{35D2878C-BA6F-11DB-96F0-005056C00008}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{35D2878C-BA6F-11DB-96F0-005056C00008}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{35D2878C-BA6F-11DB-96F0-005056C00008}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{35D2878C-BA6F-11DB-96F0-005056C00008}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{D0FCF32E-BA6E-11DB-96F0-005056C00008}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{D0FCF32E-BA6E-11DB-96F0-005056C00008}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{D0FCF32E-BA6E-11DB-96F0-005056C00008}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{D0FCF32E-BA6E-11DB-96F0-005056C00008}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{9B5D0F0D-313D-4FD6-A401-87EA00F36643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B5D0F0D-313D-4FD6-A401-87EA00F36643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B5D0F0D-313D-4FD6-A401-87EA00F36643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B5D0F0D-313D-4FD6-A401-87EA00F36643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{031ED048-C11D-11DB-96F8-005056C00008}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{031ED048-C11D-11DB-96F8-005056C00008}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{031ED048-C11D-11DB-96F8-005056C00008}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{031ED048-C11D-11DB-96F8-005056C00008}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{5B8E49A8-BE23-4727-ADFE-4ED90C3C40BF}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{5B8E49A8-BE23-4727-ADFE-4ED90C3C40BF}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{5B8E49A8-BE23-4727-ADFE-4ED90C3C40BF}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{5B8E49A8-BE23-4727-ADFE-4ED90C3C40BF}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{A1551604-C1D2-11DB-96F9-005056C00008}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{A1551604-C1D2-11DB-96F9-005056C00008}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{A1551604-C1D2-11DB-96F9-005056C00008}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{A1551604-C1D2-11DB-96F9-005056C00008}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{A17C3BC4-97A2-4ECA-A9DD-0ABF4045545D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A17C3BC4-97A2-4ECA-A9DD-0ABF4045545D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A17C3BC4-97A2-4ECA-A9DD-0ABF4045545D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A17C3BC4-97A2-4ECA-A9DD-0ABF4045545D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D20BEE6-CED7-11DB-9705-005056C00008}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{4D20BEE6-CED7-11DB-9705-005056C00008}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{4D20BEE6-CED7-11DB-9705-005056C00008}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{4D20BEE6-CED7-11DB-9705-005056C00008}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{9434508C-A3F1-4F44-83BE-77C21A1D8FC3}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{9434508C-A3F1-4F44-83BE-77C21A1D8FC3}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{9434508C-A3F1-4F44-83BE-77C21A1D8FC3}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{9434508C-A3F1-4F44-83BE-77C21A1D8FC3}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{707B8D39-F498-4A6A-95DE-D3DF59D8AB87}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{707B8D39-F498-4A6A-95DE-D3DF59D8AB87}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{707B8D39-F498-4A6A-95DE-D3DF59D8AB87}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{707B8D39-F498-4A6A-95DE-D3DF59D8AB87}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{B881F94F-7F9A-4CF5-9A15-8C31BB39032D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B881F94F-7F9A-4CF5-9A15-8C31BB39032D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B881F94F-7F9A-4CF5-9A15-8C31BB39032D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B881F94F-7F9A-4CF5-9A15-8C31BB39032D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C21680-9E8F-4F93-B2D6-BAC902729779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C21680-9E8F-4F93-B2D6-BAC902729779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C21680-9E8F-4F93-B2D6-BAC902729779}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{27C21680-9E8F-4F93-B2D6-BAC902729779}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{47CD2E2B-25AB-4A2D-A61E-0C55E56C79CB}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{47CD2E2B-25AB-4A2D-A61E-0C55E56C79CB}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{47CD2E2B-25AB-4A2D-A61E-0C55E56C79CB}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{47CD2E2B-25AB-4A2D-A61E-0C55E56C79CB}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{B454C5AF-0C4D-4F46-93ED-C2CEEAD6552E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B454C5AF-0C4D-4F46-93ED-C2CEEAD6552E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B454C5AF-0C4D-4F46-93ED-C2CEEAD6552E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B454C5AF-0C4D-4F46-93ED-C2CEEAD6552E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D31EEC7-05AA-4A54-B192-C3FDEBD3C2B1}.Debug|Any CPU.ActiveCfg = Debug|.NET 1.1
+		{5D31EEC7-05AA-4A54-B192-C3FDEBD3C2B1}.Debug|Any CPU.Build.0 = Debug|.NET 1.1
+		{5D31EEC7-05AA-4A54-B192-C3FDEBD3C2B1}.Release|Any CPU.ActiveCfg = Release|.NET 1.0
+		{5D31EEC7-05AA-4A54-B192-C3FDEBD3C2B1}.Release|Any CPU.Build.0 = Release|.NET 1.0
+		{97381CE7-46F6-4FB7-8AD7-10712DC531DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97381CE7-46F6-4FB7-8AD7-10712DC531DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97381CE7-46F6-4FB7-8AD7-10712DC531DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97381CE7-46F6-4FB7-8AD7-10712DC531DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 19
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs02.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CodeMetrics\\CodeMetrics.csproj
+		SccProjectName1 = CodeMetrics
+		SccLocalPath1 = CodeMetrics
+		SccProjectUniqueName2 = ComLoader\\ComLoader.csproj
+		SccProjectName2 = ComLoader
+		SccLocalPath2 = ComLoader
+		SccProjectUniqueName3 = ClassView\\ClassView.csproj
+		SccProjectName3 = ClassView
+		SccLocalPath3 = ClassView
+		SccProjectUniqueName4 = DelphiLanguage\\DelphiLanguage.csproj
+		SccProjectName4 = DelphiLanguage
+		SccLocalPath4 = DelphiLanguage
+		SccProjectUniqueName5 = CodeModelViewer\\CodeModelViewer.csproj
+		SccProjectName5 = CodeModelViewer
+		SccLocalPath5 = CodeModelViewer
+		SccProjectUniqueName6 = CodeModelExample\\CodeModelExample.csproj
+		SccProjectName6 = CodeModelExample
+		SccLocalPath6 = CodeModelExample
+		SccProjectUniqueName7 = RemoteController\\RemoteController.csproj
+		SccProjectName7 = RemoteController
+		SccLocalPath7 = RemoteController
+		SccProjectUniqueName8 = BizTalkDisassembler\\BizTalkDisassembler.csproj
+		SccProjectName8 = BizTalkDisassembler
+		SccLocalPath8 = BizTalkDisassembler
+		SccProjectUniqueName9 = MCppLanguage\\MCppLanguage.csproj
+		SccProjectName9 = MCppLanguage
+		SccLocalPath9 = MCppLanguage
+		SccProjectUniqueName10 = Review\\Review.csproj
+		SccProjectName10 = Review
+		SccLocalPath10 = Review
+		SccProjectUniqueName11 = CodeSearch\\CodeSearch.csproj
+		SccProjectName11 = CodeSearch
+		SccLocalPath11 = CodeSearch
+		SccProjectUniqueName13 = Graph\\Graph.csproj
+		SccProjectName13 = Graph
+		SccLocalPath13 = Graph
+		SccProjectUniqueName14 = BamlViewer\\BamlViewer.csproj
+		SccProjectName14 = BamlViewer
+		SccLocalPath14 = BamlViewer
+		SccProjectUniqueName15 = PowerShellLanguage\\PowerShellLanguage.csproj
+		SccProjectName15 = PowerShellLanguage
+		SccLocalPath15 = PowerShellLanguage
+		SccProjectUniqueName16 = SilverlightLoader\\SilverlightLoader.csproj
+		SccProjectName16 = SilverlightLoader
+		SccLocalPath16 = SilverlightLoader
+		SccProjectUniqueName17 = SilverlightBrowser\\SilverlightBrowser.csproj
+		SccProjectName17 = SilverlightBrowser
+		SccLocalPath17 = SilverlightBrowser
+		SccProjectUniqueName18 = ReflectionEmitLanguage\\ReflectionEmitLanguage.csproj
+		SccProjectName18 = ReflectionEmitLanguage
+		SccLocalPath18 = ReflectionEmitLanguage
+	EndGlobalSection
+	GlobalSection(TextTemplating) = postSolution
+		TextTemplating = 1
+	EndGlobalSection
+EndGlobal

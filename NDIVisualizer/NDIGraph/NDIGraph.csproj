@@ -1,0 +1,132 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{97381CE7-46F6-4FB7-8AD7-10712DC531DD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Reflector.NDIGraph</RootNamespace>
+    <AssemblyName>Reflector.NDIGraph</AssemblyName>
+    <OutputPath>..\..\Build\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\Build\Intermediate\$(AssemblyName)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.GLEE, Version=1.2.0.0, Culture=neutral, PublicKeyToken=7f84f738e1fc245c, processorArchitecture=MSIL">
+      <HintPath>..\External\GLEE2\Microsoft.GLEE.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.GLEE.Drawing, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8a3d7c21d5fa1306, processorArchitecture=MSIL">
+      <HintPath>..\External\GLEE2\Microsoft.GLEE.Drawing.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.GLEE.GraphViewerGDI, Version=1.2.0.0, Culture=neutral, PublicKeyToken=fffc27ea4058b3a1, processorArchitecture=MSIL">
+      <HintPath>..\External\GLEE2\Microsoft.GLEE.GraphViewerGDI.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NDependencyInjection, Version=1.0.0.57, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\NDependencyInjection\Bin\NDependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph, Version=2.0.30513.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <HintPath>..\External\QuickGraph2\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Algorithms, Version=2.21.1.0, Culture=neutral, PublicKeyToken=975e84d0c8d6464d">
+      <HintPath>..\External\QuickGraph2\QuickGraph.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Glee, Version=2.0.30513.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <HintPath>..\External\QuickGraph2\QuickGraph.Glee.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Graphviz, Version=2.0.30513.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <HintPath>..\External\QuickGraph2\QuickGraph.Graphviz.dll</HintPath>
+    </Reference>
+    <Reference Include="Reflector">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Build\Reflector.exe</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\DerivedTypeInformation.cs" />
+    <Compile Include="Controls\GraphControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\WiringDiagramControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraphPackage.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="InstructionHelper.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="TextFormatter.cs" />
+    <Compile Include="Transformer.cs" />
+    <Compile Include="Visitor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TypeRank.png" />
+    <EmbeddedResource Include="MethodRank.png" />
+    <EmbeddedResource Include="IlGraph.png" />
+    <EmbeddedResource Include="ClassDiagram.png" />
+    <EmbeddedResource Include="AssemblyGraph.png" />
+    <EmbeddedResource Include="Controls\GraphControl.resx">
+      <DependentUpon>GraphControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="..\External\GLEE\GLEE SHARED SOURCE LICENSE 2006-08-22.rtf">
+      <Link>GLEE SHARED SOURCE LICENSE 2006-08-22.rtf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reflector.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Graphs\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
