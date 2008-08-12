@@ -5,10 +5,39 @@ using Microsoft.Glee.Drawing;
 using QuickGraph;
 using QuickGraph.Glee;
 using Reflector.CodeModel;
-using Reflector.CodeModel.Memory;
 
 namespace Reflector.NDIGraph.Controls
 {
+    public class Node
+    {
+        private readonly string name;
+        private bool isProvided;
+        private bool isServed;
+
+        public Node(string name)
+        {
+            isProvided = false;
+            this.name = name;
+        }
+
+        public bool IsProvided
+        {
+            get { return isProvided; }
+            set { isProvided = value; }
+        }
+
+        public bool IsServed
+        {
+            get { return isServed; }
+            set { isServed = value; }
+        }
+
+        public override string ToString()
+        {
+            return name;
+        }
+    }
+
     internal sealed class WiringDiagramControl : GraphControl
     {
         private readonly IAssemblyBrowser assemblyBrowser;
@@ -58,9 +87,9 @@ namespace Reflector.NDIGraph.Controls
             IInstructionCollection method = FindBuildMethod(activeType);
             if (method == null) return;
 
-            AdjacencyGraph<string, IEdge<string>> g = new AdjacencyGraph<string, IEdge<string>>();
-            List<string> services = new List<string>();
-            string serviceNode = null;
+            AdjacencyGraph<Node, IEdge<Node>> g = new AdjacencyGraph<Node, IEdge<Node>>();
+            Dictionary<string, Node> services = new Dictionary<string, Node>();
+            Node serviceNode = null;
 
             foreach (IInstruction instruction in method)
             {
@@ -75,13 +104,15 @@ namespace Reflector.NDIGraph.Controls
                             if (reference == null) break;
 
                             serviceNode = GetVertex(reference.Name, services, g);
+                            serviceNode.IsServed = true;
 
                             IMethodDeclaration constructor = GetInjectionConstructor(reference);
                             if (constructor == null) break;
 
                             foreach (IParameterDeclaration param in constructor.Parameters)
                             {
-                                g.AddEdge(new Edge<string>(GetVertex(GetName(param.ParameterType), services, g), serviceNode));
+                                g.AddEdge(new Edge<Node>(serviceNode,
+                                                         GetVertex(GetName(param.ParameterType), services, g)));
                             }
                         }
                         break;
@@ -90,7 +121,8 @@ namespace Reflector.NDIGraph.Controls
                     case "HasCollection":
                     case "HasSubsystem":
                         {
-                            serviceNode = GetVertex(methodInstanceReference.GenericArguments[0].ToString(),services, g);
+                            serviceNode = GetVertex(methodInstanceReference.GenericArguments[0].ToString(), services, g);
+                            serviceNode.IsServed = true;
                         }
                         break;
                     case "Provides":
@@ -98,10 +130,11 @@ namespace Reflector.NDIGraph.Controls
                         {
                             if (serviceNode != null)
                             {
-                                string vertex =
+                                Node vertex =
                                     GetVertex(methodInstanceReference.GenericArguments[0].ToString(),
                                               services, g);
-                                g.AddEdge(new Edge<string>(serviceNode, vertex));
+                                g.AddEdge(new Edge<Node>(serviceNode, vertex));
+                                vertex.IsProvided = true;
                             }
                         }
                         break;
@@ -111,7 +144,23 @@ namespace Reflector.NDIGraph.Controls
                 }
             }
 
-            GleeGraphPopulator<string, IEdge<string>> populator = GleeGraphUtility.Create(g);
+            GleeGraphPopulator<Node, IEdge<Node>> populator = GleeGraphUtility.Create(g);
+            populator.NodeAdded += delegate(object sender, GleeVertexEventArgs<Node> args)
+                                       {
+                                           if (args.Vertex.IsServed)
+                                           {
+                                               args.Node.Attr.Fillcolor = Color.LightGreen;
+                                           }
+                                           else if (args.Vertex.IsProvided)
+                                           {
+                                               args.Node.Attr.Shape = Shape.Ellipse;
+                                               args.Node.Attr.Fillcolor = Color.LightBlue;
+                                           }
+                                           else
+                                           {
+                                               args.Node.Attr.Fillcolor = Color.LightGray;
+                                           }
+                                       };
             populator.Compute();
             Graph graph = populator.GleeGraph;
 
@@ -120,21 +169,12 @@ namespace Reflector.NDIGraph.Controls
 
         private static string GetName(IType typeRef)
         {
-            IArrayType arrayType = typeRef as IArrayType;
-            if (arrayType != null)
-            {
-                ITypeReference type = arrayType.ElementType as ITypeReference;
-                if (type != null)
-                {
-                    return type.Name + "[]";
-                }
-            }
-
             ITypeReference paramType = typeRef as ITypeReference;
-            if (paramType != null)
-            {
-                return paramType.Name;
-            }
+            if (paramType != null) return paramType.Name;
+
+            IArrayType arrayType = typeRef as IArrayType;
+            if (arrayType != null) return GetName(arrayType.ElementType) + "[]";
+
             return "Unknown Name";
         }
 
@@ -177,16 +217,17 @@ namespace Reflector.NDIGraph.Controls
             return null;
         }
 
-        private static string GetVertex(string name, ICollection<string> services,
-                                        IMutableVertexListGraph<string, IEdge<string>> g)
+        private static Node GetVertex(string name, IDictionary<string, Node> services,
+                                      IMutableVertexListGraph<Node, IEdge<Node>> g)
         {
-            string vertex = name;
-            if (!services.Contains(vertex))
+            if (!services.ContainsKey(name))
             {
-                services.Add(vertex);
-                g.AddVertex(vertex);
+                Node v = new Node(name);
+                services[name] = v;
+                g.AddVertex(v);
+                return v;
             }
-            return vertex;
+            return services[name];
         }
     }
 }
