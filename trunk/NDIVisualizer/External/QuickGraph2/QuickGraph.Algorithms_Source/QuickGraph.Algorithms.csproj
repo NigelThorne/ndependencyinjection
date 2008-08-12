@@ -1,0 +1,154 @@
+<VisualStudioProject>
+  <CSHARP ProjectType="Local" ProductVersion="7.10.3077" SchemaVersion="2.0" ProjectGuid="0E50F633-7C2B-46A5-871A-F4AE42FD8748">
+    <Build>
+      <Settings ApplicationIcon="" AssemblyKeyContainerName="" AssemblyName="QuickGraph.Algorithms" AssemblyOriginatorKeyFile="" DefaultClientScript="JScript" DefaultHTMLPageLayout="Grid" DefaultTargetSchema="IE50" DelaySign="false" OutputType="Library" PreBuildEvent="" PostBuildEvent="" RootNamespace="QuickGraph.Algorithms" RunPostBuildEvent="OnBuildSuccess" StartupObject="">
+        <Config Name="Debug" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="DEBUG;TRACE" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="false" NoStdLib="false" NoWarn="" Optimize="false" OutputPath="bin\Debug\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+        <Config Name="Release" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="TRACE" DocumentationFile="" DebugSymbols="false" FileAlignment="4096" IncrementalBuild="false" NoStdLib="false" NoWarn="" Optimize="true" OutputPath="bin\Release\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+      </Settings>
+      <References>
+        <Reference Name="mscorlib" AssemblyName="mscorlib" HintPath="mscorlib.dll" />
+        <Reference Name="QuickGraph" AssemblyName="QuickGraph" HintPath="QuickGraph.dll" />
+        <Reference Name="System.Drawing" AssemblyName="System.Drawing" HintPath="System.Drawing.dll" />
+      </References>
+    </Build>
+    <Files>
+      <Include>
+        <File RelPath="AssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\AlgoUtility.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath\FloydWarshallAllShortestPathAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath\FloydWarshallEventArgs.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath\FloydWarshallEventHandler.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Reducers\IFloydWarshallDistanceReducer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Reducers\FloydWarshallMaxMinDistanceReducer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Reducers\FloydWarshallMinMaxDistanceReducer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Reducers\FloydWarshallNegativeCycleDistanceReducer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Reducers\FloydWarshallPredecessorRecorderReducer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Reducers\FloydWarshallSafestDistanceReducer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Reducers\FloydWarshallShortestPathDistanceReducer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Reducers\FloydWarshallTransitiveHullDistanceReducer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Testers\IFloydWarshallTester.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Testers\FloydWarshallAlwaysTrueTester.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Testers\FloydWarshallDistanceTester.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Testers\IFloydWarshallDistanceTester.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.AllShortestPath.Testers\FloydWarshallShortestPathDistanceTester.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.MaximumFlow\ReversedEdgeAugmentorAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.MinimumFlow\GraphBalancerAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Clone\CloneEdgeEventHandler.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Clone\CloneEdgeEventArgs.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Clone\CloneVertexEventHandler.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Clone\CloneVertexEventArgs.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Clone\GraphClonerAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Clone\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\CondensationGraphAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\CondensationGraphVertexEventArgs.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\CondensationGraphVertexEventHandler.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\ConnectedComponentsAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\IPotential.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\Potential.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\DirectedForcePotential.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\IEdgeRenderer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\EdgeRenderer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\ILayoutAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\LayoutAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\IIteratedLayoutAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\IForceDirectedLayoutAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\ForceDirectedLayoutAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\FruchtermanReingoldLayoutAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\FruchtermanReingoldGridVariantLayoutAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\GridDirectedForcePotential.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\IVertexRenderer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\LargeGraphRenderer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\PointMath.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\RandomLayoutAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Layout\VertexRenderer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.MaximumFlow\MaximumFlowAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.MaximumFlow\EdmondsKarpMaximumFlowAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.MaximumFlow\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.MaximumFlow\PushRelabelMaximumFlowAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Metrics\EdgeCoverageMetric.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Metrics\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Metrics\VertexCoverageMetric.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.MinimumFlow\MinimumFlowAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.PerfectMatching\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.RandomWalks\CyclePoppingRandomTreeAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.RandomWalks\IMarkovEdgeChain.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.RandomWalks\Markov.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.RandomWalks\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.RandomWalks\NormalizedMarkovEdgeChain.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.RandomWalks\RandomWalkAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.RandomWalks\WeightedMarkovEdgeChain.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.RandomWalks\VanishingWeightedMarkovEdgeChain.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Ranking\PageRankAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\AdjacencyGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\BidirectionalAdaptorGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\BidirectionalGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\ClusteredAdjacencyGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\EdgeList.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\ImplicitGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\TreeAdaptorGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\MutableTreeAdapterGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri\AllwaysTrueConditionExpression.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri\Arc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri.Collections\TokenCollection.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri\IdentityExpression.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri\PetriGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri\PetriNet.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri\PetriNetSimulator.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri\Place.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations.Petri\Transition.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\Representation.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\ReversedBidirectionalGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\TransitionDelegate.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Representations\TransitionDelegateCollection.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\BreadthFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\DepthFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\EdgeDepthFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\EdgeHeightFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\HeightFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\ImplicitDepthFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\ImplicitEdgeDepthFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\NeighborBreadthFirstSearch.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\NeighborDepthFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Search\UndirectedDepthFirstSearchAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.ShortestPath\BellmanFordShortestPathAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.ShortestPath\DagShortestPathAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.ShortestPath\DijkstraShortestPathAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.ShortestPath\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\SourceFirstTopologicalSortAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\StrongComponentsAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\BoundedReachabilityGame.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\IBoundedReachabilityGamePlayer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\IPerformanceComparer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\IStrategy.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\ITestGraph.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\OptimalStrategy.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\OptimalWinningStrategyCalculationAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\PairPreOrderPerformanceComparer.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\ReachabilityStrategyCalculationAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.TestGames\Strategy.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\TopologicalSortAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\TransitiveClosureAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\TransitiveClosureVertexEventArgs.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms\TransitiveClosureVertexEventHandler.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Travelling\EulerianTrailAlgorithm.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Travelling\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\DistanceRecorderVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\EdgePredecessorRecorderVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\EdgeRecorderVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\EdgeWeightScalerVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\SinkRecorderVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\NamespaceDoc.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\PredecessorRecorderVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\SuccessorRecorderVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\TimeStamperVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\PopulatorVisitor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="QuickGraph.Algorithms.Visitors\VertexRecorderVisitor.cs" SubType="Code" BuildAction="Compile" />
+      </Include>
+    </Files>
+  </CSHARP>
+</VisualStudioProject>
