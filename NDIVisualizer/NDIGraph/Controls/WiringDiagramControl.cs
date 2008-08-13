@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
+using System.Windows.Forms;
+using Microsoft.Glee;
 using Microsoft.Glee.Drawing;
 using QuickGraph;
+using QuickGraph.Algorithms.Layout;
 using QuickGraph.Glee;
 using Reflector.CodeModel;
+using Color=Microsoft.Glee.Drawing.Color;
+using Rectangle=Microsoft.Glee.Splines.Rectangle;
 
 namespace Reflector.NDIGraph.Controls
 {
@@ -144,28 +150,51 @@ namespace Reflector.NDIGraph.Controls
                 }
             }
 
+            Dictionary<Node, PointF> positions = new Dictionary<Node, PointF>();
+//            Graphics graphics = CreateGraphics();
+//
+//            GdiGraphLayoutRenderer<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>, RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>> renderer = 
+//                new GdiGraphLayoutRenderer<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>, RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>>(new RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>(g, positions), graphics);
+//            renderer.Render();
+            
+
             GleeGraphPopulator<Node, IEdge<Node>> populator = GleeGraphUtility.Create(g);
-            populator.NodeAdded += delegate(object sender, GleeVertexEventArgs<Node> args)
-                                       {
-                                           if (args.Vertex.IsServed)
-                                           {
-                                               args.Node.Attr.Fillcolor = Color.LightGreen;
-                                           }
-                                           else if (args.Vertex.IsProvided)
-                                           {
-                                               args.Node.Attr.Shape = Shape.Ellipse;
-                                               args.Node.Attr.Fillcolor = Color.LightBlue;
-                                           }
-                                           else
-                                           {
-                                               args.Node.Attr.Fillcolor = Color.LightGray;
-                                           }
-                                       };
+            populator.NodeAdded += OnGleeVertexNodeEvent;
             populator.Compute();
             Graph graph = populator.GleeGraph;
+            Viewer.Graph = graph; // we have the graph :)      
+            Viewer.CalculateLayout(graph);
 
-            Viewer.Graph = graph; // we have the graph :)
+            RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>> layout = new RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>(g, positions);
+//            layout.BoundingBox = new RectangleF((float) graph.BBox.Top, (float) graph.BBox.Left, (float) graph.BBox.Width, (float) graph.BBox.Height);
+            layout.Compute();
+
+            foreach (Microsoft.Glee.Drawing.Node node in graph.NodeMap.Values)
+            {
+                PointF p = positions[(Node)node.UserData];
+                node.Attr.GleeNode.Center = new Microsoft.Glee.Splines.Point(node.Attr.GleeNode.Center.X, p.Y);
+            }
+            graph.NeedCalculateLayout = false;
+            graph.GleeGraph.BoundingBox = new Rectangle(layout.BoundingBox.X, layout.BoundingBox.Y, layout.BoundingBox.X + layout.BoundingBox.Width, layout.BoundingBox.Y + layout.BoundingBox.Height);
         }
+
+        private void OnGleeVertexNodeEvent(object sender, GleeVertexEventArgs<Node> args)
+        {
+            if (args.Vertex.IsServed)
+            {
+                args.Node.Attr.Fillcolor = Color.LightGreen;
+            }
+            else if (args.Vertex.IsProvided)
+            {
+                args.Node.Attr.Shape = Shape.Ellipse;
+                args.Node.Attr.Fillcolor = Color.LightBlue;
+            }
+            else
+            {
+                args.Node.Attr.Fillcolor = Color.LightGray;
+            }
+        }
+
 
         private static string GetName(IType typeRef)
         {
