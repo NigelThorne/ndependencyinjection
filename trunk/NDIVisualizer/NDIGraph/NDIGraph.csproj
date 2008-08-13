@@ -63,9 +63,6 @@
     <Reference Include="QuickGraph, Version=2.0.30513.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
       <HintPath>..\External\QuickGraph2\QuickGraph.dll</HintPath>
     </Reference>
-    <Reference Include="QuickGraph.Algorithms, Version=2.21.1.0, Culture=neutral, PublicKeyToken=975e84d0c8d6464d">
-      <HintPath>..\External\QuickGraph2\QuickGraph.Algorithms.dll</HintPath>
-    </Reference>
     <Reference Include="QuickGraph.Glee, Version=2.0.30513.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
       <HintPath>..\External\QuickGraph2\QuickGraph.Glee.dll</HintPath>
     </Reference>
@@ -91,18 +88,13 @@
     </Compile>
     <Compile Include="GraphPackage.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="Layout\ForceDirectedLayoutAlgorithm.cs" />
     <Compile Include="InstructionHelper.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="TextFormatter.cs" />
     <Compile Include="Transformer.cs" />
     <Compile Include="Visitor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TypeRank.png" />
-    <EmbeddedResource Include="MethodRank.png" />
-    <EmbeddedResource Include="IlGraph.png" />
-    <EmbeddedResource Include="ClassDiagram.png" />
-    <EmbeddedResource Include="AssemblyGraph.png" />
     <EmbeddedResource Include="Controls\GraphControl.resx">
       <DependentUpon>GraphControl.cs</DependentUpon>
       <SubType>Designer</SubType>
