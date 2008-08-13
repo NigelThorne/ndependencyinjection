@@ -48,6 +48,9 @@ namespace Reflector.NDIGraph.Controls
     {
         private readonly IAssemblyBrowser assemblyBrowser;
         private readonly StringCollection excludedTypes = new StringCollection();
+        private AdjacencyGraph<Node, IEdge<Node>> g = null;
+        private RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>> layout;
+
 
         public WiringDiagramControl(IServiceProvider serviceProvider)
             : base(serviceProvider)
@@ -55,6 +58,22 @@ namespace Reflector.NDIGraph.Controls
             assemblyBrowser = (IAssemblyBrowser) serviceProvider.GetService(typeof (IAssemblyBrowser));
 
             excludedTypes.Add("System.Object");
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+//            if (g != null)
+//            {
+//                GdiGraphLayoutRenderer
+//                    <Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>,
+//                        LayoutAlgorithmBase<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>> renderer =
+//                            new GdiGraphLayoutRenderer
+//                                <Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>,
+//                                    LayoutAlgorithmBase<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>>(
+//                                this.layout, e.Graphics);
+//                renderer.Render();
+//            }
+            base.OnPaint(e);
         }
 
         protected override void OnParentChanged(EventArgs e)
@@ -93,7 +112,8 @@ namespace Reflector.NDIGraph.Controls
             IInstructionCollection method = FindBuildMethod(activeType);
             if (method == null) return;
 
-            AdjacencyGraph<Node, IEdge<Node>> g = new AdjacencyGraph<Node, IEdge<Node>>();
+//            AdjacencyGraph<Node, IEdge<Node>> g = new AdjacencyGraph<Node, IEdge<Node>>();
+            g = new AdjacencyGraph<Node, IEdge<Node>>();
             Dictionary<string, Node> services = new Dictionary<string, Node>();
             Node serviceNode = null;
 
@@ -105,6 +125,7 @@ namespace Reflector.NDIGraph.Controls
                 switch (methodInstanceReference.Name)
                 {
                     case "HasSingleton":
+                    case "HasFactory":
                         {
                             ITypeReference reference = methodInstanceReference.GenericArguments[0] as ITypeReference;
                             if (reference == null) break;
@@ -117,15 +138,19 @@ namespace Reflector.NDIGraph.Controls
 
                             foreach (IParameterDeclaration param in constructor.Parameters)
                             {
-                                g.AddEdge(new Edge<Node>(serviceNode,
-                                                         GetVertex(GetName(param.ParameterType), services, g)));
+                                g.AddEdge(new Edge<Node>(
+                                                         GetVertex(GetName(param.ParameterType), services, g), serviceNode));
                             }
                         }
                         break;
                     case "HasInstance":
-                    case "HasFactory":
-                    case "HasCollection":
                     case "HasSubsystem":
+                        {
+                            serviceNode = GetVertex(methodInstanceReference.Parameters[0].Name, services, g);
+                            serviceNode.IsServed = true;
+                        }
+                        break;
+                    case "HasCollection":
                         {
                             serviceNode = GetVertex(methodInstanceReference.GenericArguments[0].ToString(), services, g);
                             serviceNode.IsServed = true;
@@ -144,39 +169,42 @@ namespace Reflector.NDIGraph.Controls
                             }
                         }
                         break;
-                    default:
-                        serviceNode = null;
-                        break;
+                    //default:
+                    //    serviceNode = null;
+                    //    break;
                 }
             }
 
-            Dictionary<Node, PointF> positions = new Dictionary<Node, PointF>();
+//            Dictionary<Node, PointF> positions = new Dictionary<Node, PointF>();
 //            Graphics graphics = CreateGraphics();
 //
-//            GdiGraphLayoutRenderer<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>, RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>> renderer = 
-//                new GdiGraphLayoutRenderer<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>, RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>>(new RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>(g, positions), graphics);
-//            renderer.Render();
-            
+            layout = new RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>(g, new Dictionary<Node, PointF>());
+            this.layout.BoundingBox = this.ClientRectangle;
+            this.layout.Compute();
+
 
             GleeGraphPopulator<Node, IEdge<Node>> populator = GleeGraphUtility.Create(g);
             populator.NodeAdded += OnGleeVertexNodeEvent;
             populator.Compute();
             Graph graph = populator.GleeGraph;
             Viewer.Graph = graph; // we have the graph :)      
-            Viewer.CalculateLayout(graph);
+//            Viewer.CalculateLayout(graph);
 
-            RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>> layout = new RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>(g, positions);
-//            layout.BoundingBox = new RectangleF((float) graph.BBox.Top, (float) graph.BBox.Left, (float) graph.BBox.Width, (float) graph.BBox.Height);
-            layout.Compute();
-
-            foreach (Microsoft.Glee.Drawing.Node node in graph.NodeMap.Values)
-            {
-                PointF p = positions[(Node)node.UserData];
-                node.Attr.GleeNode.Center = new Microsoft.Glee.Splines.Point(node.Attr.GleeNode.Center.X, p.Y);
-            }
-            graph.NeedCalculateLayout = false;
-            graph.GleeGraph.BoundingBox = new Rectangle(layout.BoundingBox.X, layout.BoundingBox.Y, layout.BoundingBox.X + layout.BoundingBox.Width, layout.BoundingBox.Y + layout.BoundingBox.Height);
+//            RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>> layout = new RandomLayoutAlgorithm<Node, IEdge<Node>, AdjacencyGraph<Node, IEdge<Node>>>(g, positions);
+//            layout.BoundingBox = new RectangleF(-500,500,1000,1000);
+//            layout.Compute();
+//
+//            foreach (Microsoft.Glee.Drawing.Node node in graph.NodeMap.Values)
+//            {
+//                PointF p = positions[(Node)node.UserData];
+//                node.Attr.GleeNode.Center = new Microsoft.Glee.Splines.Point(p.X, p.Y);
+//            }
+//            graph.NeedCalculateLayout = false;
+//            graph.GleeGraph.BoundingBox = new Rectangle(-5000, 5000, 5000, -5000);
+//            graph.GleeGraph.CalculateLayout();
         }
+
+        
 
         private void OnGleeVertexNodeEvent(object sender, GleeVertexEventArgs<Node> args)
         {
