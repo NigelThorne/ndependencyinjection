@@ -6,17 +6,20 @@ using NDependencyInjection.interfaces;
 using NDependencyInjection.Tests.ExampleClasses;
 using NUnit.Framework;
 
-
 namespace NDependencyInjection.Tests
 {
     [TestFixture]
     public class SystemDefinitionUATs
     {
+        #region Setup/Teardown
+
         [SetUp]
         public void SetUp()
         {
             definition = new SystemDefinition();
         }
+
+        #endregion
 
         private ISystemDefinition definition;
 
@@ -29,10 +32,14 @@ namespace NDependencyInjection.Tests
         {
             public List<int> recieved = new List<int>();
 
+            #region IListener Members
+
             public void OnMessage(int m)
             {
                 recieved.Add(m);
             }
+
+            #endregion
         }
 
         public interface ISender
@@ -49,10 +56,14 @@ namespace NDependencyInjection.Tests
                 this.listener = listener;
             }
 
+            #region ISender Members
+
             public void SendMessage(int m)
             {
                 listener.OnMessage(m);
             }
+
+            #endregion
         }
 
         private class Page
@@ -67,6 +78,90 @@ namespace NDependencyInjection.Tests
         private static void Page1(ISystemDefinition scope)
         {
             scope.HasSingleton<Page>().Provides<Page>();
+        }
+
+        private class CountCalls : IDoSomething
+        {
+            private int count;
+
+            #region IDoSomething Members
+
+            public int DoSomething(int x, int y)
+            {
+                return count++;
+            }
+
+            #endregion
+        }
+
+        private class Add : IDoSomething
+        {
+            #region IDoSomething Members
+
+            public int DoSomething(int x, int y)
+            {
+                return x + y;
+            }
+
+            #endregion
+        }
+
+        private class CountAndAdd : IDoSomething
+        {
+            private readonly IDoSomething something;
+            private int count;
+
+            public CountAndAdd(IDoSomething something)
+            {
+                this.something = something;
+            }
+
+            #region IDoSomething Members
+
+            public int DoSomething(int x, int y)
+            {
+                return something.DoSomething(x, y) + count++;
+            }
+
+            #endregion
+        }
+
+        private class DoublingDecorator : IDoSomething
+        {
+            private readonly IDoSomething something;
+
+            public DoublingDecorator(IDoSomething something)
+            {
+                this.something = something;
+            }
+
+            #region IDoSomething Members
+
+            public int DoSomething(int x, int y)
+            {
+                return something.DoSomething(x, y)*2;
+            }
+
+            #endregion
+        }
+
+        private class Increment : IDoSomething
+        {
+            private readonly IDoSomething something;
+
+            public Increment(IDoSomething something)
+            {
+                this.something = something;
+            }
+
+            #region IDoSomething Members
+
+            public int DoSomething(int x, int y)
+            {
+                return something.DoSomething(x, y) + 1;
+            }
+
+            #endregion
         }
 
         [Test]
@@ -110,6 +205,35 @@ namespace NDependencyInjection.Tests
         }
 
         [Test]
+        public void Decorate_SpecifiesADecoratorToUseForAType()
+        {
+            definition.HasSingleton<Add>().Provides<IDoSomething>();
+            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            Assert.AreEqual(60, addThenDouble.DoSomething(10, 20));
+        }
+
+        [Test]
+        public void Decoraters_ChainSoAllApply()
+        {
+            definition.HasSingleton<Add>().Provides<IDoSomething>();
+            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+            definition.Decorate<IDoSomething>().With<Increment>();
+            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            Assert.AreEqual(61, addThenDouble.DoSomething(10, 20));
+        }
+
+        [Test]
+        public void Decoraters_ChainSoAllApply_Event_same_twice()
+        {
+            definition.HasSingleton<Add>().Provides<IDoSomething>();
+            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            Assert.AreEqual(120, addThenDouble.DoSomething(10, 20));
+        }
+
+        [Test]
         public void Decorator_GetsInstanceOfParentForServiceItProvides()
         {
             DecoratorA instance = null;
@@ -123,7 +247,18 @@ namespace NDependencyInjection.Tests
                                                 instance = scope.Get<DecoratorA>();
                                             }));
 
-            Assert.AreEqual(parent,instance.Parent);
+            Assert.AreEqual(parent, instance.Parent);
+        }
+
+        [Test]
+        public void DecoratorsActLikeTheDecoratedClass_SingletonOrFactory()
+        {
+            definition.HasSingleton<CountCalls>().Provides<IDoSomething>();
+            definition.Decorate<IDoSomething>().With<CountAndAdd>();
+
+            Assert.AreEqual(0, definition.Get<IDoSomething>().DoSomething(0, 0));
+            Assert.AreEqual(2, definition.Get<IDoSomething>().DoSomething(0, 0));
+            Assert.AreEqual(4, definition.Get<IDoSomething>().DoSomething(0, 0));
         }
 
         [Test, ExpectedException(typeof (UnknownTypeException))]
@@ -315,46 +450,6 @@ namespace NDependencyInjection.Tests
         }
 
         [Test]
-        public void Decorate_SpecifiesADecoratorToUseForAType()
-        {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
-            Assert.AreEqual(60, addThenDouble.DoSomething(10, 20));
-        }
-
-        [Test]
-        public void DecoratorsActLikeTheDecoratedClass_SingletonOrFactory()
-        {
-            definition.HasSingleton<CountCalls>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<CountAndAdd>();
-
-            Assert.AreEqual(0, definition.Get<IDoSomething>().DoSomething(0, 0));
-            Assert.AreEqual(2, definition.Get<IDoSomething>().DoSomething(0, 0));
-            Assert.AreEqual(4, definition.Get<IDoSomething>().DoSomething(0, 0));
-        }
-
-        [Test]
-        public void Decoraters_ChainSoAllApply()
-        {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            definition.Decorate<IDoSomething>().With<Increment>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
-            Assert.AreEqual(61, addThenDouble.DoSomething(10,20));
-        }
-
-        [Test]
-        public void Decoraters_ChainSoAllApply_Event_same_twice()
-        {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
-            Assert.AreEqual(120, addThenDouble.DoSomething(10,20));
-        }
-
-        [Test]
         public void Service_Decorates_Works()
         {
             definition.HasSingleton<Add>().Provides<IDoSomething>();
@@ -364,75 +459,24 @@ namespace NDependencyInjection.Tests
         }
 
         [Test]
-        public void Service_()
+        public void Service_Decorates_Works_EvenOnParentScopeObjects()
+        {
+            definition.HasSingleton<Add>().Provides<IDoSomething>();
+            ISystemDefinition subsystem = definition.CreateSubsystem(
+                new DelegateExecutingBuilder(
+                    delegate(ISystemDefinition scope) { scope.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>(); }));
+
+            Assert.AreEqual(60, subsystem.Get<IDoSomething>().DoSomething(10, 20));
+        }
+
+        [Test]
+        public void Service_Decorates_Works_Twice()
         {
             definition.HasSingleton<Add>().Provides<IDoSomething>();
             definition.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>();
             definition.HasSingleton<Increment>().Decorates<IDoSomething>();
             IDoSomething addThenDouble = definition.Get<IDoSomething>();
             Assert.AreEqual(61, addThenDouble.DoSomething(10, 20));
-        }
-
-        class CountCalls : IDoSomething
-        {
-            private int count = 0;
-            public int DoSomething(int x, int y)
-            {
-                return count++;
-            }
-        }
-
-        class Add : IDoSomething
-        {
-            public int DoSomething(int x, int y)
-            {
-                return x + y;
-            }
-        }
-
-        class CountAndAdd : IDoSomething
-        {
-            private readonly IDoSomething something;
-            private int count = 0;
-            public CountAndAdd(IDoSomething something)
-            {
-                this.something = something;
-            }
-
-            public int DoSomething(int x, int y)
-            {
-                return something.DoSomething(x, y) + count++;
-            }
-        }
-
-        class DoublingDecorator : IDoSomething
-        {
-            private readonly IDoSomething something;
-
-            public DoublingDecorator(IDoSomething something)
-            {
-                this.something = something;
-            }
-
-            public int DoSomething(int x, int y)
-            {
-                return something.DoSomething(x, y) * 2;
-            }
-        }
-
-        class Increment : IDoSomething
-        {
-            private readonly IDoSomething something;
-
-            public Increment(IDoSomething something)
-            {
-                this.something = something;
-            }
-
-            public int DoSomething(int x, int y)
-            {
-                return something.DoSomething(x, y) +1;
-            }
         }
     }
 }
