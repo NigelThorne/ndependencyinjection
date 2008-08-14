@@ -10,8 +10,8 @@ namespace NDependencyInjection.Generics
     {
         private readonly IServiceProvider provider;
         private readonly InterfaceType proxy;
-        private bool targetSet = false;
-        private InterfaceType target = default(InterfaceType);
+        private bool targetSet;
+        private InterfaceType target;
         private readonly IServiceLocator context;
 
         public TypeResolvingConduit(IServiceProvider provider, IServiceLocator context)

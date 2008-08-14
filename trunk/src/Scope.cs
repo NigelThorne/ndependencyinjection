@@ -80,6 +80,10 @@ namespace NDependencyInjection
             if (!HasService(typeof(InterfaceType)))
                 throw new InvalidOperationException(String.Format("Type {0} not defined", typeof(InterfaceType)));
 
+            if(!dictionary.ContainsKey(typeof(InterfaceType)))
+            {
+                dictionary[typeof (InterfaceType)] = new ScopeQueryingProvider(outerScope);
+            }
             dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<InterfaceType>(dictionary[typeof(InterfaceType)], decorator);
         }
 
@@ -93,6 +97,26 @@ namespace NDependencyInjection
         private T GetService<T>()
         {
             return (T) GetService(typeof (T));
+        }
+    }
+
+    internal class ScopeQueryingProvider : IServiceProvider
+    {
+        private readonly IServiceLocator scope;
+
+        public ScopeQueryingProvider(IServiceLocator scope)
+        {
+            this.scope = scope;
+        }
+
+        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
+        {
+            return scope.GetService(interfaceType);
+        }
+
+        public void AddMapping(Type serviceType)
+        {
+            
         }
     }
 }
