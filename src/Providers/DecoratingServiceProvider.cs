@@ -5,6 +5,7 @@ using System.Reflection;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
+
 namespace NDependencyInjection.Providers
 {
     /// <summary>
@@ -20,8 +21,6 @@ namespace NDependencyInjection.Providers
         {
             concreteType = typeof (ConcreteType);
         }
-
-        #region IServiceProvider Members
 
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
@@ -39,8 +38,6 @@ namespace NDependencyInjection.Providers
                                                  concreteType, serviceType);
         }
 
-        #endregion
-
         private object[] GetServicesForParameters(IServiceLocator context, IEnumerable<Type> types)
         {
             return GetServices(types, context);
@@ -52,9 +49,13 @@ namespace NDependencyInjection.Providers
             foreach (Type type in types)
             {
                 if (myTypes.Contains(type))
+                {
                     list.Add(context.Parent.GetService(type));
+                }
                 else
+                {
                     list.Add(context.GetService(type));
+                }
             }
             return list.ToArray();
         }

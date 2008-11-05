@@ -1,5 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
+using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
 using NMock2;
@@ -18,12 +19,12 @@ namespace NDependencyInjection.Tests
     [TestFixture]
     public class BroadcasterProviderTests : MockingTestFixture
     {
-        private BroadcasterProvider<IXListener> broadcasterProvider;
+        private BroadcasterProvider<IXListener, TypeSafeBroadcaster<IXListener>> broadcasterProvider;
         private IServiceLocator context;
 
         protected override void SetUp()
         {
-            broadcasterProvider = new BroadcasterProvider<IXListener>();
+            broadcasterProvider = new BroadcasterProvider<IXListener, TypeSafeBroadcaster<IXListener>>();
             context = NewMock<IServiceLocator>();
         }
 

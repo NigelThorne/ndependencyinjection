@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BroadcasterProviderTests.cs" />
+    <Compile Include="CompositeProviderTests.cs" />
     <Compile Include="SystemDefinitionUATs.cs" />
     <Compile Include="TypeSafeBroadcasterTests.cs" />
     <Compile Include="FactoryServiceProviderTests.cs" />

@@ -1,5 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
 using NDependencyInjection.interfaces;
+using NDependencyInjection.Providers;
 
 
 namespace NDependencyInjection
@@ -27,9 +28,21 @@ namespace NDependencyInjection
             return this;
         }
 
+        public IServiceDefinition ListensToState<EventsListener>()
+        {
+            scope.RegisterServiceStateListener<EventsListener>(provider);
+            return this;
+        }
+
         public IServiceDefinition Decorates<Interface>()
         {
             scope.DecorateService<Interface>(provider);
+            return this;
+        }
+
+        public IServiceDefinition AddsToComposite<Interface>()
+        {
+            scope.RegisterCompositeItem<Interface>(provider);
             return this;
         }
     }

@@ -1,4 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
+using LinFu.DynamicProxy;
+
 namespace NDependencyInjection.interfaces
 {
     public interface IBroadcaster
