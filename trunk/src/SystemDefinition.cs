@@ -1,7 +1,9 @@
 //Copyright (c) 2008 Nigel Thorne
+using System;
 using System.Collections.Generic;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
+using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection
 {
@@ -21,6 +23,11 @@ namespace NDependencyInjection
         public void Broadcasts<S>()
         {
             scope.RegisterBroadcaster<S>();
+        }
+
+        public void StateBroadcasts<S>()
+        {
+            scope.RegisterStateBroadcaster<S>();
         }
 
         public Service Get<Service>()
@@ -84,6 +91,13 @@ namespace NDependencyInjection
         public IDecoratingContext Decorate<S>()
         {
             return new DecoratorDefinition<S>(scope);
+        }
+
+        public IServiceDefinition HasComposite<Interface>()
+        {
+            IServiceProvider provider = new CompositeProvider<Interface>();
+            scope.RegisterServiceProvider(typeof(IComposite<Interface>), provider);
+            return NewComponent(provider);
         }
 
         /// <summary>

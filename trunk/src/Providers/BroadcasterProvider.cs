@@ -1,13 +1,13 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
-using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection.Providers
 {
-    public class BroadcasterProvider<EventsInterface> : IServiceProvider
+    public class BroadcasterProvider<EventsInterface, Broadcaster> : IServiceProvider
+        where Broadcaster : IBroadcaster<EventsInterface>, new()
     {
         private IBroadcaster<EventsInterface> broadcaster;
 
@@ -20,7 +20,7 @@ namespace NDependencyInjection.Providers
 
             if (broadcaster == null)
             {
-                broadcaster = new TypeSafeBroadcaster<EventsInterface>();
+                broadcaster = new Broadcaster();
             }
 
             if (serviceType == typeof(IBroadcaster<EventsInterface>))

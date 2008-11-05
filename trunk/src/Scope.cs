@@ -8,8 +8,6 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection
 {
-    /// <summary>
-    /// </summary>
     public class Scope : IScope
     {
         private readonly Dictionary<Type, IServiceProvider> dictionary = new Dictionary<Type, IServiceProvider>();
@@ -39,11 +37,24 @@ namespace NDependencyInjection
             GetService<IBroadcaster<EventsInterface>>().AddListeners(new TypeResolvingConduit<EventsInterface>(provider, this).Proxy);
         }
 
+        public void RegisterServiceStateListener<EventsInterface>(IServiceProvider provider)
+        {
+            IConduit conduit = ((SingletonServiceProviderDecorator)provider).GetStateListenerConduit(typeof(EventsInterface));
+            GetService<IBroadcaster<EventsInterface>>().AddListeners((EventsInterface)conduit.Proxy);
+        }
+
         public void RegisterBroadcaster<EventsInterface>()
         {
-            BroadcasterProvider<EventsInterface> provider = new BroadcasterProvider<EventsInterface>();
+            MesssageBroadcasterProvider<EventsInterface> provider = new MesssageBroadcasterProvider<EventsInterface>();
             RegisterServiceProvider(typeof(IBroadcaster<EventsInterface>), provider);
-            RegisterServiceProvider(typeof(EventsInterface),provider);
+            RegisterServiceProvider(typeof(EventsInterface), provider);
+        }
+
+        public void RegisterStateBroadcaster<EventsInterface>()
+        {
+            StateBroadcasterProvider<EventsInterface> provider = new StateBroadcasterProvider<EventsInterface>();
+            RegisterServiceProvider(typeof(IBroadcaster<EventsInterface>), provider);
+            RegisterServiceProvider(typeof(EventsInterface), provider);
         }
 
         public bool HasService(Type serviceType)
@@ -85,6 +96,11 @@ namespace NDependencyInjection
                 dictionary[typeof (InterfaceType)] = new ScopeQueryingProvider(outerScope);
             }
             dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<InterfaceType>(dictionary[typeof(InterfaceType)], decorator);
+        }
+
+        public void RegisterCompositeItem<Interface>(IServiceProvider provider)
+        {
+            GetService<IComposite<Interface>>().Add(new TypeResolvingConduit<Interface>(provider, this).Proxy);
         }
 
         public void ReplaceServiceProvider<T1>(IServiceProvider provider)

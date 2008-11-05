@@ -48,15 +48,21 @@
       <HintPath>..\Lib\NMockExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContructingLockManager.cs" />
     <Compile Include="DecoratorDefinition.cs" />
     <Compile Include="DecoratingFactoryServiceProvider.cs" />
+    <Compile Include="Helpers\BufferingConduit.cs" />
+    <Compile Include="interfaces\IComposite.cs" />
     <Compile Include="interfaces\IScope.cs" />
     <Compile Include="Providers\BroadcasterProvider.cs" />
     <Compile Include="Providers\CollectionProvider.cs" />
     <Compile Include="Helpers\Conduit.cs" />
     <Compile Include="DelegateExecutingBuilder.cs" />
+    <Compile Include="Providers\CompositeProvider.cs" />
     <Compile Include="Providers\ConstructorHelper.cs" />
     <Compile Include="Providers\DecoratingServiceProvider.cs" />
     <Compile Include="Providers\InstanceServiceProvider.cs" />
@@ -75,7 +81,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\Reflection.cs" />
     <Compile Include="Providers\InvalidWiringException.cs" />
+    <Compile Include="Providers\MesssageBroadcasterProvider.cs" />
+    <Compile Include="Providers\StateBroadcasterProvider.cs" />
     <Compile Include="Providers\SubsystemProvider.cs" />
+    <Compile Include="Providers\TypeSafeStateBroadcaster.cs" />
     <Compile Include="Scope.cs" />
     <Compile Include="Providers\SingletonServiceProviderDecorator.cs" />
     <Compile Include="ServiceDefinition.cs" />

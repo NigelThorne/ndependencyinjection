@@ -11,9 +11,11 @@ namespace NDependencyInjection.interfaces
         IServiceDefinition HasSubsystem(ISubsystemBuilder subsystemBuilder);
         IServiceDefinition HasSubsystem(CreateSubsystem method);
         IDecoratingContext Decorate<S>();
+        IServiceDefinition HasComposite<S>();
 
         Service Get<Service>();
         void Broadcasts<T1>();
+        void StateBroadcasts<T>();
 
         /// <summary>
         /// Are you sure you don't want to use "HasSubsystem"? 

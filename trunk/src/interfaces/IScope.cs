@@ -8,8 +8,11 @@ namespace NDependencyInjection.interfaces
     {
         void RegisterServiceProvider(Type serviceType, IServiceProvider provider);
         void RegisterServiceListener<T1>(IServiceProvider provider);
+        void RegisterServiceStateListener<T>(IServiceProvider provider);
         void RegisterBroadcaster<EventsInterface>();
+        void RegisterStateBroadcaster<EventsInterface>();
         IScope CreateInnerScope();
         void DecorateService<InterfaceType>(IServiceProvider decorator);
+        void RegisterCompositeItem<T>(IServiceProvider provider);
     }
 }
