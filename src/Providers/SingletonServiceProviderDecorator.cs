@@ -31,15 +31,11 @@ namespace NDependencyInjection.Providers
                 return NewProxy(interfaceType);
             }
 
-            ContructingLockManager.Lock();
-
             buildingInstance = true;
             instance = serviceProvider.GetService(service, interfaceType, context);
             buildingInstance = false;
 
             ResolveProxies();
-
-            ContructingLockManager.Release();
 
             return instance;
         }
@@ -49,17 +45,9 @@ namespace NDependencyInjection.Providers
             serviceProvider.AddMapping(serviceType);
         }
 
-        public IConduit GetStateListenerConduit(Type serviceType)
-        {
-            IConduit conduit = new BufferingConduit(serviceType);
-            conduits.Add(conduit);
-            return conduit;
-        }
-
         private object NewProxy(Type interfaceType)
         {
-            IConduit conduit = new BufferingConduit(interfaceType);
-//>>>            IConduit conduit = new Conduit(interfaceType);
+            IConduit conduit = new Conduit(interfaceType);
             conduits.Add(conduit);
             return conduit.Proxy;
         }

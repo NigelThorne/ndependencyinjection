@@ -37,22 +37,9 @@ namespace NDependencyInjection
             GetService<IBroadcaster<EventsInterface>>().AddListeners(new TypeResolvingConduit<EventsInterface>(provider, this).Proxy);
         }
 
-        public void RegisterServiceStateListener<EventsInterface>(IServiceProvider provider)
-        {
-            IConduit conduit = ((SingletonServiceProviderDecorator)provider).GetStateListenerConduit(typeof(EventsInterface));
-            GetService<IBroadcaster<EventsInterface>>().AddListeners((EventsInterface)conduit.Proxy);
-        }
-
         public void RegisterBroadcaster<EventsInterface>()
         {
             MesssageBroadcasterProvider<EventsInterface> provider = new MesssageBroadcasterProvider<EventsInterface>();
-            RegisterServiceProvider(typeof(IBroadcaster<EventsInterface>), provider);
-            RegisterServiceProvider(typeof(EventsInterface), provider);
-        }
-
-        public void RegisterStateBroadcaster<EventsInterface>()
-        {
-            StateBroadcasterProvider<EventsInterface> provider = new StateBroadcasterProvider<EventsInterface>();
             RegisterServiceProvider(typeof(IBroadcaster<EventsInterface>), provider);
             RegisterServiceProvider(typeof(EventsInterface), provider);
         }

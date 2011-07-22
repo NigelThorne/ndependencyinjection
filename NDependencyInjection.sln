@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDependencyInjection", "src\NDependencyInjection.csproj", "{34206C97-167A-4A15-8FEF-C331001326B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDependencyInjection.Tests", "src\Tests\NDependencyInjection.Tests.csproj", "{160F8E1E-BC53-4CB5-BC43-A8B0BC30C903}"

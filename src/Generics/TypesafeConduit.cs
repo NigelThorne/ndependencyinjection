@@ -10,8 +10,7 @@ namespace NDependencyInjection.Generics
 
         public TypeSafeConduit()
         {
-//>>>            conduit = new Conduit(typeof (T));
-            conduit = new BufferingConduit(typeof(T));
+            conduit = new Conduit(typeof (T));
         }
 
         public T Proxy

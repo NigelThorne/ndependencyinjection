@@ -531,53 +531,5 @@ namespace NDependencyInjection.Tests
             IDoSomething[] composite = definition.Get<IDoSomething[]>();
             Assert.AreEqual(1, composite.Length);
         }
-
-        [Test]
-        public void Service_StateBroadcaster()
-        {
-            ISystemDefinition subsystem = new SystemDefinition();
-            subsystem.StateBroadcasts<IListener>();
-
-            subsystem.HasSingleton<Sender>().Provides<ISender>();
-            ISender sender = subsystem.Get<ISender>();
-
-            sender.SendMessage(11);
-            sender.SendMessage(7);
-
-            Reciever reciever = new Reciever();
-            subsystem.HasInstance(reciever).ListensTo<IListener>();
-
-            Assert.AreEqual(7, reciever.recieved[0]);
-
-            sender.SendMessage(3);
-            Assert.AreEqual(3, reciever.recieved[1]);
-        }
-
-        [Test]
-        public void Service_StateListener()
-        {
-            ISystemDefinition subsystem = new SystemDefinition();
-            subsystem.StateBroadcasts<IListener>();
-
-            subsystem.HasSingleton<Sender>().Provides<ISender>();
-            ISender sender = subsystem.Get<ISender>();
-
-            sender.SendMessage(11);
-            sender.SendMessage(7);
-
-            subsystem.HasSingleton<RecieverThatDoesSomething>()
-                .ListensToState<IListener>()
-                .Provides<RecieverThatDoesSomething>();
-
-            subsystem.HasSingleton<Add>()
-                .Provides<IDoSomething>();
-
-            RecieverThatDoesSomething reciever = subsystem.Get<RecieverThatDoesSomething>();
-
-            Assert.AreEqual(7, reciever.recieved[0]);
-
-            sender.SendMessage(3);
-            Assert.AreEqual(3, reciever.recieved[1]);
-        }
     }
 }
