@@ -28,12 +28,6 @@ namespace NDependencyInjection
             return this;
         }
 
-        public IServiceDefinition ListensToState<EventsListener>()
-        {
-            scope.RegisterServiceStateListener<EventsListener>(provider);
-            return this;
-        }
-
         public IServiceDefinition Decorates<Interface>()
         {
             scope.DecorateService<Interface>(provider);

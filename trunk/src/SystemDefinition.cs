@@ -25,11 +25,6 @@ namespace NDependencyInjection
             scope.RegisterBroadcaster<S>();
         }
 
-        public void StateBroadcasts<S>()
-        {
-            scope.RegisterStateBroadcaster<S>();
-        }
-
         public Service Get<Service>()
         {
             return (Service) scope.GetService(typeof (Service));
