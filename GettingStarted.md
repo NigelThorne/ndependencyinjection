@@ -1,0 +1,126 @@
+# Introduction #
+
+In this section I will put together a simple skeleton for a WinForms app.
+
+# Details #
+
+1. Start a new Visual Studio project for a Winforms Application.
+3. Add a reference to NDependencyInjection
+2. Open Program.cs
+
+You should have something like this...
+
+```
+[STAThread]
+static void Main()
+{
+    Application.EnableVisualStyles();
+    Application.SetCompatibleTextRenderingDefault(false);
+    Application.Run(new Form1());
+}
+```
+This the entry point for your application, so this is where the wiring definition needs to go.
+
+Now the first thing about WinForms apps is that they are tied to the lifecycle of the main Form. Once the form is closed the app is complete. We need to make sure our services therefore start when the form loads and end when it closes. We'll do this be creating a message that gets broadcast to all services that are listening.
+
+We also want the application to have access to the form so we need to put that in the wiring too.
+
+```
+    static class Program
+    {
+		[STAThread]
+		static void Main()
+		{
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+
+			SystemDefinition system = new SystemDefinition();
+			system.Broadcasts<IService>();
+			system.HasSubsystem(new ApplicationBuilder());
+			system.HasSingleton<Form1>().Provides<Form>();
+
+			Form form = system.Get<Form>();
+			form.Load += delegate{ system.Get<IService>().Start();};
+			form.Closed += delegate{ system.Get<IService>().Stop();};
+			Application.Run(form);
+		}
+    }
+```
+
+So.. you can see we have a system definition.
+We next register IService as an interface that people can listen to.
+We define a subsystem that will contain the rest of our application wiring.
+We then register the basic Form class as the type of Form to use.
+
+We then instantiate the form and hook into it's load an closed events to transmit Start and Stop to all IService listeners.
+
+Assuming you have this too...
+```
+ 	public interface IService
+	{
+		void Start();
+		void Stop();
+	}
+
+	public class ApplicationBuilder : ISubsystemBuilder
+	{
+		public void Build(ISystemDefinition system)
+		{
+			system.HasInstance("hello world").Provides<string>();
+			system.HasSingleton<Label>().Provides<Control>();
+			system.HasSingleton<MessageDisplayer>().ListensTo<IService>();
+		}
+	}
+	
+	public class MessageDisplayer: IService
+	{
+		private string message;
+		private Control label;
+		private Form form;
+
+		public MessageDisplayer(string message, Control label, Form form)
+		{
+			this.message = message;
+			this.label = label;
+			this.form = form;
+		}
+		
+		public void Start()
+		{
+			form.Controls.Add(label);
+			label.Dock = DockStyle.Fill;
+			label.Text = message;			
+		}
+		
+		public void Stop()
+		{
+			
+		}
+	}
+	
+```
+
+You can run this code.
+
+Once you have this running experiment with changes to the ApplicationBuilder.
+
+What happens if you change the message?
+What happens if you change the 
+
+&lt;Label&gt;
+
+ to 
+
+&lt;TextBox&gt;
+
+ or 
+
+&lt;Button&gt;
+
+?
+
+This ability to change the decision as to what Control is going to be used is significant. It shows MessageDisplayer is decoupled from this decision.
+
+Which building blocks you decide to assemble, how you structure your hierarchy of systems and subsystems and what life-cycles they each have are the decisions that make up the architecture of your application.
+
+A good design includes building blocks that are meaningful within your problem domain, and subsystems that represents meaningful higher level concepts.

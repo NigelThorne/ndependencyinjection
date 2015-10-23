@@ -1,0 +1,1 @@
+There should be a separation of concerns between what your classes do and how they are used. How they are used is a wiring decision.

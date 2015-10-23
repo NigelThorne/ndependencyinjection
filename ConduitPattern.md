@@ -1,0 +1,12 @@
+# Introduction #
+
+The Conduit Design Pattern allows two classes to reference each other in their constructors and still be constructible. This removes the need for setter injection.
+
+# Details #
+
+Assuming class A requires class B and B requires class A.
+Assuming both classes are referencing each-other through interfaces IA and IB
+
+The conduit patter involves resolving this conflict by generating a proxy object implementing IB. Creating A passing the proxy of IB. Then creating B using the real A. Then telling the proxy to forward all method calls to the real B.
+
+This placeholder breaks the loop.

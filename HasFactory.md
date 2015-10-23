@@ -1,0 +1,11 @@
+
+```
+ISystemDefinition system = new SystemDefinition();
+
+system.HasFactory<Banana>().Provides<IBanana>();
+
+IBanana b1 = system.Get<IBanana>();
+IBanana b2 = system.Get<IBanana>();
+
+Assert.AreNotEqual(b1,b2);
+```

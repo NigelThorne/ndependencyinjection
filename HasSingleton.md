@@ -1,0 +1,10 @@
+
+```
+ISystemDefinition system = new SystemDefinition();
+system.HasSingleton<Banana>().Provides<IBanana>();
+
+IBanana banana1 = system.Get<IBanana>();
+IBanana banana2 = system.Get<IBanana>();
+
+Assert.AreSame(banana1, banana2);
+```

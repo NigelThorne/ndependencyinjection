@@ -1,0 +1,8 @@
+Key words...
+
+  * HasInstance
+  * HasSingleton
+  * HasFactory
+  * HasCollection
+  * HasSubsystem
+  * [Broadcasts](Broadcasts.md)
