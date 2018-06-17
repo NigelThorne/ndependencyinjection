@@ -26,6 +26,7 @@ namespace NDependencyInjection.Providers
             return list.ToArray(interfaceType.GetElementType());
         }
 
+        // SMELL: Not used
         public void AddMapping(Type serviceType)
         {
             

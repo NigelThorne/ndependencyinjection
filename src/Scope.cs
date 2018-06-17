@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
-using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
+using IServiceProvider = NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection
 {
     public class Scope : IScope
     {
-        private readonly Dictionary<Type, IServiceProvider> dictionary = new Dictionary<Type, IServiceProvider>();
-        private readonly IServiceLocator outerScope;
+        private readonly Dictionary<Type, IServiceProvider> _providersByType = new Dictionary<Type, IServiceProvider>();
 
         public Scope()
             : this(new NullServiceLocator())
@@ -20,106 +19,84 @@ namespace NDependencyInjection
 
         public Scope(IServiceLocator outerScope)
         {
-            this.outerScope = outerScope;
+            this.Parent = outerScope;
         }
 
         public void RegisterServiceProvider(Type serviceType, IServiceProvider provider)
         {
-            if (dictionary.ContainsKey(serviceType))
-                throw new InvalidOperationException(String.Format("Type {0} is already registered", serviceType));
+            if (_providersByType.ContainsKey(serviceType))
+                throw new InvalidOperationException($"Type {serviceType} is already registered");
 
-            dictionary[serviceType] = provider;
+            _providersByType[serviceType] = provider;
+
             provider.AddMapping(serviceType);
         }
 
-        public void RegisterServiceListener<EventsInterface>(IServiceProvider provider)
+        public void RegisterServiceListener<TEventsInterface>(IServiceProvider provider)
         {
-            GetService<IBroadcaster<EventsInterface>>().AddListeners(new TypeResolvingConduit<EventsInterface>(provider, this).Proxy);
+            GetService<IBroadcaster<TEventsInterface>>().AddListeners(new TypeResolvingConduit<TEventsInterface>(provider, this).Proxy);
         }
 
-        public void RegisterBroadcaster<EventsInterface>()
+        public void RegisterBroadcaster<TEventsInterface>()
         {
-            MesssageBroadcasterProvider<EventsInterface> provider = new MesssageBroadcasterProvider<EventsInterface>();
-            RegisterServiceProvider(typeof(IBroadcaster<EventsInterface>), provider);
-            RegisterServiceProvider(typeof(EventsInterface), provider);
+            var provider = new BroadcasterProvider<TEventsInterface>();
+            RegisterServiceProvider(typeof(IBroadcaster<TEventsInterface>), provider);
+            RegisterServiceProvider(typeof(TEventsInterface), provider);
         }
 
         public bool HasService(Type serviceType)
         {
-            return dictionary.ContainsKey(serviceType) || outerScope.HasService(serviceType);
+            return _providersByType.ContainsKey(serviceType) || Parent.HasService(serviceType);
         }
 
-        private Type pendingType = null;
+        private Type _pendingType = null;
         public object GetService(Type serviceType)
         {
-            if (pendingType == serviceType) throw new InvalidWiringException("You have a scope defined as providing type "+ serviceType + " but it doesn't");
-            if (dictionary.ContainsKey(serviceType))
+            if (_pendingType == serviceType) throw new InvalidWiringException("You have a scope defined as providing type "+ serviceType + " but it doesn't");
+            if (_providersByType.ContainsKey(serviceType))
             {
-                return dictionary[serviceType].GetService(serviceType, serviceType, this);
+                return _providersByType[serviceType].GetService(serviceType, serviceType, this);
             }
-            pendingType = serviceType;
-            object service = outerScope.GetService(serviceType);
-            pendingType = null;
+            _pendingType = serviceType;
+            object service = Parent.GetService(serviceType);
+            _pendingType = null;
             return service;
         }
 
-        public IServiceLocator Parent
-        {
-            get { return outerScope; }
-        }
+        public IServiceLocator Parent { get; }
 
         public IScope CreateInnerScope()
         {
             return new Scope(this);
         }
 
-        public void DecorateService<InterfaceType>(IServiceProvider decorator)
+        public void DecorateService<TInterfaceType>(IServiceProvider decorator)
         {
-            if (!HasService(typeof(InterfaceType)))
-                throw new InvalidOperationException(String.Format("Type {0} not defined", typeof(InterfaceType)));
+            if (!HasService(typeof(TInterfaceType)))
+                throw new InvalidOperationException($"Type {typeof(TInterfaceType)} not defined");
 
-            if(!dictionary.ContainsKey(typeof(InterfaceType)))
+            if(!_providersByType.ContainsKey(typeof(TInterfaceType)))
             {
-                dictionary[typeof (InterfaceType)] = new ScopeQueryingProvider(outerScope);
+                _providersByType[typeof (TInterfaceType)] = new ScopeQueryingProvider(Parent);
             }
-            dictionary[typeof(InterfaceType)] = new DecoratingServiceProvider<InterfaceType>(dictionary[typeof(InterfaceType)], decorator);
+            _providersByType[typeof(TInterfaceType)] = new DecoratingServiceProvider<TInterfaceType>(_providersByType[typeof(TInterfaceType)], decorator);
         }
 
-        public void RegisterCompositeItem<Interface>(IServiceProvider provider)
+        public void RegisterCompositeItem<TInterface>(IServiceProvider provider)
         {
-            GetService<IComposite<Interface>>().Add(new TypeResolvingConduit<Interface>(provider, this).Proxy);
+            GetService<IComposite<TInterface>>().Add(new TypeResolvingConduit<TInterface>(provider, this).Proxy);
         }
 
         public void ReplaceServiceProvider<T1>(IServiceProvider provider)
         {
-            if (!dictionary.ContainsKey(typeof(T1)))
-                throw new InvalidOperationException(String.Format("Type {0} not defined so you can't replace it", typeof(T1)));
-            dictionary[typeof(T1)] = provider;
+            if (!_providersByType.ContainsKey(typeof(T1)))
+                throw new InvalidOperationException($"Type {typeof(T1)} not defined so you can't replace it");
+            _providersByType[typeof(T1)] = provider;
         }
 
         private T GetService<T>()
         {
             return (T) GetService(typeof (T));
-        }
-    }
-
-    internal class ScopeQueryingProvider : IServiceProvider
-    {
-        private readonly IServiceLocator scope;
-
-        public ScopeQueryingProvider(IServiceLocator scope)
-        {
-            this.scope = scope;
-        }
-
-        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
-        {
-            return scope.GetService(interfaceType);
-        }
-
-        public void AddMapping(Type serviceType)
-        {
-            
         }
     }
 }

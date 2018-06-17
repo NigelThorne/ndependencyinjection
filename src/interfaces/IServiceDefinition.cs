@@ -4,7 +4,7 @@ namespace NDependencyInjection.interfaces
     public interface IServiceDefinition
     {
         IServiceDefinition Provides<Interface>();
-        IServiceDefinition ListensTo<EventsListener>();
+        IServiceDefinition ListensFor<EventsListener>();
         IServiceDefinition Decorates<Interface>();
         IServiceDefinition AddsToComposite<T>();
     }

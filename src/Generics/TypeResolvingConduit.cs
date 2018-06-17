@@ -1,4 +1,6 @@
 //Copyright (c) 2008 Nigel Thorne
+
+using System.Diagnostics;
 using System.Reflection;
 using LinFu.DynamicProxy;
 using NDependencyInjection.interfaces;
@@ -26,6 +28,7 @@ namespace NDependencyInjection.Generics
             get { return proxy; }
         }
 
+        [DebuggerStepThrough]
         object IInterceptor.Intercept(InvocationInfo info)
         {
             try

@@ -1,6 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using LinFu.DynamicProxy;
 using NDependencyInjection.interfaces;
@@ -8,6 +9,11 @@ using NDependencyInjection.interfaces;
 
 namespace NDependencyInjection.Generics
 {
+    /// <summary>
+    /// This is the interceptor that implements the IBroadcaster interface.
+    /// This is used by MessageBroadcastProvider
+    /// </summary>
+    /// <typeparam name="ListenerType"></typeparam>
     public class TypeSafeBroadcaster<ListenerType> : IBroadcaster<ListenerType>, IInterceptor
     {
         private readonly ListenerType listener;
@@ -19,6 +25,7 @@ namespace NDependencyInjection.Generics
             listener = factory.CreateProxy<ListenerType>(this);
         }
 
+        [DebuggerStepThrough]
         object IInterceptor.Intercept(InvocationInfo info)
         {
             try

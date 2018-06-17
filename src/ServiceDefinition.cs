@@ -22,7 +22,7 @@ namespace NDependencyInjection
             return this;
         }
 
-        public IServiceDefinition ListensTo<EventsListener>()
+        public IServiceDefinition ListensFor<EventsListener>()
         {
             scope.RegisterServiceListener<EventsListener>(provider);
             return this;

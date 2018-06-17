@@ -1,11 +1,14 @@
 //Copyright (c) 2008 Nigel Thorne
+
+using NDependencyInjection.DSL;
 using NDependencyInjection.interfaces;
 
 
 namespace NDependencyInjection
 {
-    public delegate void CreateSubsystem(ISystemDefinition scope);
-
+    /// <summary>
+    /// Buil
+    /// </summary>
     public class DelegateExecutingBuilder : ISubsystemBuilder
     {
         private readonly CreateSubsystem method;

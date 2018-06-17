@@ -1,0 +1,3 @@
+﻿Application "TaskTimer.App" {
+  StartupUri: "MainWindow.g.xaml"
+}

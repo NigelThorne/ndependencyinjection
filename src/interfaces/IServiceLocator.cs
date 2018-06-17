@@ -4,6 +4,9 @@ using System;
 
 namespace NDependencyInjection.interfaces
 {
+    /// <summary>
+    /// The interface that lets you have a tree of scopes.
+    /// </summary>
     public interface IServiceLocator 
     {
         object GetService(Type serviceType);

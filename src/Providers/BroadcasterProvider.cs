@@ -1,33 +1,37 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
+using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection.Providers
 {
-    public class BroadcasterProvider<EventsInterface, Broadcaster> : IServiceProvider
-        where Broadcaster : IBroadcaster<EventsInterface>, new()
+    /// <summary>
+    /// A serviceProvider that returns either the IBroadcaster(TX) or the broadcaster as a TX 
+    /// </summary>
+    /// <typeparam name="TEventsInterface"></typeparam>
+    public class BroadcasterProvider<TEventsInterface> : IServiceProvider
     {
-        private IBroadcaster<EventsInterface> broadcaster;
+        private IBroadcaster<TEventsInterface> _broadcaster;
 
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
-            if (!typeof (EventsInterface).IsAssignableFrom(interfaceType) 
-                && !typeof (IBroadcaster<EventsInterface>).IsAssignableFrom(interfaceType))
+            if (!typeof (TEventsInterface).IsAssignableFrom(interfaceType) 
+                && !typeof (IBroadcaster<TEventsInterface>).IsAssignableFrom(interfaceType))
                 throw new InvalidProgramException(
-                    string.Format("Broadcaster supports type {0} not {1}", typeof (EventsInterface), interfaceType));
+                    $"Broadcaster supports type {typeof(TEventsInterface)} not {interfaceType}");
 
-            if (broadcaster == null)
+            if (_broadcaster == null)
             {
-                broadcaster = new Broadcaster();
+                _broadcaster = new TypeSafeBroadcaster<TEventsInterface>();
             }
 
-            if (serviceType == typeof(IBroadcaster<EventsInterface>))
+            if (serviceType == typeof(IBroadcaster<TEventsInterface>))
             {
-                return broadcaster;
+                return _broadcaster;
             }
-            return broadcaster.Listener;
+            return _broadcaster.Listener;
         }
 
         public void AddMapping(Type serviceType)

@@ -14,41 +14,38 @@ namespace NDependencyInjection.Providers
     /// <typeparam name="ConcreteType"></typeparam>
     public class FactoryServiceProvider<ConcreteType> : IServiceProvider
     {
-        private readonly Type concreteType;
-        private readonly List<Type> myTypes = new List<Type>();
+        private readonly Type _concreteType;
+        private readonly List<Type> _myTypes = new List<Type>();
 
-        public FactoryServiceProvider()
+        public FactoryServiceProvider() 
         {
-            concreteType = typeof (ConcreteType);
+            _concreteType = typeof (ConcreteType);
         }
 
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
-            ConstructorInfo constructor = ConstructorHelper.FindInjectionConstructor(concreteType);
+            ConstructorInfo constructor = ConstructorHelper.FindInjectionConstructor(_concreteType);
             IEnumerable<Type> types = Reflection.GetParameterTypes(constructor);
-            ConstructorHelper.EnsureAllServicesArePresent(context, types, concreteType);
-            return Reflection.CallConstructor(constructor, GetServicesForParameters(context, types));
+            ConstructorHelper.EnsureAllServicesArePresent(context, types, _concreteType);
+            return Reflection.CallConstructor(constructor, GetServicesForConstructorParameters(context, types));
         }
 
         public void AddMapping(Type serviceType)
         {
-            myTypes.Add(serviceType);
-            if (!serviceType.IsAssignableFrom(concreteType))
+            if (!serviceType.IsAssignableFrom(_concreteType))
                 throw new InvalidWiringException("Service of type {0} does not implement type {1}",
-                                                 concreteType, serviceType);
+                                                 _concreteType, serviceType);
+            _myTypes.Add(serviceType);
         }
 
-        private object[] GetServicesForParameters(IServiceLocator context, IEnumerable<Type> types)
-        {
-            return GetServices(types, context);
-        }
-
-        private object[] GetServices(IEnumerable<Type> types, IServiceLocator context)
+        private object[] GetServicesForConstructorParameters(IServiceLocator context, IEnumerable<Type> types)
         {
             List<object> list = new List<object>();
             foreach (Type type in types)
             {
-                if (myTypes.Contains(type))
+                // You are the one that would supply these types in your context.
+                // You can't for your own constructor.
+                if (_myTypes.Contains(type)) 
                 {
                     list.Add(context.Parent.GetService(type));
                 }

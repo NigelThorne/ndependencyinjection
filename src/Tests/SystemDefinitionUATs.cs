@@ -1,10 +1,12 @@
 //Copyright (c) 2008 Nigel Thorne
+
+
 using System;
 using System.Collections.Generic;
-using LinFu.DynamicProxy;
+using NDependencyInjection.DSL;
 using NDependencyInjection.Exceptions;
 using NDependencyInjection.interfaces;
-using NDependencyInjection.Tests.ExampleClasses;
+using NDependencyInjection.Tests.TestClasses;
 using NUnit.Framework;
 
 namespace NDependencyInjection.Tests
@@ -12,89 +14,51 @@ namespace NDependencyInjection.Tests
     [TestFixture]
     public class SystemDefinitionUATs
     {
-        #region Setup/Teardown
-
         [SetUp]
         public void SetUp()
         {
-            definition = new SystemDefinition();
+            _definition = new SystemDefinition();
         }
 
-        #endregion
+        private ISystemDefinition _definition;
 
-        private ISystemDefinition definition;
-
-        public interface IListener
+        public interface IMessageReciever
         {
             void OnMessage(int m);
         }
 
-        public class Reciever : IListener
-        {
-            public List<int> recieved = new List<int>();
-
-            #region IListener Members
-
-            public void OnMessage(int m)
-            {
-                recieved.Add(m);
-            }
-
-            #endregion
-        }
-
-        public class RecieverThatDoesSomething : IListener
-        {
-            private readonly IDoSomething doSomething;
-            public List<int> recieved = new List<int>();
-
-            public RecieverThatDoesSomething(IDoSomething doSomething)
-            {
-                this.doSomething = doSomething;
-            }
-
-            public void OnMessage(int m)
-            {
-                recieved.Add(m);
-            }
-        }
-
-        public interface ISender
+        public interface IMessageSender
         {
             void SendMessage(int m);
         }
 
-        public class Sender : ISender
+        public class Reciever : IMessageReciever
         {
-            private readonly IListener listener;
+            public readonly List<int> recieved = new List<int>();
 
-            public Sender(IListener listener)
+            public void OnMessage(int m)
             {
-                this.listener = listener;
+                recieved.Add(m);
             }
+        }
 
-            #region ISender Members
+        private class MessageSender : IMessageSender
+        {
+            private readonly IMessageReciever _messageReciever;
+
+            public MessageSender(IMessageReciever messageReciever)
+            {
+                this._messageReciever = messageReciever;
+            }
 
             public void SendMessage(int m)
             {
-                listener.OnMessage(m);
+                _messageReciever.OnMessage(m);
             }
-
-            #endregion
         }
 
         private class Page
         {
-        }
-
-        private static void Page2(ISystemDefinition scope)
-        {
-            scope.HasInstance(new Page()).Provides<Page>();
-        }
-
-        private static void Page1(ISystemDefinition scope)
-        {
-            scope.HasSingleton<Page>().Provides<Page>();
         }
 
         private class CountCalls : IDoSomething
@@ -111,7 +75,7 @@ namespace NDependencyInjection.Tests
             #endregion
         }
 
-        private class Add : IDoSomething
+        private class AddSomething : IDoSomething
         {
             #region IDoSomething Members
 
@@ -162,11 +126,11 @@ namespace NDependencyInjection.Tests
             #endregion
         }
 
-        private class Increment : IDoSomething
+        private class IncrementDecorator : IDoSomething
         {
             private readonly IDoSomething something;
 
-            public Increment(IDoSomething something)
+            public IncrementDecorator(IDoSomething something)
             {
                 this.something = something;
             }
@@ -181,17 +145,27 @@ namespace NDependencyInjection.Tests
             #endregion
         }
 
+        private static void Page1(ISystemDefinition scope)
+        {
+            scope.HasSingleton<Page>().Provides<Page>();
+        }
+
+        private static void Page2(ISystemDefinition scope)
+        {
+            scope.HasInstance(new Page()).Provides<Page>();
+        }
+
         [Test]
         public void Broadcasts_RegistersABroadcasterWithTheGivenInterface()
         {
             ISystemDefinition subsystem = new SystemDefinition();
-            subsystem.Broadcasts<IListener>();
+            subsystem.BroadcastsTo<IMessageReciever>();
 
-            Reciever reciever = new Reciever();
-            subsystem.HasInstance(reciever).ListensTo<IListener>();
-            subsystem.HasSingleton<Sender>().Provides<ISender>();
+            var reciever = new Reciever();
+            subsystem.HasInstance(reciever).ListensFor<IMessageReciever>();
+            subsystem.HasSingleton<MessageSender>().Provides<IMessageSender>();
 
-            ISender sender = subsystem.Get<ISender>();
+            var sender = subsystem.Get<IMessageSender>();
 
             sender.SendMessage(2);
             sender.SendMessage(4);
@@ -204,15 +178,13 @@ namespace NDependencyInjection.Tests
         public void Broadcasts_RegistersABroadcasterWithTheGivenInterface_AndCanBeListenedToWithinSubsystems()
         {
             ISystemDefinition subsystem = new SystemDefinition();
-            subsystem.Broadcasts<IListener>();
+            subsystem.BroadcastsTo<IMessageReciever>();
 
-            Reciever reciever = new Reciever();
-            subsystem.HasSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope) { scope.HasInstance(reciever).ListensTo<IListener>(); }));
-            subsystem.HasSingleton<Sender>().Provides<ISender>();
+            var reciever = new Reciever();
+            subsystem.HasSubsystem( scope => scope.HasInstance(reciever).ListensFor<IMessageReciever>());
+            subsystem.HasSingleton<MessageSender>().Provides<IMessageSender>();
 
-            ISender sender = subsystem.Get<ISender>();
+            var sender = subsystem.Get<IMessageSender>();
 
             sender.SendMessage(2);
             sender.SendMessage(4);
@@ -224,29 +196,29 @@ namespace NDependencyInjection.Tests
         [Test]
         public void Decorate_SpecifiesADecoratorToUseForAType()
         {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            _definition.HasSingleton<AddSomething>().Provides<IDoSomething>();
+            _definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+            var addThenDouble = _definition.Get<IDoSomething>();
             Assert.AreEqual(60, addThenDouble.DoSomething(10, 20));
         }
 
         [Test]
         public void Decoraters_ChainSoAllApply()
         {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            definition.Decorate<IDoSomething>().With<Increment>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            _definition.HasSingleton<AddSomething>().Provides<IDoSomething>();
+            _definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+            _definition.Decorate<IDoSomething>().With<IncrementDecorator>();
+            var addThenDouble = _definition.Get<IDoSomething>();
             Assert.AreEqual(61, addThenDouble.DoSomething(10, 20));
         }
 
         [Test]
         public void Decoraters_ChainSoAllApply_Event_same_twice()
         {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            definition.Decorate<IDoSomething>().With<DoublingDecorator>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            _definition.HasSingleton<AddSomething>().Provides<IDoSomething>();
+            _definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+            _definition.Decorate<IDoSomething>().With<DoublingDecorator>();
+            var addThenDouble = _definition.Get<IDoSomething>();
             Assert.AreEqual(120, addThenDouble.DoSomething(10, 20));
         }
 
@@ -256,13 +228,13 @@ namespace NDependencyInjection.Tests
             DecoratorA instance = null;
 
             IA parent = new ClassA();
-            definition.HasInstance(parent).Provides<IA>();
-            definition.HasSubsystem(new DelegateExecutingBuilder(
-                                        delegate(ISystemDefinition scope)
-                                        {
-                                            scope.HasSingleton<DecoratorA>().Provides<IA>().Provides<DecoratorA>();
-                                            instance = scope.Get<DecoratorA>();
-                                        }));
+            _definition.HasInstance(parent).Provides<IA>();
+            _definition.HasSubsystem(
+                scope =>
+                {
+                    scope.HasSingleton<DecoratorA>().Provides<IA>().Provides<DecoratorA>();
+                    instance = scope.Get<DecoratorA>();
+                });
 
             Assert.AreEqual(parent, instance.Parent);
         }
@@ -270,39 +242,50 @@ namespace NDependencyInjection.Tests
         [Test]
         public void DecoratorsActLikeTheDecoratedClass_SingletonOrFactory()
         {
-            definition.HasSingleton<CountCalls>().Provides<IDoSomething>();
-            definition.Decorate<IDoSomething>().With<CountAndAdd>();
+            _definition.HasSingleton<CountCalls>().Provides<IDoSomething>();
+            _definition.Decorate<IDoSomething>().With<CountAndAdd>();
 
-            Assert.AreEqual(0, definition.Get<IDoSomething>().DoSomething(0, 0));
-            Assert.AreEqual(2, definition.Get<IDoSomething>().DoSomething(0, 0));
-            Assert.AreEqual(4, definition.Get<IDoSomething>().DoSomething(0, 0));
+            Assert.AreEqual(0, _definition.Get<IDoSomething>().DoSomething(0, 0));
+            // both counters increment, so they are both singletons
+            Assert.AreEqual(2, _definition.Get<IDoSomething>().DoSomething(0, 0));
+            // both counters increment, so they are both singletons
+            Assert.AreEqual(4, _definition.Get<IDoSomething>().DoSomething(0, 0)); 
         }
 
-        [Test, ExpectedException(typeof(UnknownTypeException))]
+        [Test]
+        public void DecoratorsActLikeTheDecoratedClass_SingletonOrFactory2()
+        {
+            _definition.HasFactory<CountCalls>().Provides<IDoSomething>();
+            _definition.Decorate<IDoSomething>().With<CountAndAdd>();
+
+            Assert.AreEqual(0, _definition.Get<IDoSomething>().DoSomething(0, 0));
+            // both counters start again so they are new instances
+            Assert.AreEqual(0, _definition.Get<IDoSomething>().DoSomething(0, 0));
+        }
+        [Test]
         public void Get_CannotAccessTypesRegisteredInASubsystem()
         {
-            definition.HasSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope) { scope.HasInstance(new Object()).Provides<Object>(); }));
-            definition.Get<Object>();
+            _definition.HasSubsystem(scope => scope.HasInstance(new object()).Provides<object>());
+
+            Assert.Throws<UnknownTypeException>(() => _definition.Get<object>());
         }
 
         [Test]
         public void Get_ResolvedDependencies_WhenRequestedTypeDependsOnAnotherKnownType()
         {
-            definition.HasSingleton<ClassA>().Provides<IA>();
-            definition.HasSingleton<ClassB>().Provides<IB>();
+            _definition.HasSingleton<ClassA>().Provides<IA>();
+            _definition.HasSingleton<ClassB>().Provides<IB>();
 
-            Assert.IsNotNull(definition.Get<IB>());
-            Assert.AreSame(definition.Get<IA>(), definition.Get<IB>().A);
+            Assert.IsNotNull(_definition.Get<IB>());
+            Assert.AreSame(_definition.Get<IA>(), _definition.Get<IB>().A);
         }
 
         [Test]
         public void Get_ResolvesCircularDependencies_WhenKnownTypesDependOnEachOther()
         {
-            definition.HasSingleton<NeedsA>().Provides<IB>();
-            definition.HasSingleton<NeedsB>().Provides<IA>();
-            IB b = definition.Get<IB>();
+            _definition.HasSingleton<NeedsA>().Provides<IB>();
+            _definition.HasSingleton<NeedsB>().Provides<IA>();
+            var b = _definition.Get<IB>();
             Assert.IsNotNull(b);
             Assert.IsNotNull(b.A);
         }
@@ -310,15 +293,14 @@ namespace NDependencyInjection.Tests
         [Test]
         public void Get_ResolvesDependencies_WhenInnerScopeTypeNeedsTypesFromOuterScope()
         {
-            definition.HasSingleton<ClassA>().Provides<IA>();
+            _definition.HasSingleton<ClassA>().Provides<IA>();
             IB actual = null;
-            definition.HasSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope)
-                    {
-                        scope.HasSingleton<NeedsA>().Provides<IB>();
-                        actual = scope.Get<IB>();
-                    }));
+            _definition.HasSubsystem(
+                scope =>
+                {
+                    scope.HasSingleton<NeedsA>().Provides<IB>();
+                    actual = scope.Get<IB>();
+                });
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual.A);
         }
@@ -326,12 +308,12 @@ namespace NDependencyInjection.Tests
         [Test]
         public void Get_ReturnsABroadcaster_WhenMultipleListenersAreRegisteredForAType()
         {
-            definition.Broadcasts<ITestListener>();
-            TestListener realListener1 = new TestListener();
-            TestListener realListener2 = new TestListener();
-            definition.HasInstance(realListener1).ListensTo<ITestListener>();
-            definition.HasInstance(realListener2).ListensTo<ITestListener>();
-            ITestListener listener = definition.Get<ITestListener>();
+            _definition.BroadcastsTo<ITestListener>();
+            var realListener1 = new TestListener();
+            var realListener2 = new TestListener();
+            _definition.HasInstance(realListener1).ListensFor<ITestListener>();
+            _definition.HasInstance(realListener2).ListensFor<ITestListener>();
+            var listener = _definition.Get<ITestListener>();
 
             listener.OnEvent();
 
@@ -343,7 +325,7 @@ namespace NDependencyInjection.Tests
         public void Get_ReturnsACollectionConstructedFromTheProvidersOfThatType_WhenThereIsMoreThanOneProvider()
         {
             ISystemDefinition book = new SystemDefinition();
-            book.HasCollection(new DelegateExecutingBuilder(Page1), new DelegateExecutingBuilder(Page2)).Provides
+            book.HasCollection(Page1, Page2).Provides
                 <Page[]>();
             Assert.AreEqual(2, book.Get<Page[]>().Length);
         }
@@ -351,137 +333,135 @@ namespace NDependencyInjection.Tests
         [Test]
         public void Get_ReturnsAnInstanceOfType_WhenTypeIsRegistered()
         {
-            definition.HasInstance(new Object()).Provides<Object>();
-            Assert.IsNotNull(definition.Get<Object>());
+            _definition.HasInstance(new object()).Provides<object>();
+            Assert.IsNotNull(_definition.Get<object>());
         }
 
         [Test]
         public void Get_ReturnsASpecificInstance_WhenHasInstanceWasUsedToRegisterTheType()
         {
-            object instance = new Object();
-            definition.HasInstance(instance).Provides<Object>();
-            Assert.AreSame(instance, definition.Get<Object>());
+            var instance = new object();
+            _definition.HasInstance(instance).Provides<object>();
+            Assert.AreSame(instance, _definition.Get<object>());
         }
 
         [Test]
         public void Get_ReturnsInstanceFromInnerSystem_WhenCalledFromASubsystemThatDoesHaveAProviderForThatType()
         {
-            object expected = new Object();
+            var expected = new object();
             object actual = null;
 
-            definition.HasFactory<Object>().Provides<Object>();
-            definition.HasSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope)
-                    {
-                        scope.HasInstance(expected).Provides<Object>();
-                        actual = scope.Get<Object>();
-                    }));
+            _definition.HasFactory<object>().Provides<object>();
+            _definition.HasSubsystem(
+                scope =>
+                {
+                    scope.HasInstance(expected).Provides<object>();
+                    actual = scope.Get<object>();
+                });
             Assert.AreSame(expected, actual);
         }
 
         [Test]
         public void Get_ReturnsInstanceFromOuterSystem_WhenCalledFromASubsystemThatDoesNotHaveAProviderForThatType()
         {
-            object expected = new Object();
+            var expected = new object();
             object actual = null;
-            definition.HasInstance(expected).Provides<Object>();
-            definition.HasSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope) { actual = scope.Get<Object>(); }));
+            _definition.HasInstance(expected).Provides<object>();
+            _definition.HasSubsystem(scope => actual = scope.Get<object>());
             Assert.AreSame(expected, actual);
         }
 
         [Test]
         public void Get_ReturnsNewInstance_WhenHasFactoryWasUsedToRegisterMultipleTypes()
         {
-            definition.HasFactory<ClassA>().Provides<ClassA>().Provides<Object>();
-            Assert.AreNotSame(definition.Get<Object>(), definition.Get<ClassA>());
+            _definition.HasFactory<ClassA>().Provides<ClassA>().Provides<object>();
+            Assert.AreNotSame(_definition.Get<object>(), _definition.Get<ClassA>());
         }
 
         [Test]
         public void Get_ReturnsNewInstance_WhenHasFactoryWasUsedToRegisterTheType()
         {
-            definition.HasFactory<Object>().Provides<Object>();
-            Assert.AreNotSame(definition.Get<Object>(), definition.Get<Object>());
+            _definition.HasFactory<object>().Provides<object>();
+            Assert.AreNotSame(_definition.Get<object>(), _definition.Get<object>());
         }
 
         [Test]
         public void Get_ReturnsSameInstance_WhenHasInstanceProvidesMultipleTypes()
         {
-            ClassA instance = new ClassA();
-            definition.HasInstance(instance).Provides<Object>().Provides<ClassA>();
-            Assert.AreSame(definition.Get<Object>(), definition.Get<ClassA>());
+            var instance = new ClassA();
+            _definition.HasInstance(instance).Provides<object>().Provides<ClassA>();
+            Assert.AreSame(_definition.Get<object>(), _definition.Get<ClassA>());
         }
 
         [Test]
         public void Get_ReturnsSameInstance_WhenHasInstanceUsedToRegisterTheType()
         {
-            definition.HasInstance(new Object()).Provides<Object>();
-            Assert.AreSame(definition.Get<Object>(), definition.Get<Object>());
+            _definition.HasInstance(new object()).Provides<object>();
+            Assert.AreSame(_definition.Get<object>(), _definition.Get<object>());
         }
 
         [Test]
         public void Get_ReturnsSameInstance_WhenHasSingletonWasUsedToRegisterTheType()
         {
-            definition.HasSingleton<ClassA>().Provides<ClassA>().Provides<Object>();
-            Assert.AreSame(definition.Get<ClassA>(), definition.Get<Object>());
+            _definition.HasSingleton<ClassA>().Provides<ClassA>().Provides<object>();
+            Assert.AreSame(_definition.Get<ClassA>(), _definition.Get<object>());
         }
 
-        [Test, ExpectedException(typeof(UnknownTypeException))]
+        [Test]
         public void
-            Get_ThrowsAnException_WhenCalledFromASubsystemThatDoesHaveAProviderForThatTypeAndItIsUnknownInTheParentScope
-            ()
+            Get_ThrowsAnException_WhenCalledFromASubsystemThatDoesHaveAProviderForThatTypeAndItIsUnknownInTheParentScope()
         {
-            definition.HasSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope) { scope.Get<Object>(); }));
+            Assert.Throws<UnknownTypeException>(() =>
+            {
+                _definition.HasSubsystem(scope => scope.Get<object>());
+            });
         }
 
-        [Test, ExpectedException(typeof(UnknownTypeException))]
+        [Test]
         public void Get_ThrowsAnException_WhenTypeIsNotRegistered()
         {
-            definition.Get<Object>();
+            Assert.Throws<UnknownTypeException>(() => _definition.Get<object>());
         }
 
         [Test]
         public void ListensTo_DefinesASecondListener_WhenTheInterfaceIsListenedToAlready()
         {
-            definition.Broadcasts<Object>();
-            definition.HasFactory<Object>().ListensTo<Object>();
-            definition.HasSingleton<Object>().ListensTo<Object>();
+            _definition.BroadcastsTo<object>();
+            _definition.HasFactory<object>().ListensFor<object>();
+            _definition.HasSingleton<object>().ListensFor<object>();
         }
 
-        [Test, ExpectedException(typeof(UnknownTypeException))]
+        [Test]
         public void ListensTo_ThrowsAnException_WhenNoBroadcasterIsRegistered()
         {
-            definition.HasFactory<Object>().Provides<Object>();
-            definition.HasSingleton<Object>().ListensTo<Object>();
+            _definition.HasFactory<object>().Provides<object>();
+            Assert.Throws<UnknownTypeException>(() =>
+                _definition.HasSingleton<object>().ListensFor<object>());
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void Provides_ThrowsAnException_WhenTypeTypeGivenIsAlreadyKnown()
         {
-            definition.HasSingleton<Object>().Provides<Object>();
-            definition.HasInstance(new Object()).Provides<Object>();
+            _definition.HasSingleton<object>().Provides<object>();
+            Assert.Throws<InvalidOperationException>(() =>
+                _definition.HasInstance(new object()).Provides<object>());
         }
 
         [Test]
         public void Service_Decorates_Works()
         {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            _definition.HasSingleton<AddSomething>().Provides<IDoSomething>();
+            _definition.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>();
+            var addThenDouble = _definition.Get<IDoSomething>();
             Assert.AreEqual(60, addThenDouble.DoSomething(10, 20));
         }
 
         [Test]
         public void Service_Decorates_Works_EvenOnParentScopeObjects()
         {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            ISystemDefinition subsystem = definition.CreateSubsystem(
-                new DelegateExecutingBuilder(
-                    delegate(ISystemDefinition scope) { scope.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>(); }));
+            _definition.HasSingleton<AddSomething>().Provides<IDoSomething>();
+            var subsystem = _definition.CreateSubsystem(
+                    scope => scope.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>());
 
             Assert.AreEqual(60, subsystem.Get<IDoSomething>().DoSomething(10, 20));
         }
@@ -489,46 +469,45 @@ namespace NDependencyInjection.Tests
         [Test]
         public void Service_Decorates_Works_Twice()
         {
-            definition.HasSingleton<Add>().Provides<IDoSomething>();
-            definition.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>();
-            definition.HasSingleton<Increment>().Decorates<IDoSomething>();
-            IDoSomething addThenDouble = definition.Get<IDoSomething>();
+            _definition.HasSingleton<AddSomething>().Provides<IDoSomething>();
+            _definition.HasSingleton<DoublingDecorator>().Decorates<IDoSomething>();
+            _definition.HasSingleton<IncrementDecorator>().Decorates<IDoSomething>();
+            var addThenDouble = _definition.Get<IDoSomething>();
             Assert.AreEqual(61, addThenDouble.DoSomething(10, 20));
-        }
-
-        [Test]
-        public void Service_HasComposite_ProvidesEmptyArrayIfNoContributors()
-        {
-            definition.HasComposite<Object>().Provides<Object[]>();
-            Object[] composite = definition.Get<Object[]>();
-            Assert.AreEqual(0, composite.Length);
         }
 
         [Test]
         public void Service_HasComposite_ProvidesArrayOfContributors()
         {
-            definition.HasComposite<IDoSomething>()
+            _definition.HasComposite<IDoSomething>()
                 .Provides<IDoSomething[]>();
 
-            definition.HasSingleton<Add>()
+            _definition.HasSingleton<AddSomething>()
                 .AddsToComposite<IDoSomething>();
-            definition.HasSingleton<Increment>()
+            _definition.HasSingleton<IncrementDecorator>()
                 .AddsToComposite<IDoSomething>();
 
-            IDoSomething[] composite = definition.Get<IDoSomething[]>();
+            var composite = _definition.Get<IDoSomething[]>();
             Assert.AreEqual(2, composite.Length);
+        }
+
+        [Test]
+        public void Service_HasComposite_ProvidesEmptyArrayIfNoContributors()
+        {
+            _definition.HasComposite<object>().Provides<object[]>();
+            var composite = _definition.Get<object[]>();
+            Assert.AreEqual(0, composite.Length);
         }
 
         [Test]
         public void Service_HasComposite_ProvidesProgrammaticComposite()
         {
-            definition.HasComposite<IDoSomething>()
-                .Provides<IDoSomething[]>();
+            _definition.HasComposite<IDoSomething>().Provides<IDoSomething[]>();
 
-            IComposite<IDoSomething> compositeProvider = definition.Get<IComposite<IDoSomething>>();
-            compositeProvider.Add(new Add());
+            var compositeProvider = _definition.Get<IComposite<IDoSomething>>();
+            compositeProvider.Add(new AddSomething());
 
-            IDoSomething[] composite = definition.Get<IDoSomething[]>();
+            var composite = _definition.Get<IDoSomething[]>();
             Assert.AreEqual(1, composite.Length);
         }
     }

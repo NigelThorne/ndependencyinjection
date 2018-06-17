@@ -1,0 +1,63 @@
+﻿alias FormField (labelText, binding)
+{
+  StackPanel {
+    Orientation: Horizontal
+    
+    TextBlock { Text: $labelText }
+    TextBlock {
+      Text: $binding
+	  FontWeight: DemiBold
+    }
+  }
+}
+
+
+Window "TaskTimer.UI.TimerDialog" {
+	Width:  300
+	Height: 300
+	StackPanel {
+		Margin: 10
+		@FormField("Task: ", bind TaskName )
+		@FormField("Unallocated Time: ", bind UnAllocatedTime.TotalMinutes 
+						convert (double timespan) => Utils.WholeNumber(timespan) + " minutes" )
+						
+		TextBox { 
+			Name: "TaskNameBox"
+			Text:  bind TaskName 
+			GotFocus: OnTaskNameFocus
+		}
+		TextBox { 
+			Name: "Comment"
+			Height: 55
+			GotFocus: OnCommentFocus
+			Text: bind	Comment
+			TextWrapping: WrapWithOverflow
+			AcceptsReturn: true
+			AcceptsTab: false
+		}
+		Grid { 
+			#TwoColumns
+			Button { 
+				#Cell("0", "0")
+				"Update Task" 
+				Click: OnUpdateClicked
+			}
+			Button { 
+				#Cell("0", "1")
+				"New Task" 
+				Click: OnNewTaskClicked
+			}
+		}
+		Slider { 
+			TickFrequency:1
+			Minimum:0
+			Maximum: bind UnAllocatedTime.TotalMinutes
+			Value: bind MinutesToAllocate
+		}
+		StackPanel { 
+			TextBlock { 
+				Text: bind MinutesToAllocate
+			}
+		}
+	}
+}

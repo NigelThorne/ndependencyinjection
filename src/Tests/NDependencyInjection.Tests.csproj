@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="..\..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,12 +11,15 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NDependencyInjection.Tests</RootNamespace>
     <AssemblyName>NDependencyInjection.Tests</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +40,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NDependencyInjectionOnly|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,56 +50,57 @@
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.4.3.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.3139.17910, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
-    <Reference Include="NMock2, Version=1.0.2313.18049, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\NMock2.dll</HintPath>
+    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.8.3\lib\net45\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="NMockExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\NMockExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.4.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Rhino.Mocks.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BroadcasterProviderTests.cs" />
-    <Compile Include="CompositeProviderTests.cs" />
+    <Compile Include="UnitTests\BroadcasterProviderTests.cs" />
+    <Compile Include="UnitTests\CompositeProviderTests.cs" />
+    <Compile Include="UnitTests\MockingTestFixture.cs" />
     <Compile Include="SystemDefinitionUATs.cs" />
-    <Compile Include="TypeSafeBroadcasterTests.cs" />
-    <Compile Include="FactoryServiceProviderTests.cs" />
-    <Compile Include="ExampleClasses\ClassA.cs" />
-    <Compile Include="ExampleClasses\ClassB.cs" />
-    <Compile Include="ExampleClasses\ClassC.cs" />
-    <Compile Include="ExampleClasses\IMyTestClassA.cs" />
-    <Compile Include="ExampleClasses\MyTestClassA.cs" />
-    <Compile Include="ExampleClasses\NeedsA.cs" />
-    <Compile Include="ExampleClasses\NeedsB.cs" />
-    <Compile Include="ExampleClasses\SP.cs" />
-    <Compile Include="ExampleClasses\IA.cs" />
-    <Compile Include="ExampleClasses\IB.cs" />
-    <Compile Include="ExampleClasses\IC.cs" />
-    <Compile Include="FixedInstanceServiceProviderTests.cs" />
+    <Compile Include="UnitTests\TypeSafeBroadcasterTests.cs" />
+    <Compile Include="UnitTests\FactoryServiceProviderTests.cs" />
+    <Compile Include="TestClasses\ClassA.cs" />
+    <Compile Include="TestClasses\ClassB.cs" />
+    <Compile Include="TestClasses\ClassC.cs" />
+    <Compile Include="TestClasses\IMyTestClassA.cs" />
+    <Compile Include="TestClasses\MyTestClassA.cs" />
+    <Compile Include="TestClasses\NeedsA.cs" />
+    <Compile Include="TestClasses\NeedsB.cs" />
+    <Compile Include="TestClasses\TestSP.cs" />
+    <Compile Include="TestClasses\IA.cs" />
+    <Compile Include="TestClasses\IB.cs" />
+    <Compile Include="TestClasses\IC.cs" />
+    <Compile Include="UnitTests\FixedInstanceServiceProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ConduitTests.cs" />
-    <Compile Include="RhinoMockingTestFixture.cs" />
-    <Compile Include="ServiceRepositoryTests.cs" />
-    <Compile Include="SingletonServiceProviderDecoratorTests.cs" />
+    <Compile Include="UnitTests\ConduitTests.cs" />
+    <Compile Include="UnitTests\RhinoMockingTestFixture.cs" />
+    <Compile Include="UnitTests\ServiceRepositoryTests.cs" />
+    <Compile Include="UnitTests\SingletonServiceProviderDecoratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NDependencyInjection.csproj">
@@ -101,7 +108,16 @@
       <Name>NDependencyInjection</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.10.1\build\NUnit.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

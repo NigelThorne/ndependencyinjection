@@ -8,41 +8,45 @@ namespace NDependencyInjection
 {
     public class DecoratingServiceProvider<I> : IServiceProvider
     {
-        private readonly IServiceProvider decoratedProvider;
-        private readonly IServiceProvider decoratorProvider;
-        private readonly Dictionary<object, object> cache = new Dictionary<object, object>();
+        private readonly IServiceProvider _decoratedProvider;
+        private readonly IServiceProvider _decoratorProvider;
+        private readonly Dictionary<object, object> _cache = new Dictionary<object, object>();
 
         public DecoratingServiceProvider(IServiceProvider decoratedProvider, IServiceProvider decoratorProvider)
         {
-            this.decoratedProvider = decoratedProvider;
-            this.decoratorProvider = decoratorProvider;
+            this._decoratedProvider = decoratedProvider;
+            this._decoratorProvider = decoratorProvider;
         }
-
-        #region IServiceProvider Members
 
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
-            IScope scope = new Scope(context);
-            scope.RegisterServiceProvider(typeof(I), decoratedProvider);
-            object decorated = scope.GetService(interfaceType);
-
-            if (cache.ContainsKey(decorated))
-            {
-                return cache[decorated];
-            }
-
-            IScope scope2 = new Scope(context);
-            scope2.RegisterServiceProvider(interfaceType, new InstanceServiceProvider(decorated));
-
-            object service = decoratorProvider.GetService(serviceType, interfaceType, scope2);
-            cache[decorated] = service;
-            return service;
+            var decorated = FetchInstanceToDecorate(interfaceType, context);
+            return FetchDecoratorInstance(serviceType, interfaceType, context, decorated);
         }
 
         public void AddMapping(Type serviceType)
         {
         }
 
-        #endregion
+        private object FetchInstanceToDecorate(Type interfaceType, IServiceLocator context)
+        {
+            IScope decoratedScope = new Scope(context);
+            decoratedScope.RegisterServiceProvider(typeof(I), _decoratedProvider);
+            return decoratedScope.GetService(interfaceType);
+        }
+
+        private object FetchDecoratorInstance(Type serviceType, Type interfaceType, IServiceLocator context, object decorated)
+        {
+            if (_cache.ContainsKey(decorated)) return _cache[decorated];
+            _cache[decorated] = CreateDecoratorInstance(serviceType, interfaceType, context, decorated);
+            return _cache[decorated];
+        }
+
+        private object CreateDecoratorInstance(Type serviceType, Type interfaceType, IServiceLocator context, object decorated)
+        {
+            IScope decoratorScope = new Scope(context);
+            decoratorScope.RegisterServiceProvider(interfaceType, new InstanceServiceProvider(decorated));
+            return _decoratorProvider.GetService(serviceType, interfaceType, decoratorScope);
+        }
     }
 }

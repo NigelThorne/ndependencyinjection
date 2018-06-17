@@ -1,3 +1,4 @@
+using NDependencyInjection.DSL;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
 

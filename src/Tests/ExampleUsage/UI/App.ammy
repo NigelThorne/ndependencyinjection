@@ -1,0 +1,3 @@
+﻿Application "NDependencyInjection.Tests.ExampleUsage.UI.App" {
+  StartupUri: "TimerDialog.g.xaml"
+}

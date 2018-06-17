@@ -6,39 +6,39 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection.Providers
 {
-    public class CompositeProvider<Interface> : IServiceProvider, IComposite<Interface>
+    public class CompositeProvider<TInterface> : IServiceProvider, IComposite<TInterface>
     {
-        private readonly List<Interface> composite = new List<Interface>();
+        private readonly List<TInterface> _composite = new List<TInterface>();
 
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
-            if (!typeof(Interface).IsAssignableFrom(interfaceType)
-                && !typeof(IComposite<Interface>).IsAssignableFrom(interfaceType)
-                && !typeof(Interface[]).IsAssignableFrom(interfaceType))
+            if (!typeof(TInterface).IsAssignableFrom(interfaceType)
+                && !typeof(IComposite<TInterface>).IsAssignableFrom(interfaceType)
+                && !typeof(TInterface[]).IsAssignableFrom(interfaceType))
             {
                 throw new InvalidProgramException(
-                    string.Format("Composite supports type {0} not {1}", typeof(Interface), interfaceType));
+                    $"Composite supports type {typeof(TInterface)} not {interfaceType}");
             }
 
-            if (serviceType == typeof(IComposite<Interface>))
+            if (serviceType == typeof(IComposite<TInterface>))
             {
                 return this;
             }
-            return composite.ToArray();
+            return _composite.ToArray();
         }
 
         public void AddMapping(Type serviceType)
         {
         }
 
-        void IComposite<Interface>.Add(Interface item)
+        void IComposite<TInterface>.Add(TInterface item)
         {
-            composite.Add(item);
+            _composite.Add(item);
         }
 
-        void IComposite<Interface>.Remove(Interface item)
+        void IComposite<TInterface>.Remove(TInterface item)
         {
-            composite.Remove(item);
+            _composite.Remove(item);
         }
     }
 }

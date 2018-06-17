@@ -1,0 +1,3 @@
+<Window x:Class="NDependencyInjectionExampleApplication.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ns0="clr-namespace:AmmySidekick;assembly=AmmySidekick" Width="200" Height="100" HorizontalAlignment="Center" ns0:Ammy.Register="/NDependencyInjectionExampleApplication;component/MainWindow.g.xaml">
+  <TextBlock Text="Hello, World!"/>
+</Window>

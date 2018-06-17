@@ -1,0 +1,8 @@
+﻿Window "NDependencyInjectionExampleApplication.MainWindow" {
+	Width: 200
+	Height: 100
+	HorizontalAlignment: Center
+	TextBlock { 
+		Text: "Hello, World!"
+	}
+}

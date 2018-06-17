@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using NDependencyInjection.interfaces;
 
@@ -8,6 +9,7 @@ namespace NDependencyInjection.Providers
 {
     public class ConstructorHelper
     {
+        [DebuggerStepThrough]
         public static ConstructorInfo FindInjectionConstructor(Type concreteType)
         {
             ConstructorInfo[] constructors = concreteType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
@@ -18,22 +20,21 @@ namespace NDependencyInjection.Providers
                 if (Reflection.HasAttribute<InjectionConstructorAttribute>(info)) return info;
             }
             throw new ApplicationException(
-                string.Format(
-                    "Type {0} has more or less than one constructor. Indicate the constructor to use with a [InjectionConstructor] attribute",
-                    concreteType));
+                $"Type {concreteType} has more or less than one public constructor. Indicate which constructor to use with a [InjectionConstructor] attribute");
         }
 
+        [DebuggerStepThrough]
         public static void EnsureAllServicesArePresent(IServiceLocator context, IEnumerable<Type> types, Type concreteType)
         {
             List<Type> unknownTypes = GetUnknownTypes(context, types);
             if (unknownTypes.Count > 0)
             {
                 throw new ApplicationException(
-                    string.Format("Constructor for {0} referenced types unknown within this scope: \n{1}",
-                                  concreteType, TypesToString(unknownTypes)));
+                    $"Constructor reference to unknown type: \n\t{concreteType} referenced \n\t{TypesToString(unknownTypes)}");
             }
         }
 
+        [DebuggerStepThrough]
         private static List<Type> GetUnknownTypes(IServiceLocator context, IEnumerable<Type> types)
         {
             List<Type> unknownTypes = new List<Type>();
@@ -44,12 +45,13 @@ namespace NDependencyInjection.Providers
             return unknownTypes;
         }
 
+        [DebuggerStepThrough]
         public static string TypesToString(IEnumerable<Type> types)
         {
             string message = "";
             foreach (Type type in types)
             {
-                message += string.Format("{0} \n", type.FullName);
+                message += $"{type.FullName} \n";
             }
             return message;
         }

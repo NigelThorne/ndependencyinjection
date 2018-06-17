@@ -1,0 +1,5 @@
+﻿Window "NDependencyInjection.Tests.ExampleUsage.UI.TimerDialog" {
+	StackPanel {
+		TextBlock { "Hello, World!" }
+	}
+}
