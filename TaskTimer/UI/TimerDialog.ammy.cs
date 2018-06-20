@@ -21,7 +21,7 @@ namespace TaskTimer.UI
 
         void ITimerView.ShowDialog()
         {
-            if(!this.IsVisible) this.ShowDialog();
+            if(!this.IsVisible) this.Show();
             this.Topmost = true;
         }
 

@@ -1,25 +1,24 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Threading;
 
 namespace TaskTimer.UI
 {
     public class TickingClock : IClock
     {
-        private readonly ITickListener _tickListener;
+        private readonly DispatcherTimer _dispatcherTimer;
 
         public TickingClock(ITickListener tickListener)
         {
-            _tickListener = tickListener;
+            _dispatcherTimer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
+            _dispatcherTimer.Tick += ((sender, args) => tickListener.OnTick(CurrentTime()));
         }
 
-        public async Task StartTicking()
+        public void StartTicking()
         {
-            while (true)
-            {
-                _tickListener.OnTick(CurrentTime());
-                await Task.Delay(1000);
-            }
+            _dispatcherTimer.Start();
         }
 
         public DateTime CurrentTime()

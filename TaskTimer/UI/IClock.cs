@@ -6,7 +6,7 @@ namespace TaskTimer.UI
     public interface IClock
     {
         DateTime CurrentTime();
-        Task StartTicking();
+        void StartTicking();
     }
 
     public interface IScheduler
