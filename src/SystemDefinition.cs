@@ -1,12 +1,14 @@
 //Copyright (c) 2008 Nigel Thorne
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using NDependencyInjection.DSL;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
 
 namespace NDependencyInjection
 {
+    [DebuggerStepThrough]
     public class SystemDefinition : ISystemDefinition
     {
         private readonly IScope _scope;
@@ -86,7 +88,6 @@ namespace NDependencyInjection
             subsystem.Build(system);
             return system;
         }
-
 
         private IServiceProvider CreateSubsystemProvider(ISubsystemBuilder subsystemBuilder)
         {

@@ -61,17 +61,20 @@
     <Compile Include="App.ammy.cs">
       <DependentUpon>App.ammy</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationBuilder.cs" />
     <Compile Include="ITaskRepository.cs" />
+    <Compile Include="MainEntryPoint.cs" />
     <Compile Include="TaskRepository.cs" />
     <Compile Include="UI\ITimeDialogEventListener.cs" />
-    <Compile Include="UI\ITimerUpdatehandler.cs" />
+    <Compile Include="ITimerCommandsHandler.cs" />
+    <Compile Include="UI\UIBuilder.cs" />
     <Compile Include="UI\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IRunnable.cs" />
     <Compile Include="Domain\ITaskHistory.cs" />
     <Compile Include="UI\ITimerUI.cs" />
-    <Compile Include="MainProcess.cs" />
+    <Compile Include="Application.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Domain\TaskHistory.cs" />
     <Compile Include="Domain\TimerTask.cs" />
@@ -127,7 +130,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <DependentUpon>App.ammy</DependentUpon>
-      </Page>
+    </Page>
     <Page Include="MainWindow.g.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -1,13 +1,13 @@
 ﻿using NDependencyInjection;
 using NDependencyInjection.DSL;
+using NDependencyInjection.interfaces;
 
 namespace TaskTimer.UI
 {
-    public class UIFactory : IUIFactory
+    public class UIFactory : UIBuilder, IUIFactory
     {
-        private readonly ITimerUpdateHandler _listener;
-
-        public UIFactory(ITimerUpdateHandler listener)
+        private readonly ITimerCommandsHandler _listener;
+        public UIFactory(ITimerCommandsHandler listener)
         {
             _listener = listener;
         }
@@ -15,28 +15,8 @@ namespace TaskTimer.UI
         public ITimerUI CreateUI()
         {
             ISystemDefinition sys = new SystemDefinition();
-            sys.BroadcastsTo<IStartListener>();
-            sys.BroadcastsTo<ITickListener>();
-            sys.BroadcastsTo<ITimeDialogEventListener>();
-
-            sys.HasInstance(_listener)
-                .Provides<ITimerUpdateHandler>(); // the way events get out of this subsystem
-
-            sys.HasSingleton<TickingClock>()
-                .Provides<IClock>()
-                .ListensFor<IStartListener>(); // this is ticking
-
-            sys.HasSingleton<TimerDialog>()
-                .Provides<ITimerDialog>();
-
-            sys.HasSingleton<TimerViewModel>()
-                .Provides<TimerViewModel>();
-
-            sys.HasSingleton<TimerController>()
-                .Provides<ITimerUI>()
-                .ListensFor<ITickListener>()
-                .ListensFor<ITimeDialogEventListener>();
-
+            sys.HasInstance<ITimerCommandsHandler>(_listener);
+            sys.HasSubsystem(this);
             return sys.Get<ITimerUI>();
         }
     }

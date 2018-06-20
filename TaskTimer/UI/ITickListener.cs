@@ -1,8 +1,10 @@
-﻿namespace TaskTimer.UI
+﻿using System;
+
+namespace TaskTimer.UI
 {
 
         public interface ITickListener
         {
-            void OnTick();
+            void OnTick(DateTime time);
         }
 }

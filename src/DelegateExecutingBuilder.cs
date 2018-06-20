@@ -11,16 +11,16 @@ namespace NDependencyInjection
     /// </summary>
     public class DelegateExecutingBuilder : ISubsystemBuilder
     {
-        private readonly CreateSubsystem method;
+        private readonly CreateSubsystem _method;
 
         public DelegateExecutingBuilder(CreateSubsystem method)
         {
-            this.method = method;
+            _method = method;
         }
 
         public void Build(ISystemDefinition system)
         {
-            method(system);
+            _method(system);
         }
     }
 }

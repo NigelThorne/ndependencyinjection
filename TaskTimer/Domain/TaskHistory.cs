@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TaskTimer.Domain
 {
-    public class TaskHistory : ITaskHistory
+    public class TaskHistory : ITaskHistory, ITimerCommandsHandler
     {
         private readonly ITaskRepository _repository;
         private readonly List<TimerTask> _list;
@@ -22,31 +22,6 @@ namespace TaskTimer.Domain
             return _list.LastOrDefault();
         }
 
-        public void AddAllocationToCurrentTask(DateTime start, DateTime end, string comment)
-        {
-            CurrentTask().AddAllocation( comment, start, end);
-        }
-
-
-        public void AddNewTask(string taskName, DateTime start, DateTime end, string comment)
-        {
-            _list.Add(new TimerTask()
-            {
-                Name = taskName,
-                Allocations = new List<TimerTask.Allocation>(new []
-                {
-                    new TimerTask.Allocation()
-                    {
-                        Comment = comment,
-                        StartTime = start,
-                        EndTime = end
-                    }, 
-                })
-            });
-
-            _repository.SaveHistory(_list);
-        }
-
         public void ReplaceCurrentTask(TimerTask timerTask)
         {
             // TODO: Add rules to make sure this task starts at the same time...?
@@ -61,6 +36,38 @@ namespace TaskTimer.Domain
         {
             // TODO: make Tasks Imutable
             CurrentTask().Name = name;
+            _repository.SaveHistory(_list);
+        }
+        void ITimerCommandsHandler.UpdateCurrentTask(
+            string taskName,
+            string comment,
+            DateTime startAt,
+            DateTime endAt)
+        {
+            if (CurrentTask().Name != taskName)
+                RenameCurrentTask(taskName);
+            CurrentTask().AddAllocation( comment, startAt, endAt);
+        }
+
+        void ITimerCommandsHandler.AddNewTask(string taskName,
+            DateTime startAt,
+            DateTime endAt,
+            string comment)
+        {
+            _list.Add(new TimerTask()
+            {
+                Name = taskName,
+                Allocations = new List<TimerTask.Allocation>(new []
+                {
+                    new TimerTask.Allocation()
+                    {
+                        Comment = comment,
+                        StartTime = startAt,
+                        EndTime = endAt
+                    }, 
+                })
+            });
+
             _repository.SaveHistory(_list);
         }
     }

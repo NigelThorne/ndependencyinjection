@@ -22,7 +22,7 @@ namespace TaskTimer.UI
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            _tickListener.OnTick();
+            _tickListener.OnTick(CurrentTime());
         }
 
         public void OnStart()

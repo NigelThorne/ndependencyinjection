@@ -1,6 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
@@ -12,6 +13,7 @@ namespace NDependencyInjection.Providers
     /// Calls the constructor for the ConcreteType when GetService is called. Any Parameters are resolved first
     /// </summary>
     /// <typeparam name="ConcreteType"></typeparam>
+    [DebuggerStepThrough]
     public class FactoryServiceProvider<ConcreteType> : IServiceProvider
     {
         private readonly Type _concreteType;
@@ -22,6 +24,7 @@ namespace NDependencyInjection.Providers
             _concreteType = typeof (ConcreteType);
         }
 
+        [DebuggerStepThrough]
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             ConstructorInfo constructor = ConstructorHelper.FindInjectionConstructor(_concreteType);

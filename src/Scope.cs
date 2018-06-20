@@ -1,6 +1,7 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using NDependencyInjection.Generics;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
@@ -8,6 +9,7 @@ using IServiceProvider = NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection
 {
+    [DebuggerStepThrough]
     public class Scope : IScope
     {
         private readonly Dictionary<Type, IServiceProvider> _providersByType = new Dictionary<Type, IServiceProvider>();

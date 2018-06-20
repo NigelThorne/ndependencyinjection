@@ -6,7 +6,7 @@ namespace TaskTimer.UI
     {
         private readonly IClock _clock;
         private readonly IStartListener _startListener;
-        private readonly ITimerUpdateHandler _updateHandlers;
+        private readonly ITimerCommandsHandler _commandsHandlers;
         private readonly ITimerDialog _view;
         private readonly TimerViewModel _viewModel;
 
@@ -15,16 +15,16 @@ namespace TaskTimer.UI
             ITimerDialog view,
             IClock clock,
             IStartListener startListener,
-            ITimerUpdateHandler updateHandlers)
+            ITimerCommandsHandler commandsHandlers)
         {
             _view = view;
             _viewModel = viewModel;
             _clock = clock;
             _startListener = startListener;
-            _updateHandlers = updateHandlers;
+            _commandsHandlers = commandsHandlers;
         }
 
-        void ITickListener.OnTick()
+        void ITickListener.OnTick(DateTime now)
         {
             UpdateUnAllocatedTime();
         }
@@ -33,7 +33,7 @@ namespace TaskTimer.UI
         {
             var endtime = CalculateNewEndTime();
 
-            _updateHandlers.UpdateCurrentTask(
+            _commandsHandlers.UpdateCurrentTask(
                 _viewModel.TaskName, 
                 _viewModel.Comment, 
                 _viewModel.TimeAllocatedUpTo,
@@ -52,12 +52,10 @@ namespace TaskTimer.UI
         {
             var endtime = CalculateNewEndTime();
 
-            _updateHandlers.AddNewTask(
+            _commandsHandlers.AddNewTask(
                 _viewModel.TaskName,
-                _viewModel.Comment,
                 _viewModel.TimeAllocatedUpTo,
-                endtime
-                );
+                endtime, _viewModel.Comment);
 
             UpdateViewModel(_viewModel.TaskName, _viewModel.TimeAllocatedUpTo, endtime);
         }
