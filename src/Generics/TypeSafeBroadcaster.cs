@@ -25,7 +25,7 @@ namespace NDependencyInjection.Generics
             listener = factory.CreateProxy<ListenerType>(this);
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         object IInterceptor.Intercept(InvocationInfo info)
         {
             try

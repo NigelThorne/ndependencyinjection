@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace TaskTimer.Domain
 {
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
     public class TasksDomainController : ITasksDomainController
     {
         private readonly ITaskRepository _repository;
@@ -30,9 +32,7 @@ namespace TaskTimer.Domain
 
         public void RenameCurrentTask(string name)
         {
-            // TODO: make Tasks Imutable
-            CurrentTask.Name = name;
-            _repository.SaveTasks(_list);
+            ReplaceCurrentTask(new TimerTask(name, CurrentTask.Allocations));
         }
 
         public void UpdateCurrentTask(
@@ -51,10 +51,7 @@ namespace TaskTimer.Domain
             DateTime endAt,
             string comment)
         {
-            _list.Add(new TimerTask()
-            {
-                Name = taskName,
-                Allocations = new List<TimerTask.Allocation>(new []
+            _list.Add(new TimerTask(taskName,new []
                 {
                     new TimerTask.Allocation()
                     {
@@ -63,7 +60,7 @@ namespace TaskTimer.Domain
                         EndTime = endAt
                     }, 
                 })
-            });
+            );
 
             _repository.SaveTasks(_list);
         }

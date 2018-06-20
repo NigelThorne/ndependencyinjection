@@ -1,6 +1,6 @@
 ﻿namespace TaskTimer.UI
 {
-    public interface ITimerDialog
+    public interface ITimerView
     {
         void ShowDialog();
     }

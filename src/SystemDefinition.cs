@@ -8,7 +8,7 @@ using NDependencyInjection.Providers;
 
 namespace NDependencyInjection
 {
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public class SystemDefinition : ISystemDefinition
     {
         private readonly IScope _scope;

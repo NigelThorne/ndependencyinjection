@@ -13,7 +13,7 @@ namespace NDependencyInjection.Providers
     /// Calls the constructor for the ConcreteType when GetService is called. Any Parameters are resolved first
     /// </summary>
     /// <typeparam name="ConcreteType"></typeparam>
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public class FactoryServiceProvider<ConcreteType> : IServiceProvider
     {
         private readonly Type _concreteType;
@@ -24,7 +24,7 @@ namespace NDependencyInjection.Providers
             _concreteType = typeof (ConcreteType);
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
         {
             ConstructorInfo constructor = ConstructorHelper.FindInjectionConstructor(_concreteType);

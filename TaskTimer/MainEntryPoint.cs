@@ -10,9 +10,6 @@ namespace TaskTimer
         [STAThread]
         public static void Main()
         {
-            App app = new App();
-
-            RuntimeUpdateHandler.Register(app, "/" + Ammy.GetAssemblyName(app) + ";component/App.g.xaml");
 
             ISystemDefinition sys = new SystemDefinition();
             sys.HasSubsystem(new ApplicationBuilder()).Provides<IRunnable>();

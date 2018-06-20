@@ -2,8 +2,8 @@
 
 namespace TaskTimer.UI
 {
-    public interface ITimerUI
+    public interface ITimerUI: ITickListener
     {
-        void StartTimerUI();
+        void ShowUI();
     }
 }

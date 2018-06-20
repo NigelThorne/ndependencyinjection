@@ -4,5 +4,6 @@
     {
         void OnUpdateClicked();
         void OnNewTaskClicked();
+        void OnViewClosed();
     }
 }

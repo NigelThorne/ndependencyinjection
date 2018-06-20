@@ -9,7 +9,7 @@ using IServiceProvider = NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection
 {
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public class Scope : IScope
     {
         private readonly Dictionary<Type, IServiceProvider> _providersByType = new Dictionary<Type, IServiceProvider>();

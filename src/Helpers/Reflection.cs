@@ -21,7 +21,7 @@ namespace NDependencyInjection
         //            }
         //        }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public static object CallConstructor(ConstructorInfo constructor, object[] parameters)
         {
             try
@@ -49,7 +49,7 @@ namespace NDependencyInjection
         //            }
         //        }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public static IEnumerable<Type> GetParameterTypes(ConstructorInfo constructor)
         {
             ParameterInfo[] parameterInfos = constructor.GetParameters();
@@ -61,7 +61,7 @@ namespace NDependencyInjection
             return list;
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public static bool HasAttribute<TAttributeType>(ConstructorInfo info)
         {
             object[] attributes = info.GetCustomAttributes(false);

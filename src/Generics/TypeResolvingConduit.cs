@@ -28,7 +28,7 @@ namespace NDependencyInjection.Generics
             get { return proxy; }
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         object IInterceptor.Intercept(InvocationInfo info)
         {
             try

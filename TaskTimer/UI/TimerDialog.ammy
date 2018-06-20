@@ -39,13 +39,13 @@ Window "TaskTimer.UI.TimerDialog" {
 			#TwoColumns
 			Button { 
 				#Cell("0", "0")
-				"Update Task" 
-				Click: OnUpdateClicked
+				"Add" 
+				Click: OnAddButtonClicked
 			}
 			Button { 
 				#Cell("0", "1")
-				"New Task" 
-				Click: OnNewTaskClicked
+				"Rename" 
+				Click: OnRenameButtonClicked
 			}
 		}
 		Slider { 

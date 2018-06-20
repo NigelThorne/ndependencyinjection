@@ -7,7 +7,7 @@ using NDependencyInjection.Providers;
 
 namespace NDependencyInjection
 {
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     internal class ServiceDefinition : IServiceDefinition
     {
         private readonly IServiceProvider provider;

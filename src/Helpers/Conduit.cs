@@ -29,7 +29,7 @@ namespace NDependencyInjection
             this.target = target;
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         object IInterceptor.Intercept(InvocationInfo info)
         {
             try

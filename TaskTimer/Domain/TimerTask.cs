@@ -1,47 +1,42 @@
-﻿using System;
+﻿#region usings
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
+
+#endregion
 
 namespace TaskTimer.Domain
 {
     public class TimerTask
     {
-        public string Name { get; set; }
+        private readonly IList<Allocation> _allocations;
 
-        public IList<Allocation> Allocations  = new List<Allocation>();
-
-        public DateTime StartTime
+        public TimerTask(string name, IEnumerable<Allocation> allocations)
         {
-            get
-            {
-                return Allocations.Min(a => a.StartTime); 
-            }
+            Name = name;
+            _allocations = allocations.ToList();
         }
 
-        public DateTime EndTime
-        {
-            get { return Allocations.Max(a => a.EndTime); }
-        }
+        public string Name { get; }
 
-        public void AddAllocation(string comment, DateTime startTime, DateTime endTime)
-        {
-            Allocations.Add(new Allocation {Comment = comment, StartTime = startTime, EndTime = endTime});
-        }
+        public DateTime StartTime => Allocations.Min(a => a.StartTime);
 
-        public class Allocation
-        {
-            public DateTime StartTime { get; set; }
-            public DateTime EndTime { get; set; }
-            public string Comment{ get; set; }
+        public DateTime EndTime => Allocations.Max(a => a.EndTime);
 
-            public int Minutes => (int) (EndTime - StartTime).TotalMinutes;
+        public IEnumerable<Allocation> Allocations => _allocations;
+
+        public TimerTask AddAllocation(string comment, DateTime startTime, DateTime endTime)
+        {
+            return new TimerTask(
+                Name, 
+                Allocations.
+                        Concat( new []{new Allocation { Comment = comment, StartTime = startTime, EndTime = endTime }}).ToList());
         }
 
         public static TimerTask CreateDefaultTask()
         {
-            return new TimerTask
-            {
-                Allocations = new List<Allocation>(new[]
+            return new TimerTask("StartTicking tracking time.", new List<Allocation>(new[]
                 {
                     new Allocation
                     {
@@ -49,9 +44,16 @@ namespace TaskTimer.Domain
                         StartTime = DateTime.Now,
                         EndTime = DateTime.Now
                     }
-                }),
-                Name = "Start tracking time."
-            };
+                }));
+        }
+
+        public class Allocation
+        {
+            public DateTime StartTime { get; set; }
+            public DateTime EndTime { get; set; }
+            public string Comment { get; set; }
+
+            public int Minutes => (int) (EndTime - StartTime).TotalMinutes;
         }
     }
 }

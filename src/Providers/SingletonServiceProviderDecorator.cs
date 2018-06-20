@@ -8,7 +8,7 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection.Providers
 {
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public class SingletonServiceProviderDecorator : IServiceProvider
     {
         private readonly IServiceProvider serviceProvider;

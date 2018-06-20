@@ -7,7 +7,7 @@ using NDependencyInjection.interfaces;
 
 namespace NDependencyInjection
 {
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     internal class NullServiceLocator : IServiceLocator
     {
 

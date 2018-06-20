@@ -67,6 +67,8 @@
     <Compile Include="TaskRepository.cs" />
     <Compile Include="UI\ITimeDialogEventListener.cs" />
     <Compile Include="ITimerCommandsHandler.cs" />
+    <Compile Include="UI\IViewClosedHandler.cs" />
+    <Compile Include="UI\Scheduler.cs" />
     <Compile Include="UI\UIBuilder.cs" />
     <Compile Include="UI\Utils.cs" />
   </ItemGroup>
@@ -81,7 +83,7 @@
     <Compile Include="UI\IClock.cs" />
     <Compile Include="UI\IStartListener.cs" />
     <Compile Include="UI\ITickListener.cs" />
-    <Compile Include="UI\ITimerDialog.cs" />
+    <Compile Include="UI\ITimerView.cs" />
     <Compile Include="UI\IUIFactory.cs" />
     <Compile Include="UI\TickingClock.cs" />
     <Compile Include="UI\TimerController.cs" />

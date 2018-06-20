@@ -9,7 +9,7 @@ namespace NDependencyInjection.Providers
 {
     public class ConstructorHelper
     {
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public static ConstructorInfo FindInjectionConstructor(Type concreteType)
         {
             ConstructorInfo[] constructors = concreteType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
@@ -23,7 +23,7 @@ namespace NDependencyInjection.Providers
                 $"Type {concreteType} has more or less than one public constructor. Indicate which constructor to use with a [InjectionConstructor] attribute");
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public static void EnsureAllServicesArePresent(IServiceLocator context, IEnumerable<Type> types, Type concreteType)
         {
             List<Type> unknownTypes = GetUnknownTypes(context, types);
@@ -34,7 +34,7 @@ namespace NDependencyInjection.Providers
             }
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         private static List<Type> GetUnknownTypes(IServiceLocator context, IEnumerable<Type> types)
         {
             List<Type> unknownTypes = new List<Type>();
@@ -45,7 +45,7 @@ namespace NDependencyInjection.Providers
             return unknownTypes;
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public static string TypesToString(IEnumerable<Type> types)
         {
             string message = "";

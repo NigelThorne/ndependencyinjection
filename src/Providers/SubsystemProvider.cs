@@ -7,7 +7,7 @@ using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 namespace NDependencyInjection.Providers
 {
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     internal class SubsystemProvider : IServiceProvider
     {
         private readonly IServiceLocator scope;

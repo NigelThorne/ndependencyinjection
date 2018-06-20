@@ -31,8 +31,8 @@
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
-      <Button Grid.Row="0" Grid.Column="0" Click="OnUpdateClicked">Update Task</Button>
-      <Button Grid.Row="0" Grid.Column="1" Click="OnNewTaskClicked">New Task</Button>
+      <Button Grid.Row="0" Grid.Column="0" Click="OnAddButtonClicked">Add</Button>
+      <Button Grid.Row="0" Grid.Column="1" Click="OnRenameButtonClicked">Rename</Button>
     </Grid>
     <Slider TickFrequency="1" Minimum="0">
       <Slider.Maximum>
