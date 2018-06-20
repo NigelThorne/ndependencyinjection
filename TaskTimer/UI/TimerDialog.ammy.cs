@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace TaskTimer.UI
 {
@@ -16,7 +18,7 @@ namespace TaskTimer.UI
             this.DataContext = model;
             InitializeComponent();
             this.Closed += (sender, args) => listener.OnViewClosed();
-            this.Initialized += (sender, args) => this.Topmost = false;
+            this.Activated += (sender, args) => this.Topmost = false;
         }
 
         void ITimerView.ShowDialog()

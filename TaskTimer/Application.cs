@@ -26,12 +26,9 @@ namespace TaskTimer
             App app = new App();
             RuntimeUpdateHandler.Register(app, "/" + Ammy.GetAssemblyName(app) + ";component/App.g.xaml");
 
-            _scheduler.ScheduleCallback(ShowUI, 10 * 60);
+            _scheduler.ScheduleCallback(ShowUI, 5*60 );
             _clock.StartTicking();
-//            while (true)
-//            {
-//                System.Threading.Thread.Yield();
-//            }
+
             app.Run();
         }
 
