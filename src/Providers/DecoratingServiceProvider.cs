@@ -17,7 +17,7 @@ namespace NDependencyInjection.Providers
     public class FactoryServiceProvider<ConcreteType> : IServiceProvider
     {
         private readonly Type _concreteType;
-        private readonly List<Type> _myTypes = new List<Type>();
+        private readonly IList<Type> _myTypes = new List<Type>();
 
         public FactoryServiceProvider() 
         {

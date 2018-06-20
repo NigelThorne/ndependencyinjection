@@ -7,13 +7,13 @@ namespace TaskTimer.UI
 
         public void Build(ISystemDefinition sys)
         {
-            sys.BroadcastsTo<IStartListener>();
-            sys.BroadcastsTo<ITickListener>();
-            sys.BroadcastsTo<ITimeDialogEventListener>();
+            sys.RelaysCallsTo<IStartListener>();
+            sys.RelaysCallsTo<ITickListener>();
+            sys.RelaysCallsTo<ITimeDialogEventListener>();
 
             sys.HasSingleton<TickingClock>()
                 .Provides<IClock>()
-                .ListensFor<IStartListener>(); // this is ticking
+                .HandlesCallsTo<IStartListener>(); // this is ticking
 
             sys.HasSingleton<TimerDialog>()
                 .Provides<ITimerDialog>();
@@ -23,8 +23,8 @@ namespace TaskTimer.UI
 
             sys.HasSingleton<TimerController>()
                 .Provides<ITimerUI>()
-                .ListensFor<ITickListener>()
-                .ListensFor<ITimeDialogEventListener>();
+                .HandlesCallsTo<ITickListener>()
+                .HandlesCallsTo<ITimeDialogEventListener>();
         }
     }
 }

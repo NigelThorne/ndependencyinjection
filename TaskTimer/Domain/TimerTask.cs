@@ -6,10 +6,9 @@ namespace TaskTimer.Domain
 {
     public class TimerTask
     {
-
         public string Name { get; set; }
 
-        public List<Allocation> Allocations  = new List<Allocation>();
+        public IList<Allocation> Allocations  = new List<Allocation>();
 
         public DateTime StartTime
         {

@@ -72,11 +72,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IRunnable.cs" />
-    <Compile Include="Domain\ITaskHistory.cs" />
+    <Compile Include="Domain\ITasksDomainController.cs" />
     <Compile Include="UI\ITimerUI.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Domain\TaskHistory.cs" />
+    <Compile Include="Domain\TasksDomainController.cs" />
     <Compile Include="Domain\TimerTask.cs" />
     <Compile Include="UI\IClock.cs" />
     <Compile Include="UI\IStartListener.cs" />

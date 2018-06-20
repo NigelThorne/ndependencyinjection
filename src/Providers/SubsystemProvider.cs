@@ -1,11 +1,13 @@
 //Copyright (c) 2008 Nigel Thorne
 using System;
+using System.Diagnostics;
 using NDependencyInjection.interfaces;
 using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
 
 namespace NDependencyInjection.Providers
 {
+    [DebuggerStepThrough]
     internal class SubsystemProvider : IServiceProvider
     {
         private readonly IServiceLocator scope;

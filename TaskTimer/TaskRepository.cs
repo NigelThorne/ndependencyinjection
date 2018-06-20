@@ -9,13 +9,13 @@ namespace TaskTimer
     {
         private const string TaskHistoryJsonFile = @"c:\temp\log.json";
 
-        public void SaveHistory(List<TimerTask> list)
+        public void SaveTasks(IList<TimerTask> list)
         {
             var listJson = JsonConvert.SerializeObject(list,Formatting.Indented);
             File.WriteAllText(TaskHistoryJsonFile, listJson);
         }
 
-        public List<TimerTask> LoadList()
+        public IList<TimerTask> LoadTasks()
         {
             if (File.Exists(TaskHistoryJsonFile))
             {

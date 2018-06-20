@@ -4,52 +4,49 @@ using System.Linq;
 
 namespace TaskTimer.Domain
 {
-    public class TaskHistory : ITaskHistory, ITimerCommandsHandler
+    public class TasksDomainController : ITasksDomainController
     {
         private readonly ITaskRepository _repository;
-        private readonly List<TimerTask> _list;
+        private readonly IList<TimerTask> _list;
 
-        public TaskHistory(ITaskRepository repository)
+        public TasksDomainController(ITaskRepository repository)
         {
             _repository = repository;
-            _list = _repository.LoadList();
-//            _list = new List<TimerTask>();
+            _list = _repository.LoadTasks();
             if (_list.Count == 0) _list.Add(TimerTask.CreateDefaultTask());
         }
 
-        public TimerTask CurrentTask()
-        {
-            return _list.LastOrDefault();
-        }
+        public TimerTask CurrentTask => _list.LastOrDefault();
 
         public void ReplaceCurrentTask(TimerTask timerTask)
         {
             // TODO: Add rules to make sure this task starts at the same time...?
             
-            var task = CurrentTask();
+            var task = CurrentTask;
             _list.Remove(task);
             _list.Add(timerTask);
-            _repository.SaveHistory(_list);
+            _repository.SaveTasks(_list);
         }
 
         public void RenameCurrentTask(string name)
         {
             // TODO: make Tasks Imutable
-            CurrentTask().Name = name;
-            _repository.SaveHistory(_list);
+            CurrentTask.Name = name;
+            _repository.SaveTasks(_list);
         }
-        void ITimerCommandsHandler.UpdateCurrentTask(
+
+        public void UpdateCurrentTask(
             string taskName,
             string comment,
             DateTime startAt,
             DateTime endAt)
         {
-            if (CurrentTask().Name != taskName)
+            if (CurrentTask.Name != taskName)
                 RenameCurrentTask(taskName);
-            CurrentTask().AddAllocation( comment, startAt, endAt);
+            CurrentTask.AddAllocation( comment, startAt, endAt);
         }
 
-        void ITimerCommandsHandler.AddNewTask(string taskName,
+        public void AddNewTask(string taskName,
             DateTime startAt,
             DateTime endAt,
             string comment)
@@ -68,7 +65,7 @@ namespace TaskTimer.Domain
                 })
             });
 
-            _repository.SaveHistory(_list);
+            _repository.SaveTasks(_list);
         }
     }
 }

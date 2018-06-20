@@ -5,7 +5,7 @@ namespace TaskTimer
 {
     public interface ITaskRepository
     {
-        List<TimerTask> LoadList();
-        void SaveHistory(List<TimerTask> list);
+        IList<TimerTask> LoadTasks();
+        void SaveTasks(IList<TimerTask> list);
     }
 }

@@ -49,7 +49,7 @@ namespace NDependencyInjection.DSL
 
         TService Get<TService>();
 
-        void BroadcastsTo<TMessage>();
+        void RelaysCallsTo<TMessage>();
 
         /// <summary>
         /// CreateSubsystem returns a new _system_ definition with the previous 

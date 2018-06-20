@@ -34,7 +34,7 @@ namespace NDependencyInjection.Tests
 
         public class Reciever : IMessageReciever
         {
-            public readonly List<int> recieved = new List<int>();
+            public readonly IList<int> recieved = new List<int>();
 
             public void OnMessage(int m)
             {
@@ -159,10 +159,10 @@ namespace NDependencyInjection.Tests
         public void Broadcasts_RegistersABroadcasterWithTheGivenInterface()
         {
             ISystemDefinition subsystem = new SystemDefinition();
-            subsystem.BroadcastsTo<IMessageReciever>();
+            subsystem.RelaysCallsTo<IMessageReciever>();
 
             var reciever = new Reciever();
-            subsystem.HasInstance(reciever).ListensFor<IMessageReciever>();
+            subsystem.HasInstance(reciever).HandlesCallsTo<IMessageReciever>();
             subsystem.HasSingleton<MessageSender>().Provides<IMessageSender>();
 
             var sender = subsystem.Get<IMessageSender>();
@@ -178,10 +178,10 @@ namespace NDependencyInjection.Tests
         public void Broadcasts_RegistersABroadcasterWithTheGivenInterface_AndCanBeListenedToWithinSubsystems()
         {
             ISystemDefinition subsystem = new SystemDefinition();
-            subsystem.BroadcastsTo<IMessageReciever>();
+            subsystem.RelaysCallsTo<IMessageReciever>();
 
             var reciever = new Reciever();
-            subsystem.HasSubsystem( scope => scope.HasInstance(reciever).ListensFor<IMessageReciever>());
+            subsystem.HasSubsystem( scope => scope.HasInstance(reciever).HandlesCallsTo<IMessageReciever>());
             subsystem.HasSingleton<MessageSender>().Provides<IMessageSender>();
 
             var sender = subsystem.Get<IMessageSender>();
@@ -308,11 +308,11 @@ namespace NDependencyInjection.Tests
         [Test]
         public void Get_ReturnsABroadcaster_WhenMultipleListenersAreRegisteredForAType()
         {
-            _definition.BroadcastsTo<ITestListener>();
+            _definition.RelaysCallsTo<ITestListener>();
             var realListener1 = new TestListener();
             var realListener2 = new TestListener();
-            _definition.HasInstance(realListener1).ListensFor<ITestListener>();
-            _definition.HasInstance(realListener2).ListensFor<ITestListener>();
+            _definition.HasInstance(realListener1).HandlesCallsTo<ITestListener>();
+            _definition.HasInstance(realListener2).HandlesCallsTo<ITestListener>();
             var listener = _definition.Get<ITestListener>();
 
             listener.OnEvent();
@@ -426,9 +426,9 @@ namespace NDependencyInjection.Tests
         [Test]
         public void ListensTo_DefinesASecondListener_WhenTheInterfaceIsListenedToAlready()
         {
-            _definition.BroadcastsTo<object>();
-            _definition.HasFactory<object>().ListensFor<object>();
-            _definition.HasSingleton<object>().ListensFor<object>();
+            _definition.RelaysCallsTo<object>();
+            _definition.HasFactory<object>().HandlesCallsTo<object>();
+            _definition.HasSingleton<object>().HandlesCallsTo<object>();
         }
 
         [Test]
@@ -436,7 +436,7 @@ namespace NDependencyInjection.Tests
         {
             _definition.HasFactory<object>().Provides<object>();
             Assert.Throws<UnknownTypeException>(() =>
-                _definition.HasSingleton<object>().ListensFor<object>());
+                _definition.HasSingleton<object>().HandlesCallsTo<object>());
         }
 
         [Test]

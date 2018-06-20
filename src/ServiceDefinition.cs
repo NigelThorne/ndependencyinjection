@@ -1,10 +1,13 @@
 //Copyright (c) 2008 Nigel Thorne
+
+using System.Diagnostics;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
 
 
 namespace NDependencyInjection
 {
+    [DebuggerStepThrough]
     internal class ServiceDefinition : IServiceDefinition
     {
         private readonly IServiceProvider provider;
@@ -22,7 +25,7 @@ namespace NDependencyInjection
             return this;
         }
 
-        public IServiceDefinition ListensFor<EventsListener>()
+        public IServiceDefinition HandlesCallsTo<EventsListener>()
         {
             scope.RegisterServiceListener<EventsListener>(provider);
             return this;

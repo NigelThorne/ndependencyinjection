@@ -1,4 +1,5 @@
 ﻿using System;
+using TaskTimer.Domain;
 
 namespace TaskTimer.UI
 {
@@ -6,7 +7,7 @@ namespace TaskTimer.UI
     {
         private readonly IClock _clock;
         private readonly IStartListener _startListener;
-        private readonly ITimerCommandsHandler _commandsHandlers;
+        private readonly ITasksDomainController _tasksDomainDomainController;
         private readonly ITimerDialog _view;
         private readonly TimerViewModel _viewModel;
 
@@ -15,13 +16,13 @@ namespace TaskTimer.UI
             ITimerDialog view,
             IClock clock,
             IStartListener startListener,
-            ITimerCommandsHandler commandsHandlers)
+            ITasksDomainController tasksDomainDomainController)
         {
             _view = view;
             _viewModel = viewModel;
             _clock = clock;
             _startListener = startListener;
-            _commandsHandlers = commandsHandlers;
+            _tasksDomainDomainController = tasksDomainDomainController;
         }
 
         void ITickListener.OnTick(DateTime now)
@@ -33,14 +34,13 @@ namespace TaskTimer.UI
         {
             var endtime = CalculateNewEndTime();
 
-            _commandsHandlers.UpdateCurrentTask(
+            _tasksDomainDomainController.UpdateCurrentTask(
                 _viewModel.TaskName, 
                 _viewModel.Comment, 
                 _viewModel.TimeAllocatedUpTo,
                 endtime);
 
             UpdateViewModel(_viewModel.TaskName, endtime, endtime);
-            
         }
 
         private DateTime CalculateNewEndTime()
@@ -52,7 +52,7 @@ namespace TaskTimer.UI
         {
             var endtime = CalculateNewEndTime();
 
-            _commandsHandlers.AddNewTask(
+            _tasksDomainDomainController.AddNewTask(
                 _viewModel.TaskName,
                 _viewModel.TimeAllocatedUpTo,
                 endtime, _viewModel.Comment);
@@ -60,9 +60,10 @@ namespace TaskTimer.UI
             UpdateViewModel(_viewModel.TaskName, _viewModel.TimeAllocatedUpTo, endtime);
         }
 
-        public void StartTimerUI(string currentTask, DateTime startTime, DateTime taskEndTime)
+        public void StartTimerUI()
         {
-            UpdateViewModel(currentTask, startTime, taskEndTime);
+            var task = _tasksDomainDomainController.CurrentTask;
+            UpdateViewModel(task.Name, task.StartTime, task.EndTime);
 
             _startListener.OnStart();
             _view.ShowDialog();

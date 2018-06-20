@@ -13,7 +13,7 @@ namespace NDependencyInjection.Providers
     {
         private readonly IServiceProvider serviceProvider;
         private bool buildingInstance = false;
-        private readonly List<IConduit> conduits = new List<IConduit>();
+        private readonly IList<IConduit> conduits = new List<IConduit>();
         private object instance;
 
         public SingletonServiceProviderDecorator(IServiceProvider serviceProvider)

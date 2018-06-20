@@ -7,17 +7,14 @@ namespace TaskTimer
     {
         public void Build(ISystemDefinition sys)
         {
-            sys.BroadcastsTo<ITimerCommandsHandler>();
-
             sys.HasSingleton<Application>()
                 .Provides<IRunnable>();
 
             sys.HasSingleton<TaskRepository>()
-                .Provides<ITaskRepository>()
-                .ListensFor<ITimerCommandsHandler>();
+                .Provides<ITaskRepository>();
 
-            sys.HasSingleton<TaskHistory>()
-                .Provides<ITaskHistory>();
+            sys.HasSingleton<TasksDomainController>()
+                .Provides<ITasksDomainController>();
 
             sys.HasFactory<UI.UIFactory>()
                 .Provides<UI.IUIFactory>();

@@ -22,7 +22,7 @@ namespace NDependencyInjection
             this._scope = scope;
         }
 
-        public void BroadcastsTo<TMessage>()
+        public void RelaysCallsTo<TMessage>()
         {
             _scope.RegisterBroadcaster<TMessage>();
         }

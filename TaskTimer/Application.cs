@@ -7,24 +7,15 @@ namespace TaskTimer
     public class Application : IRunnable
     {
         private readonly UI.IUIFactory _factory;
-        private readonly ITaskHistory _history;
 
-        public Application(
-            UI.IUIFactory factory, 
-            ITaskHistory history)
+        public Application(UI.IUIFactory factory)
         {
             _factory = factory;
-            _history = history;
         }
 
         public void Run()
         {
-            var task = _history.CurrentTask();
-            var timerUI = _factory.CreateUI();
-            timerUI.StartTimerUI(task.Name, task.StartTime, task.EndTime);
-
+            _factory.CreateUI().StartTimerUI();
         }
-
-
     }
 }
