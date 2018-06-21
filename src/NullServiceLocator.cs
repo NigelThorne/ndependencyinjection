@@ -1,29 +1,26 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
+
 using System;
-using System.Diagnostics;
 using NDependencyInjection.Exceptions;
 using NDependencyInjection.interfaces;
 
+#endregion
 
 namespace NDependencyInjection
 {
     //[DebuggerStepThrough]
     internal class NullServiceLocator : IServiceLocator
     {
-
-        public object GetService(Type serviceType)
+        public object GetService ( Type serviceType )
         {
-            throw new UnknownTypeException(serviceType);
+            throw new UnknownTypeException ( serviceType );
         }
 
-        public bool HasService(Type serviceType)
+        public bool HasService ( Type serviceType )
         {
             return false;
         }
 
-        public IServiceLocator Parent
-        {
-            get { return this; }
-        }
+        public IServiceLocator Parent => this;
     }
 }

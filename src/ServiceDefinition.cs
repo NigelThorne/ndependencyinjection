@@ -1,9 +1,8 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
 
-using System.Diagnostics;
 using NDependencyInjection.interfaces;
-using NDependencyInjection.Providers;
 
+#endregion
 
 namespace NDependencyInjection
 {
@@ -13,33 +12,33 @@ namespace NDependencyInjection
         private readonly IServiceProvider provider;
         private readonly IScope scope;
 
-        public ServiceDefinition(IScope scope, IServiceProvider provider)
+        public ServiceDefinition ( IScope scope, IServiceProvider provider )
         {
             this.scope = scope;
             this.provider = provider;
         }
 
-        public IServiceDefinition Provides<Interface>()
+        public IServiceDefinition Provides<Interface> ( )
         {
-            scope.RegisterServiceProvider(typeof(Interface), provider);
+            scope.RegisterServiceProvider ( typeof (Interface), provider );
             return this;
         }
 
-        public IServiceDefinition HandlesCallsTo<EventsListener>()
+        public IServiceDefinition HandlesCallsTo<EventsListener> ( )
         {
-            scope.RegisterServiceListener<EventsListener>(provider);
+            scope.RegisterServiceListener<EventsListener> ( provider );
             return this;
         }
 
-        public IServiceDefinition Decorates<Interface>()
+        public IServiceDefinition Decorates<Interface> ( )
         {
-            scope.DecorateService<Interface>(provider);
+            scope.DecorateService<Interface> ( provider );
             return this;
         }
 
-        public IServiceDefinition AddsToComposite<Interface>()
+        public IServiceDefinition AddsToComposite<Interface> ( )
         {
-            scope.RegisterCompositeItem<Interface>(provider);
+            scope.RegisterCompositeItem<Interface> ( provider );
             return this;
         }
     }

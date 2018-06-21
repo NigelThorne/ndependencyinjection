@@ -2,6 +2,6 @@
 {
     public interface IViewClosedHandler
     {
-        void OnViewClosed();
+        void OnViewClosed ( );
     }
 }

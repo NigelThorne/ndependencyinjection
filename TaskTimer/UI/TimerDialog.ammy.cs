@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#region usings
+
 using System.Windows;
-using System.Windows.Media;
+
+#endregion
 
 namespace TaskTimer.UI
 {
@@ -12,39 +10,39 @@ namespace TaskTimer.UI
     {
         private readonly ITimeDialogEventListener _listener;
 
-        public TimerDialog(TimerViewModel model, ITimeDialogEventListener listener)
+        public TimerDialog ( TimerViewModel model, ITimeDialogEventListener listener )
         {
             _listener = listener;
-            this.DataContext = model;
-            InitializeComponent();
-            this.Closed += (sender, args) => listener.OnViewClosed();
-            this.Activated += (sender, args) => this.Topmost = false;
+            DataContext = model;
+            InitializeComponent ();
+            Closed += ( sender, args ) => listener.OnViewClosed ();
+            Activated += ( sender, args ) => Topmost = false;
         }
 
-        void ITimerView.ShowDialog()
+        void ITimerView.ShowDialog ( )
         {
-            if(!this.IsVisible) this.Show();
-            this.Topmost = true;
+            if ( !IsVisible ) Show ();
+            Topmost = true;
         }
 
-        private void OnRenameButtonClicked(object sender, RoutedEventArgs e)
+        private void OnRenameButtonClicked ( object sender, RoutedEventArgs e )
         {
-            _listener.OnUpdateClicked();
+            _listener.OnUpdateClicked ();
         }
 
-        private void OnAddButtonClicked(object sender, RoutedEventArgs e)
+        private void OnAddButtonClicked ( object sender, RoutedEventArgs e )
         {
-            _listener.OnNewAllocationClicked();
-        }
-        
-        private void OnTaskNameFocus(object sender, RoutedEventArgs e)
-        {
-            this.TaskNameBox.SelectAll();
-        }
-        private void OnCommentFocus(object sender, RoutedEventArgs e)
-        {
-            this.Comment.SelectAll();
+            _listener.OnNewAllocationClicked ();
         }
 
+        private void OnTaskNameFocus ( object sender, RoutedEventArgs e )
+        {
+            TaskNameBox.SelectAll ();
+        }
+
+        private void OnCommentFocus ( object sender, RoutedEventArgs e )
+        {
+            Comment.SelectAll ();
+        }
     }
 }

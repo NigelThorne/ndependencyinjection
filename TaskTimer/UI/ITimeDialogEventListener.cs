@@ -2,8 +2,8 @@
 {
     public interface ITimeDialogEventListener
     {
-        void OnUpdateClicked();
-        void OnNewAllocationClicked();
-        void OnViewClosed();
+        void OnUpdateClicked ( );
+        void OnNewAllocationClicked ( );
+        void OnViewClosed ( );
     }
 }

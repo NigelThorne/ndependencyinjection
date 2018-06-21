@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace TaskTimer.UI
+﻿namespace TaskTimer.UI
 {
-    public interface ITimerUI: ITickListener
+    public interface ITimerUI : ITickListener
     {
-        void ShowUI();
+        void ShowUI ( );
     }
 }

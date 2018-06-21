@@ -1,9 +1,10 @@
-//Copyright (c) 2008 Nigel Thorne
-using System;
-using System.Diagnostics;
-using NDependencyInjection.interfaces;
-using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
+#region usings
 
+using System;
+using NDependencyInjection.interfaces;
+using IServiceProvider = NDependencyInjection.interfaces.IServiceProvider;
+
+#endregion
 
 namespace NDependencyInjection.Providers
 {
@@ -12,19 +13,19 @@ namespace NDependencyInjection.Providers
     {
         private readonly IServiceLocator scope;
 
-        public SubsystemProvider(IServiceLocator scope)
+        public SubsystemProvider ( IServiceLocator scope )
         {
             this.scope = scope;
         }
 
         // SMELL! ignores context
-        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
+        public object GetService ( Type serviceType, Type interfaceType, IServiceLocator context )
         {
-            return scope.GetService(interfaceType);
+            return scope.GetService ( interfaceType );
         }
 
         // SMELL: not used
-        public void AddMapping(Type serviceType)
+        public void AddMapping ( Type serviceType )
         {
         }
     }
