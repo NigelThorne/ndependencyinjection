@@ -1,6 +1,8 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
+
 using NDependencyInjection.interfaces;
 
+#endregion
 
 namespace NDependencyInjection.Generics
 {
@@ -8,19 +10,16 @@ namespace NDependencyInjection.Generics
     {
         private readonly IConduit conduit;
 
-        public TypeSafeConduit()
+        public TypeSafeConduit ( )
         {
-            conduit = new Conduit(typeof (T));
+            conduit = new Conduit ( typeof (T) );
         }
 
-        public T Proxy
-        {
-            get { return (T) conduit.Proxy; }
-        }
+        public T Proxy => (T) conduit.Proxy;
 
-        public void SetTarget(T target)
+        public void SetTarget ( T target )
         {
-            conduit.SetTarget(target);
+            conduit.SetTarget ( target );
         }
     }
 }

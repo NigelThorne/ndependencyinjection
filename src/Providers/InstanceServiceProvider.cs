@@ -1,8 +1,10 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
+
 using System;
 using NDependencyInjection.interfaces;
-using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
+using IServiceProvider = NDependencyInjection.interfaces.IServiceProvider;
 
+#endregion
 
 namespace NDependencyInjection.Providers
 {
@@ -10,19 +12,18 @@ namespace NDependencyInjection.Providers
     {
         private readonly object instance;
 
-        public InstanceServiceProvider(object instance)
+        public InstanceServiceProvider ( object instance )
         {
             this.instance = instance;
         }
 
-        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
+        public object GetService ( Type serviceType, Type interfaceType, IServiceLocator context )
         {
             return instance;
         }
 
-        public void AddMapping(Type serviceType)
+        public void AddMapping ( Type serviceType )
         {
-            
         }
     }
 }

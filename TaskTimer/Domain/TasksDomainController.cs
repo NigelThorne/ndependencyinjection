@@ -1,68 +1,64 @@
-﻿using System;
+﻿#region usings
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+#endregion
+
 namespace TaskTimer.Domain
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    [SuppressMessage ( "ReSharper", "ClassNeverInstantiated.Global" )]
     public class TasksDomainController : ITasksDomainController
     {
-        private readonly ITaskRepository _repository;
         private readonly IList<TimerTask> _list;
+        private readonly ITaskRepository _repository;
 
-        public TasksDomainController(ITaskRepository repository)
+        public TasksDomainController ( ITaskRepository repository )
         {
             _repository = repository;
-            _list = _repository.LoadTasks();
-            if (_list.Count == 0) _list.Add(TimerTask.CreateDefaultTask());
+            _list = _repository.LoadTasks ();
+            if ( _list.Count == 0 ) _list.Add ( TimerTask.CreateDefaultTask () );
         }
 
-        public TimerTask CurrentTask => _list.LastOrDefault();
+        public TimerTask CurrentTask => _list.LastOrDefault ();
 
-        public void ReplaceCurrentTask(TimerTask timerTask)
-        {
-            // TODO: Add rules to make sure this task starts at the same time...?
-            
-            var task = CurrentTask;
-            _list.Remove(task);
-            _list.Add(timerTask);
-            _repository.SaveTasks(_list);
-        }
-
-        public void RenameCurrentTask(string name)
-        {
-            ReplaceCurrentTask(new TimerTask(name, CurrentTask.Allocations));
-        }
-
-        public void UpdateCurrentTask(
+        public void UpdateCurrentTask (
             string taskName,
             string comment,
             DateTime startAt,
-            DateTime endAt)
+            DateTime endAt )
         {
-            if (CurrentTask.Name != taskName)
-                RenameCurrentTask(taskName);
-            CurrentTask.AddAllocation( comment, startAt, endAt);
+            if ( CurrentTask.Name != taskName )
+            {
+                // TODO: Add rules to make sure this task starts at the same time...?
+                _list.Remove ( CurrentTask );
+                _list.Add ( new TimerTask ( taskName, CurrentTask.Allocations ) );
+                _repository.SaveTasks ( _list );
+            }
+
+            CurrentTask.AddAllocation ( comment, startAt, endAt );
         }
 
-        public void AddNewTask(string taskName,
+        public void AddNewTask (
+            string taskName,
+            string comment,
             DateTime startAt,
-            DateTime endAt,
-            string comment)
+            DateTime endAt )
         {
-            _list.Add(new TimerTask(taskName,new []
+            _list.Add ( new TimerTask ( taskName, new[]
                 {
-                    new TimerTask.Allocation()
+                    new TimerTask.Allocation ()
                     {
                         Comment = comment,
                         StartTime = startAt,
                         EndTime = endAt
-                    }, 
-                })
+                    },
+                } )
             );
 
-            _repository.SaveTasks(_list);
+            _repository.SaveTasks ( _list );
         }
     }
 }

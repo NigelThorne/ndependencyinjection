@@ -1,8 +1,3 @@
-//Copyright (c) 2008 Nigel Thorne
-using System;
-using NUnit.Framework;
-
-
 namespace NDependencyInjection.Tests
 {
 //    public abstract class RhinoMockingTestFixture : MockingTestFixture

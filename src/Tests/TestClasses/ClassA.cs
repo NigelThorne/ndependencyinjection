@@ -1,46 +1,33 @@
-//Copyright (c) 2008 Nigel Thorne
 namespace NDependencyInjection.Tests.TestClasses
 {
     public class ClassA : IA
     {
-        private int property;
+        public int Property { get; set; }
 
-        public int Property
+        public int DoSomething ( int x, int y )
         {
-            get { return property; }
-            set { property = value; }
-        }
-
-        public int DoSomething(int x, int y)
-        {
-            return property;
+            return Property;
         }
     }
 
-    public class DecoratorA: IA
+    public class DecoratorA : IA
     {
-        private IA parent;
-
-        public DecoratorA(IA parent)
+        public DecoratorA ( IA parent )
         {
-            this.parent = parent;
+            Parent = parent;
         }
 
-        public IA Parent
-        {
-            get { return parent; }
-            set { parent = value; }
-        }
+        public IA Parent { get; set; }
 
         public int Property
         {
-            get { return parent.Property; }
-            set { parent.Property = value; }
+            get => Parent.Property;
+            set => Parent.Property = value;
         }
 
-        public int DoSomething(int x, int y)
+        public int DoSomething ( int x, int y )
         {
-            return parent.DoSomething(x + 1, y + 1);
+            return Parent.DoSomething ( x + 1, y + 1 );
         }
     }
 }

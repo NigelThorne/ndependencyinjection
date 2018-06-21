@@ -1,44 +1,42 @@
+#region usings
+
 using System;
 using System.Collections.Generic;
 using NDependencyInjection.interfaces;
-using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
+using IServiceProvider = NDependencyInjection.interfaces.IServiceProvider;
 
+#endregion
 
 namespace NDependencyInjection.Providers
 {
     public class CompositeProvider<TInterface> : IServiceProvider, IComposite<TInterface>
     {
-        private readonly List<TInterface> _composite = new List<TInterface>();
+        private readonly List<TInterface> _composite = new List<TInterface> ();
 
-        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
+        void IComposite<TInterface>.Add ( TInterface item )
         {
-            if (!typeof(TInterface).IsAssignableFrom(interfaceType)
-                && !typeof(IComposite<TInterface>).IsAssignableFrom(interfaceType)
-                && !typeof(TInterface[]).IsAssignableFrom(interfaceType))
-            {
-                throw new InvalidProgramException(
-                    $"Composite supports type {typeof(TInterface)} not {interfaceType}");
-            }
-
-            if (serviceType == typeof(IComposite<TInterface>))
-            {
-                return this;
-            }
-            return _composite.ToArray();
+            _composite.Add ( item );
         }
 
-        public void AddMapping(Type serviceType)
+        void IComposite<TInterface>.Remove ( TInterface item )
         {
+            _composite.Remove ( item );
         }
 
-        void IComposite<TInterface>.Add(TInterface item)
+        public object GetService ( Type serviceType, Type interfaceType, IServiceLocator context )
         {
-            _composite.Add(item);
+            if ( !typeof (TInterface).IsAssignableFrom ( interfaceType )
+                 && !typeof (IComposite<TInterface>).IsAssignableFrom ( interfaceType )
+                 && !typeof (TInterface[]).IsAssignableFrom ( interfaceType ) )
+                throw new InvalidProgramException (
+                    $"Composite supports type {typeof (TInterface)} not {interfaceType}" );
+
+            if ( serviceType == typeof (IComposite<TInterface>) ) return this;
+            return _composite.ToArray ();
         }
 
-        void IComposite<TInterface>.Remove(TInterface item)
+        public void AddMapping ( Type serviceType )
         {
-            _composite.Remove(item);
         }
     }
 }

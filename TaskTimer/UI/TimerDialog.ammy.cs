@@ -34,7 +34,7 @@ namespace TaskTimer.UI
 
         private void OnAddButtonClicked(object sender, RoutedEventArgs e)
         {
-            _listener.OnNewTaskClicked();
+            _listener.OnNewAllocationClicked();
         }
         
         private void OnTaskNameFocus(object sender, RoutedEventArgs e)

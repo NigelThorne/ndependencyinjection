@@ -1,6 +1,8 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
+
 using System;
 
+#endregion
 
 namespace NDependencyInjection.Tests.TestClasses
 {
@@ -8,20 +10,20 @@ namespace NDependencyInjection.Tests.TestClasses
     {
         private IB b;
 
-        public NeedsB(IB b)
+        public NeedsB ( IB b )
         {
             this.b = b;
         }
 
         public int Property
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get => throw new NotImplementedException ();
+            set => throw new NotImplementedException ();
         }
 
-        public int DoSomething(int x, int y)
+        public int DoSomething ( int x, int y )
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException ();
         }
     }
 }

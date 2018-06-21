@@ -1,6 +1,3 @@
-//Copyright (c) 2008 Nigel Thorne
-using LinFu.DynamicProxy;
-
 namespace NDependencyInjection.interfaces
 {
     public interface IBroadcaster
@@ -11,7 +8,7 @@ namespace NDependencyInjection.interfaces
     public interface IBroadcaster<ListenerType>
     {
         ListenerType Listener { get; }
-        void AddListeners(params ListenerType[] newListerners);
-        void RemoveListeners(params ListenerType[] oldListeners);
+        void AddListeners ( params ListenerType[] newListerners );
+        void RemoveListeners ( params ListenerType[] oldListeners );
     }
 }

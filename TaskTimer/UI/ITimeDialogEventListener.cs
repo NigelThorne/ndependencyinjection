@@ -3,7 +3,7 @@
     public interface ITimeDialogEventListener
     {
         void OnUpdateClicked();
-        void OnNewTaskClicked();
+        void OnNewAllocationClicked();
         void OnViewClosed();
     }
 }

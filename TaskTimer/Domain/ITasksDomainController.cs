@@ -1,22 +1,24 @@
-﻿using System;
+﻿#region usings
+
+using System;
+
+#endregion
 
 namespace TaskTimer.Domain
 {
     public interface ITasksDomainController
     {
         TimerTask CurrentTask { get; }
-        void ReplaceCurrentTask(TimerTask timerTask);
-        void RenameCurrentTask(string name);
 
-        void UpdateCurrentTask(
+        void UpdateCurrentTask (
             string taskName,
             string comment,
             DateTime startAt,
-            DateTime endAt);
+            DateTime endAt );
 
-        void AddNewTask(string taskName,
+        void AddNewTask ( string taskName,
+            string comment,
             DateTime startAt,
-            DateTime endAt,
-            string comment);
+            DateTime endAt );
     }
 }

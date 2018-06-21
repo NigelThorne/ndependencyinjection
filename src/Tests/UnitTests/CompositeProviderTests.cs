@@ -1,20 +1,25 @@
+#region usings
+
 using NDependencyInjection.Providers;
 using NUnit.Framework;
+
+#endregion
 
 namespace NDependencyInjection.Tests
 {
     [TestFixture]
-    public class CompositeProviderTests 
+    public class CompositeProviderTests
     {
-        private CompositeProvider<object> provider;
-
-        [SetUp] protected void SetUp()
+        [SetUp]
+        protected void SetUp ( )
         {
-            provider = new CompositeProvider<object>();
+            provider = new CompositeProvider<object> ();
         }
 
+        private CompositeProvider<object> provider;
+
         [Test]
-        public void CanInstantiate()
+        public void CanInstantiate ( )
         {
         }
     }

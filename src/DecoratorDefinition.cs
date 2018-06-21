@@ -1,6 +1,10 @@
+#region usings
+
 using NDependencyInjection.DSL;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
+
+#endregion
 
 namespace NDependencyInjection
 {
@@ -8,14 +12,14 @@ namespace NDependencyInjection
     {
         private readonly IScope scope;
 
-        public DecoratorDefinition(IScope scope)
+        public DecoratorDefinition ( IScope scope )
         {
             this.scope = scope;
         }
 
-        public void With<DecoratingType>()
+        public void With<DecoratingType> ( )
         {
-            scope.DecorateService<Interface>(new FactoryServiceProvider<DecoratingType>());
+            scope.DecorateService<Interface> ( new FactoryServiceProvider<DecoratingType> () );
         }
     }
 }

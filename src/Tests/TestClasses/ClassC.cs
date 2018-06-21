@@ -1,108 +1,70 @@
-//Copyright (c) 2008 Nigel Thorne
-
 namespace NDependencyInjection.Tests.TestClasses
 {
     public class ClassC : IC
     {
-        private readonly IA a;
-        private readonly IB b;
-
-        public ClassC(IA a, IB b)
+        public ClassC ( IA a, IB b )
         {
-            this.a = a;
-            this.b = b;
+            A = a;
+            B = b;
         }
 
-        public IA A
-        {
-            get { return a; }
-        }
+        public IA A { get; }
 
-        public IB B
-        {
-            get { return b; }
-        }
+        public IB B { get; }
     }
 
     public class TwoConstructorsNoAttributes : IC
     {
-        private readonly IA a;
-        private readonly IB b;
-
-        public TwoConstructorsNoAttributes(IA a, IB b)
+        public TwoConstructorsNoAttributes ( IA a, IB b )
         {
-            this.a = a;
-            this.b = b;
+            A = a;
+            B = b;
         }
 
-        public TwoConstructorsNoAttributes(IA a)
+        public TwoConstructorsNoAttributes ( IA a )
         {
-            this.a = a;
+            A = a;
         }
 
-        public IA A
-        {
-            get { return a; }
-        }
+        public IA A { get; }
 
-        public IB B
-        {
-            get { return b; }
-        }
+        public IB B { get; }
     }
 
     public class TwoConstructorsAttributes : IC
     {
-        private readonly IA a;
-        private readonly IB b;
-
         [InjectionConstructor]
-        public TwoConstructorsAttributes(IA a, IB b)
+        public TwoConstructorsAttributes ( IA a, IB b )
         {
-            this.a = a;
-            this.b = b;
+            A = a;
+            B = b;
         }
 
-        public TwoConstructorsAttributes(IC a)
+        public TwoConstructorsAttributes ( IC a )
         {
         }
 
-        public IA A
-        {
-            get { return a; }
-        }
+        public IA A { get; }
 
-        public IB B
-        {
-            get { return b; }
-        }
+        public IB B { get; }
     }
 
     public class TwoConstructorsTwoAttributes : IC
     {
-        private readonly IA a;
-        private readonly IB b;
-
         [InjectionConstructor]
-        public TwoConstructorsTwoAttributes(IA a, IB b)
+        public TwoConstructorsTwoAttributes ( IA a, IB b )
         {
-            this.a = a;
-            this.b = b;
+            A = a;
+            B = b;
         }
 
         [InjectionConstructor]
-        public TwoConstructorsTwoAttributes(IC a)
+        public TwoConstructorsTwoAttributes ( IC a )
         {
         }
 
-        public IA A
-        {
-            get { return a; }
-        }
+        public IA A { get; }
 
-        public IB B
-        {
-            get { return b; }
-        }
+        public IB B { get; }
     }
 }

@@ -1,67 +1,59 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using LinFu.DynamicProxy;
 using NDependencyInjection.interfaces;
 
+#endregion
 
 namespace NDependencyInjection.Generics
 {
     /// <summary>
-    /// This is the interceptor that implements the IBroadcaster interface.
-    /// This is used by MessageBroadcastProvider
+    ///     This is the interceptor that implements the IBroadcaster interface.
+    ///     This is used by MessageBroadcastProvider
     /// </summary>
     /// <typeparam name="ListenerType"></typeparam>
     public class TypeSafeBroadcaster<ListenerType> : IBroadcaster<ListenerType>, IInterceptor
     {
-        private readonly ListenerType listener;
-        private readonly List<ListenerType> listeners = new List<ListenerType>();
+        private readonly List<ListenerType> listeners = new List<ListenerType> ();
 
-        public TypeSafeBroadcaster()
+        public TypeSafeBroadcaster ( )
         {
-            ProxyFactory factory = new ProxyFactory();
-            listener = factory.CreateProxy<ListenerType>(this);
+            var factory = new ProxyFactory ();
+            Listener = factory.CreateProxy<ListenerType> ( this );
         }
 
+        public void AddListeners ( params ListenerType[] newListerners )
+        {
+            listeners.AddRange ( newListerners );
+        }
+
+        public void RemoveListeners ( params ListenerType[] oldListeners )
+        {
+            foreach ( var item in oldListeners ) listeners.Remove ( item );
+        }
+
+        public ListenerType Listener { get; }
+
         //[DebuggerStepThrough]
-        object IInterceptor.Intercept(InvocationInfo info)
+        object IInterceptor.Intercept ( InvocationInfo info )
         {
             try
             {
-                if (info.TargetMethod.ReturnType != typeof (void))
-                    throw new InvalidOperationException("You can only broadcast void methods.");
+                if ( info.TargetMethod.ReturnType != typeof (void) )
+                    throw new InvalidOperationException ( "You can only broadcast void methods." );
 
-                ListenerType[] copyOfListeners = listeners.ToArray();
-                foreach (ListenerType childListeners in copyOfListeners)
-                {
-                    info.TargetMethod.Invoke(childListeners, info.Arguments);
-                }
+                var copyOfListeners = listeners.ToArray ();
+                foreach ( var childListeners in copyOfListeners )
+                    info.TargetMethod.Invoke ( childListeners, info.Arguments );
                 return null;
             }
-            catch (TargetInvocationException ex)
+            catch ( TargetInvocationException ex )
             {
                 throw ex.InnerException;
             }
-        }
-
-        public void AddListeners(params ListenerType[] newListerners)
-        {
-            listeners.AddRange(newListerners);
-        }
-
-        public void RemoveListeners(params ListenerType[] oldListeners)
-        {
-            foreach (ListenerType item in oldListeners)
-            {
-                listeners.Remove(item);
-            }
-        }
-
-        public ListenerType Listener
-        {
-            get { return listener; }
         }
     }
 }

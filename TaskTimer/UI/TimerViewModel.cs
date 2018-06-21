@@ -1,18 +1,21 @@
-﻿using System;
+﻿#region usings
+
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using TaskTimer.Annotations;
-using TaskTimer.UI;
+
+#endregion
 
 namespace TaskTimer
 {
-    public class TimerViewModel: INotifyPropertyChanged
+    public class TimerViewModel : INotifyPropertyChanged
     {
-        private TimeSpan _unAllocatedTime;
-        private DateTime _timeAllocatedUpTo;
-        private string _taskName;
         private string _comment;
         private int _minutesToAllocate;
+        private string _taskName;
+        private DateTime _timeAllocatedUpTo;
+        private TimeSpan _unAllocatedTime;
 
         public TimeSpan UnAllocatedTime
         {
@@ -20,7 +23,7 @@ namespace TaskTimer
             set
             {
                 _unAllocatedTime = value;
-                OnPropertyChanged();
+                OnPropertyChanged ();
             }
         }
 
@@ -30,7 +33,7 @@ namespace TaskTimer
             set
             {
                 _minutesToAllocate = value;
-                OnPropertyChanged();
+                OnPropertyChanged ();
             }
         }
 
@@ -40,7 +43,7 @@ namespace TaskTimer
             set
             {
                 _timeAllocatedUpTo = value;
-                OnPropertyChanged();
+                OnPropertyChanged ();
             }
         }
 
@@ -50,7 +53,7 @@ namespace TaskTimer
             set
             {
                 _taskName = value;
-                OnPropertyChanged();
+                OnPropertyChanged ();
             }
         }
 
@@ -60,7 +63,7 @@ namespace TaskTimer
             set
             {
                 _comment = value;
-                OnPropertyChanged();
+                OnPropertyChanged ();
             }
         }
 
@@ -69,9 +72,9 @@ namespace TaskTimer
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged ( [CallerMemberName] string propertyName = null )
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke ( this, new PropertyChangedEventArgs ( propertyName ) );
         }
     }
 }

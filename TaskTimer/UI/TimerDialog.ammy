@@ -14,7 +14,11 @@
 
 Window "TaskTimer.UI.TimerDialog" {
 	Width:  300
-	Height: 300
+	Height: 200
+	MaxWidth: 300
+	MinWidth: 300
+	MaxHeight: 200
+	MinHeight: 200
 	StackPanel {
 		Margin: 10
 		@FormField("Task: ", bind TaskName )
@@ -51,7 +55,7 @@ Window "TaskTimer.UI.TimerDialog" {
 		Slider { 
 			TickFrequency:1
 			Minimum:0
-			Maximum: bind UnAllocatedTime.TotalMinutes
+			Maximum: bind UnallocatedTimeInMinutes
 			Value: bind MinutesToAllocate
 		}
 		StackPanel { 

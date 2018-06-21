@@ -1,43 +1,45 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
+
 using System;
 using Moq;
 using NDependencyInjection.interfaces;
 using NDependencyInjection.Providers;
 using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
-using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
 
+#endregion
 
 namespace NDependencyInjection.Tests
 {
     public interface IXListener
     {
-        void OnEvent();
+        void OnEvent ( );
     }
 
     [TestFixture]
-    public class BroadcasterProviderTests 
+    public class BroadcasterProviderTests
     {
+        [SetUp]
+        protected void SetUp ( )
+        {
+            broadcasterProvider = new BroadcasterProvider<IXListener> ();
+            context = new Mock<IServiceLocator> ().Object;
+        }
+
         private BroadcasterProvider<IXListener> broadcasterProvider;
         private IServiceLocator context;
 
-        [SetUp]
-        protected void SetUp()
+        [Test]
+        public void GetService_ReturnsAnEmptyBroadcaster_WhenNoListenersAreRegistered ( )
         {
-            broadcasterProvider = new BroadcasterProvider<IXListener>();
-            context = new Mock<IServiceLocator>().Object;
+            ( (IXListener) broadcasterProvider.GetService ( typeof (IXListener), typeof (IXListener), context ) )
+                .OnEvent ();
         }
 
         [Test]
-        public void GetService_ReturnsAnEmptyBroadcaster_WhenNoListenersAreRegistered()
+        public void GetService_ThrowsException_WhenAskedForIncorrectType ( )
         {
-            ((IXListener)broadcasterProvider.GetService(typeof(IXListener), typeof(IXListener), context)).OnEvent();
-        }
-
-        [Test]
-        public void GetService_ThrowsException_WhenAskedForIncorrectType()
-        {
-            Assert.Throws<InvalidProgramException>(() => broadcasterProvider.GetService(typeof (int), typeof (object), context));
+            Assert.Throws<InvalidProgramException> ( ( ) =>
+                broadcasterProvider.GetService ( typeof (int), typeof (object), context ) );
         }
     }
 }

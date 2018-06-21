@@ -1,9 +1,11 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
+
 using System;
 using System.Collections;
 using NDependencyInjection.interfaces;
-using IServiceProvider=NDependencyInjection.interfaces.IServiceProvider;
+using IServiceProvider = NDependencyInjection.interfaces.IServiceProvider;
 
+#endregion
 
 namespace NDependencyInjection.Providers
 {
@@ -11,25 +13,23 @@ namespace NDependencyInjection.Providers
     {
         private readonly IServiceProvider[] subsystems;
 
-        public CollectionProvider(IServiceProvider[] subsystems)
+        public CollectionProvider ( IServiceProvider[] subsystems )
         {
             this.subsystems = subsystems;
         }
 
-        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
+        public object GetService ( Type serviceType, Type interfaceType, IServiceLocator context )
         {
-            ArrayList list = new ArrayList();
-            foreach (IServiceProvider subsystem in subsystems)
-            {
-                list.Add(subsystem.GetService(serviceType.GetElementType(), interfaceType.GetElementType(), context));
-            }
-            return list.ToArray(interfaceType.GetElementType());
+            var list = new ArrayList ();
+            foreach ( var subsystem in subsystems )
+                list.Add ( subsystem.GetService ( serviceType.GetElementType (), interfaceType.GetElementType (),
+                    context ) );
+            return list.ToArray ( interfaceType.GetElementType () );
         }
 
         // SMELL: Not used
-        public void AddMapping(Type serviceType)
+        public void AddMapping ( Type serviceType )
         {
-            
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿//Copyright (c) 2008 Nigel Thorne
+﻿#region usings
+
 using System;
 using NDependencyInjection.interfaces;
 using IServiceProvider = NDependencyInjection.interfaces.IServiceProvider;
+
+#endregion
 
 namespace NDependencyInjection
 {
@@ -9,19 +12,18 @@ namespace NDependencyInjection
     {
         private readonly IServiceLocator _scope;
 
-        public ScopeQueryingProvider(IServiceLocator scope)
+        public ScopeQueryingProvider ( IServiceLocator scope )
         {
-            this._scope = scope;
+            _scope = scope;
         }
 
-        public object GetService(Type serviceType, Type interfaceType, IServiceLocator context)
+        public object GetService ( Type serviceType, Type interfaceType, IServiceLocator context )
         {
-            return _scope.GetService(interfaceType);
+            return _scope.GetService ( interfaceType );
         }
 
-        public void AddMapping(Type serviceType)
+        public void AddMapping ( Type serviceType )
         {
-            
         }
     }
 }

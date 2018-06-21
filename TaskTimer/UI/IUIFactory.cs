@@ -2,6 +2,6 @@
 {
     public interface IUIFactory
     {
-        ITimerUI CreateUI();
+        ITimerUI CreateUI ( );
     }
 }

@@ -10,12 +10,12 @@ namespace TaskTimer.UI
     public class TimerController : ITimerUI, ITickListener, ITimeDialogEventListener
     {
         private readonly IClock _clock;
-        private readonly ITasksDomainController _tasksDomainController;
         private readonly IViewClosedHandler _closeHandler;
+        private readonly ITasksDomainController _tasksDomainController;
         private readonly ITimerView _view;
         private readonly TimerViewModel _viewModel;
 
-        public TimerController(
+        public TimerController (
             TimerViewModel viewModel,
             ITimerView view,
             IClock clock,
@@ -29,75 +29,76 @@ namespace TaskTimer.UI
             _closeHandler = closeHandler;
         }
 
-        void ITimerUI.ShowUI()
+        void ITimeDialogEventListener.OnUpdateClicked ( )
+        {
+            CalculateAndTriggerChange ( _tasksDomainController.UpdateCurrentTask );
+        }
+
+        void ITimeDialogEventListener.OnNewAllocationClicked ( )
+        {
+            CalculateAndTriggerChange ( _tasksDomainController.AddNewTask );
+        }
+
+        void ITimeDialogEventListener.OnViewClosed ( )
+        {
+            _closeHandler.OnViewClosed ();
+        }
+
+        void ITimerUI.ShowUI ( )
         {
             var task = _tasksDomainController.CurrentTask;
-            UpdateViewModel(task.Name, task.StartTime, task.EndTime);
+            UpdateViewModel ( task.Name, task.StartTime, task.EndTime );
 
-            _view.ShowDialog();
+            _view.ShowDialog ();
         }
 
-        void ITickListener.OnTick(DateTime now)
+        void ITickListener.OnTick ( DateTime now )
         {
-            UpdateUnAllocatedTime();
+            UpdateUnAllocatedTime ();
         }
 
-        void ITimeDialogEventListener.OnUpdateClicked()
+        private void CalculateAndTriggerChange ( Action<string, string, DateTime, DateTime> controllerAction )
         {
-            var endtime = CalculateNewEndTime();
+            var endtime = CalculateNewEndTime ();
 
-            _tasksDomainController.UpdateCurrentTask(
+            controllerAction (
                 _viewModel.TaskName,
                 _viewModel.Comment,
                 _viewModel.TimeAllocatedUpTo,
-                endtime);
+                endtime );
 
-            UpdateViewModel(_viewModel.TaskName, endtime, endtime);
+            UpdateViewModel ( _viewModel.TaskName, endtime, endtime );
+            if ( UnallocatedTimeInMinutes () == 0 ) _view.Hide ();
         }
 
-        void ITimeDialogEventListener.OnNewTaskClicked()
+        private DateTime CalculateNewEndTime ( )
         {
-            var endtime = CalculateNewEndTime();
-
-            _tasksDomainController.AddNewTask(
-                _viewModel.TaskName,
-                _viewModel.TimeAllocatedUpTo,
-                endtime, _viewModel.Comment);
-
-            UpdateViewModel(_viewModel.TaskName, _viewModel.TimeAllocatedUpTo, endtime);
+            var endTime = _viewModel.TimeAllocatedUpTo.AddMinutes ( _viewModel.MinutesToAllocate );
+            if ( endTime > _clock.CurrentTime () ) endTime = _clock.CurrentTime ();
+            return endTime;
         }
 
-        void ITimeDialogEventListener.OnViewClosed()
-        {
-            _closeHandler.OnViewClosed();
-        }
-
-        private DateTime CalculateNewEndTime()
-        {
-            return _viewModel.TimeAllocatedUpTo.AddMinutes(_viewModel.MinutesToAllocate);
-        }
-
-        private void UpdateViewModel(string currentTask, DateTime startTime, DateTime taskEndTime)
+        private void UpdateViewModel ( string currentTask, DateTime startTime, DateTime taskEndTime )
         {
             _viewModel.TimeAllocatedUpTo = taskEndTime;
             _viewModel.TaskName = currentTask;
             _viewModel.CurrentTaskStartedAt = startTime;
             _viewModel.Comment = "";
-            UpdateUnAllocatedTime();
-            _viewModel.MinutesToAllocate = UnallocatedTimeInlMinutes();
+            UpdateUnAllocatedTime ();
+            _viewModel.MinutesToAllocate = UnallocatedTimeInMinutes ();
         }
 
-        private void UpdateUnAllocatedTime()
+        private void UpdateUnAllocatedTime ( )
         {
-            var allocateAllUnallocatedTime = _viewModel.MinutesToAllocate == UnallocatedTimeInlMinutes();
-            _viewModel.UnAllocatedTime = _clock.CurrentTime() - _viewModel.TimeAllocatedUpTo;
+            var allocateAllUnallocatedTime = _viewModel.MinutesToAllocate == UnallocatedTimeInMinutes ();
+            _viewModel.UnAllocatedTime = _clock.CurrentTime () - _viewModel.TimeAllocatedUpTo;
 
             // follow unallocatedTime if we are set to max
-            if (allocateAllUnallocatedTime)
-                _viewModel.MinutesToAllocate = UnallocatedTimeInlMinutes();
+            if ( allocateAllUnallocatedTime )
+                _viewModel.MinutesToAllocate = UnallocatedTimeInMinutes ();
         }
 
-        private int UnallocatedTimeInlMinutes()
+        public int UnallocatedTimeInMinutes ( )
         {
             return (int) _viewModel.UnAllocatedTime.TotalMinutes;
         }

@@ -2,13 +2,15 @@
 {
     public class Utils
     {
-        public static string WholeNumber(double val)
+        public static string WholeNumber ( double val )
         {
-            return ((int) val).ToString();
+            return ( (int) val ).ToString ();
         }
-        public static string AllocationStopTime(TimerViewModel model)
+
+        public static string AllocationStopTime ( TimerViewModel model )
         {
-            return $"{model.CurrentTaskStartedAt.AddMinutes(model.MinutesToAllocate)}({model.MinutesToAllocate} mins)";
+            return
+                $"{model.CurrentTaskStartedAt.AddMinutes ( model.MinutesToAllocate )}({model.MinutesToAllocate} mins)";
         }
     }
 }

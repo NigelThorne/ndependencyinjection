@@ -2,6 +2,6 @@
 {
     public interface IStartListener
     {
-        void OnStart();
+        void OnStart ( );
     }
 }

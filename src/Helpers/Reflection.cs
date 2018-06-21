@@ -1,9 +1,10 @@
-//Copyright (c) 2008 Nigel Thorne
+#region usings
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 
+#endregion
 
 namespace NDependencyInjection
 {
@@ -22,13 +23,13 @@ namespace NDependencyInjection
         //        }
 
         //[DebuggerStepThrough]
-        public static object CallConstructor(ConstructorInfo constructor, object[] parameters)
+        public static object CallConstructor ( ConstructorInfo constructor, object[] parameters )
         {
             try
             {
-                return constructor.Invoke(parameters);
+                return constructor.Invoke ( parameters );
             }
-            catch (TargetInvocationException ex)
+            catch ( TargetInvocationException ex )
             {
                 throw ex.InnerException;
             }
@@ -50,25 +51,21 @@ namespace NDependencyInjection
         //        }
 
         //[DebuggerStepThrough]
-        public static IEnumerable<Type> GetParameterTypes(ConstructorInfo constructor)
+        public static IEnumerable<Type> GetParameterTypes ( ConstructorInfo constructor )
         {
-            ParameterInfo[] parameterInfos = constructor.GetParameters();
-            List<Type> list = new List<Type>();
-            foreach (ParameterInfo parameterInfo in parameterInfos)
-            {
-                list.Add(parameterInfo.ParameterType);
-            }
+            var parameterInfos = constructor.GetParameters ();
+            var list = new List<Type> ();
+            foreach ( var parameterInfo in parameterInfos ) list.Add ( parameterInfo.ParameterType );
             return list;
         }
 
         //[DebuggerStepThrough]
-        public static bool HasAttribute<TAttributeType>(ConstructorInfo info)
+        public static bool HasAttribute<TAttributeType> ( ConstructorInfo info )
         {
-            object[] attributes = info.GetCustomAttributes(false);
-            foreach (object attribute in attributes)
-            {
-                if (attribute is TAttributeType) return true;
-            }
+            var attributes = info.GetCustomAttributes ( false );
+            foreach ( var attribute in attributes )
+                if ( attribute is TAttributeType )
+                    return true;
             return false;
         }
     }
