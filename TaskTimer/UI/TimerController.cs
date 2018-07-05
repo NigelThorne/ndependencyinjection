@@ -51,8 +51,11 @@ namespace TaskTimer.UI
 
         void ITimerUI.ShowUI ( )
         {
-            var task = _tasksDomainController.CurrentTask;
-            UpdateViewModel ( task.Name, task.StartTime, task.EndTime );
+            if (!_view.IsVisible())
+            {
+                var task = _tasksDomainController.CurrentTask;
+                UpdateViewModel(task.Name, task.StartTime, task.EndTime);
+            }
 
             _view.ShowDialog ();
         }

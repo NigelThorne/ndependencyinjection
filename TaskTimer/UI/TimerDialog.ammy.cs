@@ -26,6 +26,11 @@ namespace TaskTimer.UI
             Topmost = true;
         }
 
+        bool ITimerView.IsVisible()
+        {
+            return IsVisible;
+        }
+
         private void OnRenameButtonClicked ( object sender, RoutedEventArgs e )
         {
             _listener.OnUpdateClicked ();
