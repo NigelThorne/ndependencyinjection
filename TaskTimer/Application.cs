@@ -8,13 +8,14 @@ using TaskTimer.UI;
 
 namespace TaskTimer
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class Application : IRunnable, IViewClosedHandler, ITickListener
     {
         private readonly IClock _clock;
         private readonly IUIFactory _factory;
         private readonly IScheduler _scheduler;
         private ITimerUI _currentUI;
-        private readonly object _UILock = new object ();
+        private readonly object _uiLock = new object ();
         private DateTime _nextShow;
         private static readonly TimeSpan ReShowInterval = TimeSpan.FromMinutes(10);
 
@@ -44,7 +45,7 @@ namespace TaskTimer
         public void OnTick ( DateTime time )
         {
             ITimerUI currentUI;
-            lock ( _UILock )
+            lock ( _uiLock )
             {
                 currentUI = _currentUI;
             }
@@ -54,7 +55,7 @@ namespace TaskTimer
 
         public void OnViewClosed ( )
         {
-            lock ( _UILock )
+            lock ( _uiLock )
             {
                 _currentUI = null;
             }
@@ -67,7 +68,7 @@ namespace TaskTimer
             _nextShow = time + ReShowInterval;
 
             ITimerUI currentUI;
-            lock ( _UILock )
+            lock ( _uiLock )
             {
                 if ( _currentUI == null ) _currentUI = _factory.CreateUI ();
                 currentUI = _currentUI;
