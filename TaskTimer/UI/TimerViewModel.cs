@@ -24,8 +24,10 @@ namespace TaskTimer
             {
                 _unAllocatedTime = value;
                 OnPropertyChanged ();
+                OnPropertyChanged (nameof(UnAllocatedTimeInMinutes));
             }
         }
+        public int UnAllocatedTimeInMinutes => (int)Math.Floor(_unAllocatedTime.TotalMinutes);
 
         public int MinutesToAllocate
         {
@@ -34,8 +36,11 @@ namespace TaskTimer
             {
                 _minutesToAllocate = value;
                 OnPropertyChanged ();
+                OnPropertyChanged (nameof(TimeToAllocateUpTo));
             }
         }
+
+        public DateTime TimeToAllocateUpTo => _timeAllocatedUpTo+ TimeSpan.FromMinutes(_minutesToAllocate);
 
         public DateTime TimeAllocatedUpTo
         {

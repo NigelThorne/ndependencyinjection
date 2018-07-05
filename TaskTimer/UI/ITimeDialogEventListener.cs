@@ -5,5 +5,6 @@
         void OnUpdateClicked ( );
         void OnNewAllocationClicked ( );
         void OnViewClosed ( );
+        void OnNewBreakAllocationClicked();
     }
 }

@@ -39,6 +39,11 @@ namespace TaskTimer.UI
             CalculateAndTriggerChange ( _tasksDomainController.AddNewTask );
         }
 
+        void ITimeDialogEventListener.OnNewBreakAllocationClicked()
+        {
+            CalculateAndTriggerChange ( _tasksDomainController.AddNewBreakTask );
+        }
+
         void ITimeDialogEventListener.OnViewClosed ( )
         {
             _closeHandler.OnViewClosed ();

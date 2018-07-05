@@ -60,5 +60,32 @@ namespace TaskTimer.Domain
 
             _repository.SaveTasks ( _list );
         }
+
+        public void AddNewBreakTask(string taskName, string comment, DateTime startAt, DateTime endAt)
+        {
+            var currentTaskName = CurrentTask.Name;
+            _list.Add ( new TimerTask ( taskName, new[]
+                {
+                    new TimerTask.Allocation ()
+                    {
+                        Comment = comment,
+                        StartTime = startAt,
+                        EndTime = endAt
+                    },
+                } )
+            );
+            _list.Add ( new TimerTask ( currentTaskName, new[]
+                {
+                    new TimerTask.Allocation ()
+                    {
+                        Comment = "",
+                        StartTime = endAt,
+                        EndTime = endAt
+                    },
+                } )
+            );
+            _repository.SaveTasks ( _list );
+            
+        }
     }
 }

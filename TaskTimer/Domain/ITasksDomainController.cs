@@ -16,9 +16,12 @@ namespace TaskTimer.Domain
             DateTime startAt,
             DateTime endAt );
 
-        void AddNewTask ( string taskName,
+        void AddNewTask ( 
+            string taskName,
             string comment,
             DateTime startAt,
             DateTime endAt );
+
+        void AddNewBreakTask(string taskName, string comment, DateTime startAt, DateTime endAt);
     }
 }

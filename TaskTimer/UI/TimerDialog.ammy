@@ -14,15 +14,15 @@
 
 Window "TaskTimer.UI.TimerDialog" {
 	Width:  300
-	Height: 200
+	Height: 230
 	MaxWidth: 300
 	MinWidth: 300
-	MaxHeight: 200
-	MinHeight: 200
+	MaxHeight: 230
+	MinHeight: 230
 	StackPanel {
 		Margin: 10
 		@FormField("Task: ", bind TaskName )
-		@FormField("Unallocated Time: ", bind UnAllocatedTime.TotalMinutes 
+		@FormField("Allocate Time: ", bind MinutesToAllocate 
 						convert (double timespan) => Utils.WholeNumber(timespan) + " minutes" )
 						
 		TextBox { 
@@ -40,14 +40,19 @@ Window "TaskTimer.UI.TimerDialog" {
 			AcceptsTab: false
 		}
 		Grid { 
-			#TwoColumns
+			#ThreeColumns
 			Button { 
 				#Cell("0", "0")
-				"Add" 
+				"Allocate to Task" 
 				Click: OnAddButtonClicked
 			}
 			Button { 
 				#Cell("0", "1")
+				"Add Break" 
+				Click: OnAddBreakClicked
+			}
+			Button { 
+				#Cell("0", "2")
 				"Rename" 
 				Click: OnRenameButtonClicked
 			}
@@ -55,12 +60,20 @@ Window "TaskTimer.UI.TimerDialog" {
 		Slider { 
 			TickFrequency:1
 			Minimum:0
-			Maximum: bind UnallocatedTimeInMinutes
+			Maximum: bind UnAllocatedTimeInMinutes
 			Value: bind MinutesToAllocate
 		}
 		StackPanel { 
 			TextBlock { 
-				Text: bind MinutesToAllocate
+				Text: bind UnAllocatedTime.TotalMinutes 
+						convert (double timespan) => "Total Unallocated Time: " + Utils.WholeNumber(timespan) + " minutes"				
+			}
+			TextBlock { 
+				Text: bind TimeToAllocateUpTo 
+			}
+			TextBlock { 
+				Text: bind UnallocatedTimeInMinutes
+						convert (double timespan) => "Total Unallocated Time: " + Utils.WholeNumber(timespan) + " minutes"				
 			}
 		}
 	}

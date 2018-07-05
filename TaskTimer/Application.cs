@@ -15,6 +15,8 @@ namespace TaskTimer
         private readonly IScheduler _scheduler;
         private ITimerUI _currentUI;
         private readonly object _UILock = new object ();
+        private DateTime _nextShow;
+        private static readonly TimeSpan ReShowInterval = TimeSpan.FromMinutes(10);
 
         public Application ( IUIFactory factory, IClock clock, IScheduler scheduler )
         {
@@ -28,7 +30,7 @@ namespace TaskTimer
             var app = new App ();
             RuntimeUpdateHandler.Register ( app, "/" + Ammy.GetAssemblyName ( app ) + ";component/App.g.xaml" );
 
-            _scheduler.ScheduleCallback ( ShowUI, 5 * 60 );
+            _scheduler.ScheduleCallback ( ShowUI, 30 );
             _clock.StartTicking ();
 
             app.Run ();
@@ -51,10 +53,14 @@ namespace TaskTimer
             {
                 _currentUI = null;
             }
+            _nextShow = _clock.CurrentTime() + ReShowInterval;
         }
 
         private void ShowUI ( DateTime time )
         {
+            if (time < _nextShow) return;
+            _nextShow = time + ReShowInterval;
+
             ITimerUI currentUI;
             lock ( _UILock )
             {

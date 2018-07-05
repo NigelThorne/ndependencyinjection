@@ -17,6 +17,7 @@ namespace TaskTimer.UI
             InitializeComponent ();
             Closed += ( sender, args ) => listener.OnViewClosed ();
             Activated += ( sender, args ) => Topmost = false;
+            ShowActivated = false;
         }
 
         void ITimerView.ShowDialog ( )
@@ -33,6 +34,10 @@ namespace TaskTimer.UI
         private void OnAddButtonClicked ( object sender, RoutedEventArgs e )
         {
             _listener.OnNewAllocationClicked ();
+        }
+        private void OnAddBreakClicked ( object sender, RoutedEventArgs e )
+        {
+            _listener.OnNewBreakAllocationClicked ();
         }
 
         private void OnTaskNameFocus ( object sender, RoutedEventArgs e )
