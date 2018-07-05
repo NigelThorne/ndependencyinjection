@@ -54,7 +54,7 @@ mixin Cell (row = none, column = none, rowSpan = none, columnSpan = none) for Fr
 }
 
 alias ImageCached(source) {
-  Image {    
+  Image {
     Source: BitmapImage {
       UriCachePolicy: "Revalidate"
       UriSource: $source
@@ -118,13 +118,13 @@ alias GridItemsControl() {
   ItemsControl {
     ScrollViewer.HorizontalScrollBarVisibility: Disabled,
 
-    ItemsPanel: ItemsPanelTemplate { 
+    ItemsPanel: ItemsPanelTemplate {
       WrapPanel {
         IsItemsHost: true
         Orientation: Horizontal
       }
     }
-  }  
+  }
 }
 
 ////////////////
@@ -150,13 +150,13 @@ alias DoubleAnimationStoryboard (property, frm = "0", to = "1", duration = "0:0:
   }
 }
 
-mixin DoubleAnimation_PropertyTrigger(triggerProperty, triggerValue, animationProperty, frm, to, duration) for Style {  
+mixin DoubleAnimation_PropertyTrigger(triggerProperty, triggerValue, animationProperty, frm, to, duration) for Style {
   combine Triggers: @Trigger ($triggerProperty, $triggerValue) {
     EnterActions: @DoubleAnimationStoryboard($animationProperty, $frm, $to, $duration) {}
   }
 }
 
-mixin DoubleAnimation_PropertyTrigger_Toggle(triggerProperty, triggerValue, animationProperty, frm, to, duration) for Style {  
+mixin DoubleAnimation_PropertyTrigger_Toggle(triggerProperty, triggerValue, animationProperty, frm, to, duration) for Style {
   combine Triggers: @Trigger ($triggerProperty, $triggerValue) {
     EnterActions: @DoubleAnimationStoryboard($animationProperty, $frm, $to, $duration) {}
     ExitActions: @DoubleAnimationStoryboard($animationProperty, $to, $frm, $duration) {}
@@ -164,14 +164,14 @@ mixin DoubleAnimation_PropertyTrigger_Toggle(triggerProperty, triggerValue, anim
 }
 
 mixin DoubleAnimation_EventTrigger(triggerEvent, animationProperty, frm, to, duration) for Style {
-  combine Triggers: EventTrigger {    
+  combine Triggers: EventTrigger {
     RoutedEvent: $triggerEvent
     @DoubleAnimationStoryboard($animationProperty, $frm, $to, $duration) {}
   }
 }
 
 mixin DoubleAnimation_DataTrigger(binding, value, animationProperty, frm, to, duration) for Style {
-  combine Triggers: DataTrigger {  
+  combine Triggers: DataTrigger {
     Binding: $binding
     Value: $value
     EnterActions: @DoubleAnimationStoryboard($animationProperty, $frm, $to, $duration) {}
@@ -220,10 +220,10 @@ mixin Fade_OnBinding(binding, bindingValue) for Style {
   combine Triggers: [
     @DataTrigger($binding, $bindingValue) {
       EnterActions: [
-        @DoubleAnimationStoryboard("Opacity", 0, 1, "0:0:0.5") {}  
+        @DoubleAnimationStoryboard("Opacity", 0, 1, "0:0:0.5") {}
       ]
       ExitActions: [
-        @DoubleAnimationStoryboard("Opacity", 1, 0, "0:0:0.5") {}  
+        @DoubleAnimationStoryboard("Opacity", 1, 0, "0:0:0.5") {}
       ]
       #Setter("Opacity", 1)
     }

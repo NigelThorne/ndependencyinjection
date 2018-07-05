@@ -64,6 +64,7 @@
     <Compile Include="ApplicationBuilder.cs" />
     <Compile Include="ITaskRepository.cs" />
     <Compile Include="MainEntryPoint.cs" />
+    <Compile Include="SingleInstance.cs" />
     <Compile Include="TaskRepository.cs" />
     <Compile Include="UI\ITimeDialogEventListener.cs" />
     <Compile Include="ITimerCommandsHandler.cs" />

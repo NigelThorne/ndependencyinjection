@@ -30,10 +30,15 @@ namespace TaskTimer
             var app = new App ();
             RuntimeUpdateHandler.Register ( app, "/" + Ammy.GetAssemblyName ( app ) + ";component/App.g.xaml" );
 
-            _scheduler.ScheduleCallback ( ShowUI, 30 );
+            _scheduler.ScheduleCallback ( (t) => ShowUI(t), 30 );
             _clock.StartTicking ();
 
             app.Run ();
+        }
+
+        public void ShowRunningUI ( )
+        {
+            ShowUI (_clock.CurrentTime (), true);
         }
 
         public void OnTick ( DateTime time )
@@ -56,9 +61,9 @@ namespace TaskTimer
             _nextShow = _clock.CurrentTime() + ReShowInterval;
         }
 
-        private void ShowUI ( DateTime time )
+        private void ShowUI ( DateTime time, bool force = false )
         {
-            if (time < _nextShow) return;
+            if (!force && time < _nextShow) return;
             _nextShow = time + ReShowInterval;
 
             ITimerUI currentUI;
