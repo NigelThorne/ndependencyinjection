@@ -62,6 +62,7 @@
       <DependentUpon>App.ammy</DependentUpon>
     </Compile>
     <Compile Include="ApplicationBuilder.cs" />
+    <Compile Include="ArgumentsReceivedEventArgs.cs" />
     <Compile Include="ITaskRepository.cs" />
     <Compile Include="MainEntryPoint.cs" />
     <Compile Include="SingleInstance.cs" />
